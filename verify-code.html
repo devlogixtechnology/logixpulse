@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Code | Modern App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1 class="auth-title">Check your email</h1>
+                <p class="auth-subtitle">We've sent a 6-digit verification code to your email address.</p>
+            </div>
+            
+            <form id="verify-code-form" class="auth-form">
+                <div class="form-group">
+                    <label>Verification Code</label>
+                    <div class="otp-container" id="otp-input-group">
+                        <input type="text" id="verification-code-1" name="code-1" class="otp-input" maxlength="1" pattern="[0-9]" required autocomplete="off">
+                        <input type="text" id="verification-code-2" name="code-2" class="otp-input" maxlength="1" pattern="[0-9]" required autocomplete="off">
+                        <input type="text" id="verification-code-3" name="code-3" class="otp-input" maxlength="1" pattern="[0-9]" required autocomplete="off">
+                        <input type="text" id="verification-code-4" name="code-4" class="otp-input" maxlength="1" pattern="[0-9]" required autocomplete="off">
+                        <input type="text" id="verification-code-5" name="code-5" class="otp-input" maxlength="1" pattern="[0-9]" required autocomplete="off">
+                        <input type="text" id="verification-code-6" name="code-6" class="otp-input" maxlength="1" pattern="[0-9]" required autocomplete="off">
+                    </div>
+                </div>
+                
+                <button type="submit" id="verify-submit" class="btn btn-primary">Verify & Login</button>
+            </form>
+
+            <div class="auth-footer text-center">
+                <p>Didn't receive the code? <a href="#" id="resend-code-link" class="auth-link">Resend now</a></p>
+                <div class="margin-top-sm">
+                    <a href="magic-code.html" class="auth-link-small">Change email address</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
