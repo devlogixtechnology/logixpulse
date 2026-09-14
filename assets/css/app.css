@@ -1,0 +1,569 @@
+/* ============================================================
+   LogixPulse — Global Application Styles  (app.css)
+   Design system: typography, colours, buttons, layout tokens.
+   All future screens import this file.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ════════════════════════════════════════════════════════════
+   1. DESIGN TOKENS  (CSS Custom Properties)
+   ════════════════════════════════════════════════════════════ */
+:root {
+    /* ── Colour palette ── */
+    --lp-primary:           #4f46e5;
+    --lp-primary-hover:     #4338ca;
+    --lp-primary-light:     #6366f1;
+    --lp-primary-subtle:    rgba(99, 102, 241, 0.12);
+
+    --lp-secondary:         #7c3aed;
+    --lp-secondary-hover:   #6d28d9;
+
+    --lp-success:           #16a34a;
+    --lp-success-hover:     #15803d;
+    --lp-success-subtle:    rgba(22, 163, 74, 0.12);
+
+    --lp-warning:           #d97706;
+    --lp-warning-hover:     #b45309;
+    --lp-warning-subtle:    rgba(217, 119, 6, 0.12);
+
+    --lp-danger:            #dc2626;
+    --lp-danger-hover:      #b91c1c;
+    --lp-danger-subtle:     rgba(220, 38, 38, 0.12);
+
+    --lp-info:              #0891b2;
+    --lp-info-hover:        #0e7490;
+    --lp-info-subtle:       rgba(8, 145, 178, 0.12);
+
+    /* ── Neutral / surface palette ── */
+    --lp-bg:                #0b0f1a;   /* Page background              */
+    --lp-surface:           #0f172a;   /* Navbar / elevated surface    */
+    --lp-surface-2:         #1e293b;   /* Cards, dropdowns             */
+    --lp-surface-3:         #263248;   /* Hover states inside cards    */
+    --lp-border:            #334155;   /* Borders, dividers            */
+    --lp-border-subtle:     #1e293b;   /* Very subtle borders          */
+
+    /* ── Text ── */
+    --lp-text:              #f1f5f9;
+    --lp-text-secondary:    #cbd5e1;
+    --lp-text-muted:        #94a3b8;
+    --lp-text-disabled:     #475569;
+
+    /* ── Sidebar specific (detailed styles in sidebar.css) ── */
+    --lp-sidebar-width:     248px;
+    --lp-sidebar-bg:        #0f1729;        /* Dark navy sidebar              */
+    --lp-sidebar-border:    rgba(255,255,255,0.07);
+    --lp-nav-active-bg:     #4f46e5;        /* Indigo active state            */
+    --lp-nav-active-color:  #ffffff;
+    --lp-nav-active-border: #4f46e5;
+    --lp-nav-hover-bg:      rgba(255,255,255,0.06);
+    --lp-nav-text:          rgba(255,255,255,0.65);
+    --lp-nav-text-muted:    rgba(255,255,255,0.30);
+    --lp-nav-icon-color:    rgba(255,255,255,0.50);
+
+    /* ── Spacing & sizing ── */
+    --lp-nav-height:        58px;           /* Matches #lp-header height */
+    --lp-radius-sm:         6px;
+    --lp-radius:            10px;
+    --lp-radius-lg:         14px;
+    --lp-radius-xl:         20px;
+
+    /* ── Effects ── */
+    --lp-shadow-sm:         0 1px 4px rgba(0, 0, 0, 0.25);
+    --lp-shadow:            0 4px 16px rgba(0, 0, 0, 0.35);
+    --lp-shadow-lg:         0 8px 32px rgba(0, 0, 0, 0.5);
+    --lp-transition:        0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    --lp-transition-slow:   0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ════════════════════════════════════════════════════════════
+   2. GLOBAL RESET & BASE
+   ════════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: #f4f6f9;   /* Light grey page background */
+    color: #1e293b;              /* Dark navy default text     */
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove default link blue */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img, svg {
+    display: block;
+    max-width: 100%;
+}
+
+/* ════════════════════════════════════════════════════════════
+   3. TYPOGRAPHY SCALE
+   ════════════════════════════════════════════════════════════ */
+.lp-display {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    color: var(--lp-text);
+}
+
+h1, .lp-h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+    color: var(--lp-text);
+    margin: 0 0 0.5em;
+}
+
+h2, .lp-h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    line-height: 1.3;
+    color: var(--lp-text);
+    margin: 0 0 0.5em;
+}
+
+h3, .lp-h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--lp-text);
+    margin: 0 0 0.4em;
+}
+
+h4, .lp-h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--lp-text);
+    margin: 0 0 0.3em;
+}
+
+p {
+    color: var(--lp-text-secondary);
+    margin: 0 0 1em;
+    line-height: 1.65;
+}
+
+.lp-text-sm   { font-size: 0.8rem;  }
+.lp-text-xs   { font-size: 0.72rem; }
+.lp-text-muted { color: var(--lp-text-muted); }
+.lp-text-secondary { color: var(--lp-text-secondary); }
+
+/* ════════════════════════════════════════════════════════════
+   4. BUTTON SYSTEM
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Base button ── */
+.lp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: var(--lp-radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    transition:
+        background-color var(--lp-transition),
+        border-color     var(--lp-transition),
+        color            var(--lp-transition),
+        box-shadow       var(--lp-transition),
+        transform        var(--lp-transition);
+}
+
+.lp-btn:focus-visible {
+    outline: 2px solid var(--lp-primary-light);
+    outline-offset: 2px;
+}
+
+.lp-btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.lp-btn:disabled,
+.lp-btn[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.lp-btn svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ── Solid variants ── */
+.lp-btn-primary {
+    background: var(--lp-primary);
+    color: #fff;
+    border-color: var(--lp-primary);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+}
+.lp-btn-primary:hover {
+    background: var(--lp-primary-hover);
+    border-color: var(--lp-primary-hover);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.45);
+}
+
+.lp-btn-secondary {
+    background: var(--lp-secondary);
+    color: #fff;
+    border-color: var(--lp-secondary);
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+}
+.lp-btn-secondary:hover {
+    background: var(--lp-secondary-hover);
+    border-color: var(--lp-secondary-hover);
+}
+
+.lp-btn-success {
+    background: var(--lp-success);
+    color: #fff;
+    border-color: var(--lp-success);
+}
+.lp-btn-success:hover { background: var(--lp-success-hover); border-color: var(--lp-success-hover); }
+
+.lp-btn-danger {
+    background: var(--lp-danger);
+    color: #fff;
+    border-color: var(--lp-danger);
+}
+.lp-btn-danger:hover { background: var(--lp-danger-hover); border-color: var(--lp-danger-hover); }
+
+.lp-btn-warning {
+    background: var(--lp-warning);
+    color: #fff;
+    border-color: var(--lp-warning);
+}
+.lp-btn-warning:hover { background: var(--lp-warning-hover); border-color: var(--lp-warning-hover); }
+
+/* ── Outline variants ── */
+.lp-btn-outline-primary {
+    background: transparent;
+    color: var(--lp-primary-light);
+    border-color: var(--lp-primary-light);
+}
+.lp-btn-outline-primary:hover {
+    background: var(--lp-primary-subtle);
+    color: #fff;
+}
+
+.lp-btn-outline-danger {
+    background: transparent;
+    color: var(--lp-danger);
+    border-color: var(--lp-danger);
+}
+.lp-btn-outline-danger:hover {
+    background: var(--lp-danger-subtle);
+}
+
+/* ── Ghost / subtle variant ── */
+.lp-btn-ghost {
+    background: transparent;
+    color: var(--lp-text-muted);
+    border-color: var(--lp-border);
+}
+.lp-btn-ghost:hover {
+    background: var(--lp-surface-3);
+    color: var(--lp-text);
+    border-color: var(--lp-border);
+}
+
+/* ── Size modifiers ── */
+.lp-btn-sm {
+    padding: 5px 12px;
+    font-size: 0.76rem;
+    border-radius: var(--lp-radius-sm);
+}
+.lp-btn-sm svg { width: 13px; height: 13px; }
+
+.lp-btn-lg {
+    padding: 12px 28px;
+    font-size: 0.92rem;
+    border-radius: var(--lp-radius-lg);
+}
+.lp-btn-lg svg { width: 17px; height: 17px; }
+
+.lp-btn-icon {
+    padding: 8px;
+    border-radius: var(--lp-radius);
+    aspect-ratio: 1;
+}
+
+/* ════════════════════════════════════════════════════════════
+   5. BADGE / PILL SYSTEM
+   ════════════════════════════════════════════════════════════ */
+.lp-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border: 1px solid transparent;
+}
+
+.lp-badge-primary  { background: var(--lp-primary-subtle);  color: var(--lp-primary-light); border-color: rgba(99,102,241,0.25); }
+.lp-badge-success  { background: var(--lp-success-subtle);  color: #4ade80;                 border-color: rgba(22,163,74,0.25); }
+.lp-badge-warning  { background: var(--lp-warning-subtle);  color: #fbbf24;                 border-color: rgba(217,119,6,0.25); }
+.lp-badge-danger   { background: var(--lp-danger-subtle);   color: #f87171;                 border-color: rgba(220,38,38,0.25); }
+.lp-badge-muted    { background: rgba(255,255,255,0.05);    color: var(--lp-text-muted);    border-color: var(--lp-border); }
+
+/* ════════════════════════════════════════════════════════════
+   6. CARD COMPONENT
+   ════════════════════════════════════════════════════════════ */
+.lp-card {
+    background: var(--lp-surface-2);
+    border: 1px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg);
+    padding: 24px;
+    box-shadow: var(--lp-shadow-sm);
+    transition: box-shadow var(--lp-transition), border-color var(--lp-transition);
+}
+
+.lp-card:hover {
+    box-shadow: var(--lp-shadow);
+    border-color: var(--lp-border);
+}
+
+.lp-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--lp-border-subtle);
+}
+
+/* ════════════════════════════════════════════════════════════
+   7. PAGE LAYOUT (Navbar + Sidebar + Content)
+   ════════════════════════════════════════════════════════════ */
+.lp-app-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.lp-app-body {
+    display: flex;
+    flex: 1;
+    min-height: calc(100vh - var(--lp-nav-height));
+}
+
+/* Content area */
+.lp-content {
+    flex: 1;
+    padding: 28px 32px;
+    overflow-x: hidden;
+    min-width: 0;  /* prevent flex overflow */
+}
+
+/* ════════════════════════════════════════════════════════════
+   8. SIDEBAR COMPONENT
+   ════════════════════════════════════════════════════════════ */
+#lp-sidebar {
+    width: var(--lp-sidebar-width);
+    min-height: calc(100vh - var(--lp-nav-height));
+    background: var(--lp-sidebar-bg);
+    border-right: 1px solid var(--lp-sidebar-border);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: var(--lp-nav-height);
+    height: calc(100vh - var(--lp-nav-height));
+    overflow: hidden;
+    /* Detailed sidebar styles live in sidebar.css */
+}
+
+.lp-sidebar-inner {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #dee2e6 transparent;
+}
+
+.lp-sidebar-inner::-webkit-scrollbar       { width: 4px; }
+.lp-sidebar-inner::-webkit-scrollbar-track  { background: transparent; }
+.lp-sidebar-inner::-webkit-scrollbar-thumb  { background: #dee2e6; border-radius: 4px; }
+
+/* ── Section label ── */
+.lp-sidebar-section {
+    margin-bottom: 4px;
+}
+
+.lp-sidebar-label {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--lp-nav-text-muted);
+    padding: 14px 12px 5px;
+}
+
+/* ── Nav list ── */
+.lp-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+/* ── Nav link ── */
+.lp-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--lp-nav-text);
+    font-size: 0.845rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.18s, color 0.18s;
+    border-left: 3px solid transparent;
+    position: relative;
+    white-space: nowrap;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.lp-nav-link:hover {
+    background: var(--lp-nav-hover-bg);
+    color: var(--lp-nav-text);
+    text-decoration: none;
+}
+
+.lp-nav-link.active {
+    background: var(--lp-nav-active-bg);
+    color: var(--lp-nav-active-color);
+    border-left-color: var(--lp-nav-active-border);
+    font-weight: 600;
+}
+
+.lp-nav-link.active .lp-nav-icon {
+    color: var(--lp-nav-active-color);
+}
+
+/* ── Nav icon ── */
+.lp-nav-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    color: var(--lp-nav-icon-color);
+    transition: color 0.18s;
+}
+
+/* ── Nav badge (count pill) ── */
+.lp-nav-badge {
+    margin-left: auto;
+    background: rgba(0, 184, 169, 0.12);
+    color: #00897b;
+    border-radius: 99px;
+    font-size: 0.63rem;
+    font-weight: 700;
+    padding: 1px 7px;
+    letter-spacing: 0.3px;
+    border: 1px solid rgba(0, 184, 169, 0.25);
+}
+
+/* ════════════════════════════════════════════════════════════
+   9. UTILITY CLASSES
+   ════════════════════════════════════════════════════════════ */
+.lp-flex         { display: flex; }
+.lp-flex-center  { display: flex; align-items: center; justify-content: center; }
+.lp-flex-between { display: flex; align-items: center; justify-content: space-between; }
+.lp-gap-1        { gap: 4px; }
+.lp-gap-2        { gap: 8px; }
+.lp-gap-3        { gap: 12px; }
+.lp-gap-4        { gap: 16px; }
+
+.lp-mt-0 { margin-top: 0; }
+.lp-mb-0 { margin-bottom: 0; }
+
+/* ════════════════════════════════════════════════════════════
+   10. RESPONSIVE — Sidebar collapse on mobile
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 991.98px) {
+    #lp-sidebar {
+        position: fixed;
+        left: -100%;
+        top: var(--lp-nav-height);
+        z-index: 1040;
+        height: calc(100vh - var(--lp-nav-height));
+        transition: left var(--lp-transition-slow);
+        box-shadow: var(--lp-shadow-lg);
+    }
+
+    #lp-sidebar.open {
+        left: 0;
+    }
+
+    .lp-content {
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .lp-content {
+        padding: 16px 12px;
+    }
+}
+
+/* ── Sidebar overlay backdrop (mobile) ── */
+.lp-sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1039;
+    backdrop-filter: blur(2px);
+}
+
+.lp-sidebar-overlay.active {
+    display: block;
+}

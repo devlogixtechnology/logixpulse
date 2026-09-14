@@ -1,0 +1,432 @@
+/* ============================================================
+   LogixPulse — Sidebar Styles  (assets/css/sidebar.css)
+   All rules use #lp-sidebar or .lp-sb- prefix.
+   Zero conflicts with navbar.css, app.css, or Bootstrap.
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════
+   SIDEBAR DESIGN TOKENS
+   ════════════════════════════════════════════════════════ */
+:root {
+    /* ── Sidebar dimensions ── */
+    --lp-sb-width:           248px;
+    --lp-sb-collapsed-width: 60px;
+
+    /* ── Sidebar colours — dark navy palette ── */
+    --lp-sb-bg:              #0f1729;   /* Main sidebar bg              */
+    --lp-sb-top-border:      rgba(255,255,255,0.07);
+    --lp-sb-section-label:   rgba(255,255,255,0.30);
+
+    /* ── Nav link ── */
+    --lp-sb-link-color:      rgba(255,255,255,0.65);
+    --lp-sb-link-hover-bg:   rgba(255,255,255,0.06);
+    --lp-sb-link-hover-color:#ffffff;
+
+    /* ── Active link — indigo filled ── */
+    --lp-sb-active-bg:       #4f46e5;
+    --lp-sb-active-color:    #ffffff;
+
+    /* ── Icon ── */
+    --lp-sb-icon-color:      rgba(255,255,255,0.50);
+    --lp-sb-icon-active:     #ffffff;
+
+    /* ── Badge ── */
+    --lp-sb-badge-bg:        rgba(99,102,241,0.25);
+    --lp-sb-badge-color:     #a5b4fc;
+
+    /* ── Footer ── */
+    --lp-sb-footer-border:   rgba(255,255,255,0.08);
+    --lp-sb-footer-name:     #ffffff;
+    --lp-sb-footer-role:     rgba(255,255,255,0.50);
+    --lp-sb-online-color:    #22c55e;
+
+    /* ── Toggle button ── */
+    --lp-sb-toggle-color:    rgba(255,255,255,0.40);
+    --lp-sb-toggle-hover:    rgba(255,255,255,0.12);
+
+    /* ── Brand ── */
+    --lp-sb-brand-text:      #ffffff;
+    --lp-sb-brand-accent:    #818cf8;
+}
+
+/* ════════════════════════════════════════════════════════
+   SIDEBAR SHELL
+   ════════════════════════════════════════════════════════ */
+#lp-sidebar {
+    width: var(--lp-sb-width);
+    min-height: calc(100vh - var(--lp-nav-height, 58px));
+    height: calc(100vh - var(--lp-nav-height, 58px));
+    background: var(--lp-sb-bg);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: var(--lp-nav-height, 58px);
+    overflow: hidden;
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+/* ── Collapsed state ── */
+#lp-sidebar.lp-sb-collapsed {
+    width: var(--lp-sb-collapsed-width);
+}
+
+/* ════════════════════════════════════════════════════════
+   TOP: BRAND + COLLAPSE BUTTON
+   ════════════════════════════════════════════════════════ */
+.lp-sb-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    height: 56px;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--lp-sb-top-border);
+}
+
+/* Brand link */
+.lp-sb-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+    overflow: hidden;
+    flex: 1;
+    min-width: 0;
+}
+
+.lp-sb-brand-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 7px;
+}
+
+.lp-sb-brand-text {
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: var(--lp-sb-brand-text);
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    transition: opacity 0.2s, width 0.2s;
+    line-height: 1;
+}
+
+.lp-sb-brand-text span { color: var(--lp-sb-brand-accent); }
+
+/* Collapse toggle button */
+#lp-sb-collapse-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--lp-sb-toggle-color);
+    padding: 0;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s, transform 0.25s;
+}
+
+#lp-sb-collapse-btn:hover {
+    background: var(--lp-sb-toggle-hover);
+    color: #fff;
+}
+
+#lp-sb-collapse-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Rotate icon when collapsed */
+#lp-sidebar.lp-sb-collapsed #lp-sb-collapse-btn {
+    transform: rotate(180deg);
+}
+
+/* Hide text labels when collapsed */
+#lp-sidebar.lp-sb-collapsed .lp-sb-brand-text,
+#lp-sidebar.lp-sb-collapsed .lp-sb-text,
+#lp-sidebar.lp-sb-collapsed .lp-sb-label,
+#lp-sidebar.lp-sb-collapsed .lp-sb-badge,
+#lp-sidebar.lp-sb-collapsed .lp-sb-footer-info {
+    display: none;
+}
+
+/* Centre icons when collapsed */
+#lp-sidebar.lp-sb-collapsed .lp-sb-link {
+    justify-content: center;
+    padding: 10px;
+}
+
+#lp-sidebar.lp-sb-collapsed .lp-sb-footer {
+    justify-content: center;
+    padding: 12px 0;
+}
+
+/* ════════════════════════════════════════════════════════
+   SCROLL AREA
+   ════════════════════════════════════════════════════════ */
+.lp-sb-inner {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 8px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.12) transparent;
+}
+
+.lp-sb-inner::-webkit-scrollbar       { width: 3px; }
+.lp-sb-inner::-webkit-scrollbar-track { background: transparent; }
+.lp-sb-inner::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+/* ════════════════════════════════════════════════════════
+   SECTION
+   ════════════════════════════════════════════════════════ */
+.lp-sb-section {
+    margin-bottom: 4px;
+}
+
+.lp-sb-label {
+    display: block;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--lp-sb-section-label);
+    padding: 16px 12px 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ════════════════════════════════════════════════════════
+   NAV LIST
+   ════════════════════════════════════════════════════════ */
+.lp-sb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+/* ════════════════════════════════════════════════════════
+   NAV LINK
+   ════════════════════════════════════════════════════════ */
+.lp-sb-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: var(--lp-sb-link-color);
+    font-size: 0.845rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.16s, color 0.16s;
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    position: relative;
+}
+
+.lp-sb-link:hover {
+    background: var(--lp-sb-link-hover-bg);
+    color: var(--lp-sb-link-hover-color);
+    text-decoration: none;
+}
+
+/* Active state — indigo filled */
+.lp-sb-link.lp-sb-active {
+    background: var(--lp-sb-active-bg);
+    color: var(--lp-sb-active-color);
+    font-weight: 600;
+}
+
+.lp-sb-link.lp-sb-active .lp-sb-icon {
+    color: var(--lp-sb-icon-active);
+    opacity: 1;
+}
+
+/* ── Icon ── */
+.lp-sb-icon {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    color: var(--lp-sb-icon-color);
+    transition: color 0.16s;
+    opacity: 0.9;
+}
+
+/* ── Text label ── */
+.lp-sb-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Badge (count pill) ── */
+.lp-sb-badge {
+    margin-left: auto;
+    background: var(--lp-sb-badge-bg);
+    color: var(--lp-sb-badge-color);
+    border-radius: 99px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 7px;
+    letter-spacing: 0.2px;
+    flex-shrink: 0;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ════════════════════════════════════════════════════════
+   FOOTER: USER INFO
+   ════════════════════════════════════════════════════════ */
+.lp-sb-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-top: 1px solid var(--lp-sb-footer-border);
+    flex-shrink: 0;
+    min-width: 0;
+}
+
+/* Avatar circle */
+.lp-sb-footer-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* Name + role block */
+.lp-sb-footer-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.lp-sb-footer-name {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--lp-sb-footer-name);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    line-height: 1.3;
+}
+
+.lp-sb-footer-role {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.7rem;
+    color: var(--lp-sb-footer-role);
+    white-space: nowrap;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* Online status dot */
+.lp-sb-online-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lp-sb-online-color);
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+/* Sign-out button */
+.lp-sb-footer-signout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.35);
+    padding: 0;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+}
+
+.lp-sb-footer-signout:hover {
+    background: rgba(220, 38, 38, 0.15);
+    color: #f87171;
+}
+
+.lp-sb-footer-signout svg {
+    width: 15px;
+    height: 15px;
+}
+
+/* ════════════════════════════════════════════════════════
+   MOBILE OVERLAY
+   ════════════════════════════════════════════════════════ */
+.lp-sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1039;
+    backdrop-filter: blur(2px);
+}
+
+.lp-sidebar-overlay.active {
+    display: block;
+}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════ */
+@media (max-width: 991.98px) {
+    #lp-sidebar {
+        position: fixed;
+        left: calc(-1 * var(--lp-sb-width));
+        top: var(--lp-nav-height, 58px);
+        z-index: 1040;
+        height: calc(100vh - var(--lp-nav-height, 58px));
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+    }
+
+    #lp-sidebar.open {
+        left: 0;
+    }
+}
+
+@media (max-width: 575.98px) {
+    #lp-sidebar {
+        width: min(var(--lp-sb-width), 90vw);
+    }
+}
