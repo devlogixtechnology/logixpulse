@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanban Board</title>
+<style>
+  :root {
+    --teal-dark: #0e5c53;
+    --teal-light: #2ba99a;
+    --column-bg: #ffffff;
+    --column-header: #eef7f6;
+    --border: #dbe4e2;
+    --text-primary: #123c38;
+    --text-muted: #6b7a78;
+    --accent: #1a8f82;
+    --accent-soft: rgba(26, 143, 130, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: linear-gradient(160deg, var(--teal-dark), var(--teal-light));
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  .board-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 4px;
+  }
+
+  .board-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    margin: 0 0 20px;
+  }
+
+  /* The board: equal-width columns, wraps to horizontal scroll on narrow screens */
+  .board {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .column {
+    flex: 1 1 0;
+    min-width: 0;
+    background: var(--column-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--column-header);
+    border-radius: 10px 10px 0 0;
+  }
+
+  .column-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .column-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .column-title {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .column-count {
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+
+  .column-body {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .column-empty {
+    width: 100%;
+    border: 1.5px dashed var(--border);
+    border-radius: 8px;
+    padding: 28px 12px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  /* Column accent colors so each column is visually distinct, kept within the teal palette */
+  .column[data-col="backlog"] .column-dot { background: #6b7a78; }
+  .column[data-col="todo"] .column-dot { background: #2ba99a; }
+  .column[data-col="inprogress"] .column-dot { background: #e0a94e; }
+  .column[data-col="done"] .column-dot { background: #1a8f82; }
+
+  /* Responsive: below 700px, columns become a horizontally scrollable row
+     instead of squeezing to unreadable widths */
+  @media (max-width: 700px) {
+    .board {
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .column {
+      flex: 0 0 240px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <h1 class="board-title">Sprint Board</h1>
+  <p class="board-subtitle">Empty layout — columns only, no cards yet</p>
+
+  <div class="board">
+    <div class="column" data-col="backlog">
+      <div class="column-header">
+        <div class="column-header-left">
+          <span class="column-dot"></span>
+          <span class="column-title">Backlog</span>
+        </div>
+        <span class="column-count">0</span>
+      </div>
+      <div class="column-body">
+        <div class="column-empty">No cards yet</div>
+      </div>
+    </div>
+
+    <div class="column" data-col="todo">
+      <div class="column-header">
+        <div class="column-header-left">
+          <span class="column-dot"></span>
+          <span class="column-title">To Do</span>
+        </div>
+        <span class="column-count">0</span>
+      </div>
+      <div class="column-body">
+        <div class="column-empty">No cards yet</div>
+      </div>
+    </div>
+
+    <div class="column" data-col="inprogress">
+      <div class="column-header">
+        <div class="column-header-left">
+          <span class="column-dot"></span>
+          <span class="column-title">In Progress</span>
+        </div>
+        <span class="column-count">0</span>
+      </div>
+      <div class="column-body">
+        <div class="column-empty">No cards yet</div>
+      </div>
+    </div>
+
+    <div class="column" data-col="done">
+      <div class="column-header">
+        <div class="column-header-left">
+          <span class="column-dot"></span>
+          <span class="column-title">Done</span>
+        </div>
+        <span class="column-count">0</span>
+      </div>
+      <div class="column-body">
+        <div class="column-empty">No cards yet</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
