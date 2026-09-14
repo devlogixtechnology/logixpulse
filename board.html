@@ -6,24 +6,30 @@
 <title>Kanban Board</title>
 <style>
   :root {
-    --teal-dark: #0e5c53;
-    --teal-light: #2ba99a;
-    --column-bg: #ffffff;
-    --column-header: #eef7f6;
-    --border: #dbe4e2;
-    --text-primary: #123c38;
-    --text-muted: #6b7a78;
-    --accent: #1a8f82;
-    --accent-soft: rgba(26, 143, 130, 0.12);
+    /* Exact tokens from LogixPulse Design System & Component Spec */
+    --primary-indigo: #4F46E5;   /* Primary Brand */
+    --primary-hover: #4338CA;    /* Primary Hover / Active-Pressed */
+    --success-emerald: #10B981; /* Won / Paid */
+    --warning-amber: #F59E0B;   /* Pending / Review */
+    --danger-red: #EF4444;      /* Destructive */
+    --canvas: #F8FAFB;          /* Neutral Canvas, base viewport surface */
+    --pure-surface: #FFFFFF;    /* Pure Surface, elevated containers */
+    --primary-text: #111827;
+    --muted-text: #6B7280;
+    --dark-nav: #111827;        /* Dark Navigation / Sidebar Surface */
+    --border: #E5E7EB;
+
+    --accent: var(--primary-indigo);
+    --accent-soft: rgba(79, 70, 229, 0.12);
   }
 
   * { box-sizing: border-box; }
 
   body {
     margin: 0;
-    background: linear-gradient(160deg, var(--teal-dark), var(--teal-light));
-    color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--canvas);
+    color: var(--primary-text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     min-height: 100vh;
     padding: 24px;
   }
@@ -31,13 +37,14 @@
   .board-title {
     font-size: 20px;
     font-weight: 700;
-    color: #ffffff;
+    font-family: 'Manrope', -apple-system, sans-serif;
+    color: var(--primary-text);
     margin: 0 0 4px;
   }
 
   .board-subtitle {
     font-size: 13px;
-    color: rgba(255,255,255,0.8);
+    color: var(--muted-text);
     margin: 0 0 20px;
   }
 
@@ -52,13 +59,13 @@
   .column {
     flex: 1 1 0;
     min-width: 0;
-    background: var(--column-bg);
+    background: var(--pure-surface);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 12px; /* Modular Cards/Modals rounded-xl per spec */
     display: flex;
     flex-direction: column;
     min-height: 420px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.04);
   }
 
   .column-header {
@@ -67,8 +74,7 @@
     justify-content: space-between;
     padding: 14px 16px;
     border-bottom: 1px solid var(--border);
-    background: var(--column-header);
-    border-radius: 10px 10px 0 0;
+    border-radius: 12px 12px 0 0;
   }
 
   .column-header-left {
@@ -95,7 +101,7 @@
 
   .column-count {
     font-size: 12px;
-    color: var(--accent);
+    color: var(--primary-indigo);
     background: var(--accent-soft);
     padding: 2px 8px;
     border-radius: 20px;
@@ -114,18 +120,25 @@
   .column-empty {
     width: 100%;
     border: 1.5px dashed var(--border);
-    border-radius: 8px;
+    border-radius: 8px; /* Standard UI rounded-lg per spec */
     padding: 28px 12px;
     text-align: center;
-    color: var(--text-muted);
+    color: var(--muted-text);
     font-size: 13px;
   }
 
-  /* Column accent colors so each column is visually distinct, kept within the teal palette */
-  .column[data-col="backlog"] .column-dot { background: #6b7a78; }
-  .column[data-col="todo"] .column-dot { background: #2ba99a; }
-  .column[data-col="inprogress"] .column-dot { background: #e0a94e; }
-  .column[data-col="done"] .column-dot { background: #1a8f82; }
+  /* Column accents mapped to the spec's semantic status colors */
+  .column[data-col="backlog"] .column-header { background: #F3F4F6; }
+  .column[data-col="backlog"] .column-dot { background: var(--muted-text); }
+
+  .column[data-col="todo"] .column-header { background: var(--accent-soft); }
+  .column[data-col="todo"] .column-dot { background: var(--primary-indigo); }
+
+  .column[data-col="inprogress"] .column-header { background: rgba(245, 158, 11, 0.12); }
+  .column[data-col="inprogress"] .column-dot { background: var(--warning-amber); }
+
+  .column[data-col="done"] .column-header { background: rgba(16, 185, 129, 0.12); }
+  .column[data-col="done"] .column-dot { background: var(--success-emerald); }
 
   /* Responsive: below 700px, columns become a horizontally scrollable row
      instead of squeezing to unreadable widths */
