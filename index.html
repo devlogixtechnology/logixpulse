@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Internal staff login">
+  <title>Staff Login | LogixPulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="login-shell">
+    <section class="brand-panel" aria-label="LogixPulse introduction">
+      <div class="brand-panel__glow"></div>
+      <div class="brand-panel__content">
+        <header class="brand-header">
+          <a class="brand" href="/" aria-label="LogixPulse home">
+            <span class="brand__mark" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span>LogixPulse</span>
+          </a>
+          <span class="environment-pill"><i></i>Internal Ops Node</span>
+        </header>
+
+        <div class="brand-message">
+          <p class="eyebrow">Staff Login</p>
+          <h1>Run the business.<br><strong>Close the deal.</strong></h1>
+          <p class="brand-message__copy">Integrated CRM &amp; pipeline operations architecture for DevLogix partners, executive management, and sales leadership.</p>
+        </div>
+
+        <div class="role-list" aria-label="Available staff roles">
+          <div class="role-item"><i class="role-item__dot role-item__dot--blue"></i><div><b>Super Admin</b><small>System Admin &amp; Governance</small></div></div>
+          <div class="role-item"><i class="role-item__dot role-item__dot--green"></i><div><b>Executive &amp; VP</b><small>Revenue Velocity &amp; Analytics</small></div></div>
+          <div class="role-item"><i class="role-item__dot role-item__dot--yellow"></i><div><b>Team Lead</b><small>Pipeline &amp; Dispatch</small></div></div>
+        </div>
+      </div>
+      <footer class="brand-footer"><span><i class="lock-icon" aria-hidden="true">⌁</i> FIPS 140-3 Compliant Session Encryption</span><span>v0.1</span></footer>
+    </section>
+
+    <section class="form-panel" aria-labelledby="login-title">
+      <div class="form-panel__inner">
+        <div class="form-intro">
+          <span class="internal-badge"><span aria-hidden="true">♙</span> Internal Environment</span>
+          <h2 id="login-title">Login</h2>
+          <p>Enter your enterprise credentials to authenticate into the workspace.</p>
+        </div>
+
+        <form id="login-form" class="login-form" data-login-endpoint="login.php" data-redirect-path="/crm/">
+          <div class="field-group">
+            <label for="email">Work email address</label>
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true">@</span>
+              <input id="email" name="email" type="email" autocomplete="username" placeholder="alex.lawson@devlogix.io" required>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <span class="input-icon input-icon--key" aria-hidden="true">⌑</span>
+              <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+              <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false">◉</button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-option"><input type="checkbox" name="remember"><span class="checkbox" aria-hidden="true"></span><span>Remember workstation</span></label>
+            <span class="security-status"><i></i>2FA Active</span>
+          </div>
+
+          <p id="login-message" class="login-message" role="alert" aria-live="polite"></p>
+          <button id="login-submit" class="submit-button" type="submit">Login <span aria-hidden="true">→</span></button>
+          <p class="support-text">Forgot your password? Contact your System Administrator</p>
+        </form>
+
+        <div class="sso-divider"><span>Corporate SSO Gateway</span></div>
+        <button class="sso-button" type="button" disabled><span aria-hidden="true">⊙</span> Authenticate via Workspace SSO</button>
+
+        <div class="form-footer"><p><span aria-hidden="true">△</span> Internal System — Authorized Personnel Only.</p><small>Unauthorized access attempts are monitored and recorded under audit policy.</small></div>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
