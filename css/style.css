@@ -1,0 +1,400 @@
+/* ==========================================================================
+   LogixPulse Client Portal - Auth Pages
+   (Sign in, magic link, verify code, reset / set password)
+
+   Same design tokens as client-portal-dashboard/assets/css/style.css so
+   the auth flow and the dashboard feel like one product.
+   ========================================================================== */
+
+:root {
+    --color-navy: #1E2432;
+    --color-gray-dark: #5F6B73;
+    --color-gray-muted: #8A93A3;
+    --color-white: #FFFFFF;
+
+    --color-accent: #4F46E5;
+    --color-accent-dark: #4338CA;
+    --color-accent-light: #EEF0FF;
+
+    --border-color: #E5E7EE;
+    --card-bg: var(--color-white);
+    --page-bg: #F6F7FB;
+    --navbar-bg: #FFFFFF;
+
+    --radius-md: 14px;
+    --radius-sm: 8px;
+    --radius-pill: 999px;
+
+    --shadow-card: 0 1px 2px rgba(30, 36, 50, 0.05), 0 1px 8px rgba(30, 36, 50, 0.04);
+    --shadow-navbar: 0 1px 0 rgba(30, 36, 50, 0.06);
+
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--page-bg);
+    color: var(--color-navy);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   Top navbar (index.html only)
+   ========================================================================== */
+
+.auth-navbar {
+    background-color: var(--navbar-bg);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-navbar);
+}
+
+.auth-navbar-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    gap: 24px;
+}
+
+.auth-navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--color-navy);
+    white-space: nowrap;
+}
+
+.brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    flex-shrink: 0;
+}
+
+.brand-mark svg {
+    width: 18px;
+    height: 18px;
+}
+
+.auth-navbar-brand-subtext {
+    font-weight: 400;
+    color: var(--color-gray-muted);
+    margin-left: 4px;
+    font-size: 13px;
+}
+
+.auth-navbar-cta {
+    font-size: 14px;
+    color: var(--color-gray-dark);
+    white-space: nowrap;
+}
+
+.auth-navbar-cta-link {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.auth-navbar-cta-link:hover {
+    color: var(--color-accent-dark);
+}
+
+/* ==========================================================================
+   Page wrapper / centering
+   ========================================================================== */
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 56px 20px;
+}
+
+.auth-page-inner {
+    width: 100%;
+    max-width: 440px;
+}
+
+.auth-heading {
+    text-align: center;
+    margin: 0 0 28px;
+}
+
+.auth-heading h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--color-navy);
+}
+
+.text-accent {
+    color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Auth card
+   ========================================================================== */
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: 36px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.auth-title {
+    margin: 0 0 8px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-navy);
+}
+
+.auth-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: var(--color-gray-dark);
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   Form fields
+   ========================================================================== */
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--color-navy);
+    background-color: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-group input::placeholder {
+    color: var(--color-gray-muted);
+}
+
+.form-group input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-light);
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-field input {
+    padding-right: 44px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--color-gray-muted);
+}
+
+.password-toggle:hover {
+    background-color: var(--page-bg);
+    color: var(--color-gray-dark);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-accent-dark);
+}
+
+/* ==========================================================================
+   Footer links
+   ========================================================================== */
+
+.auth-footer-links {
+    text-align: center;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--color-gray-dark);
+}
+
+.auth-footer-links a {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.auth-footer-links a:hover {
+    color: var(--color-accent-dark);
+}
+
+.auth-footer {
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--color-gray-dark);
+}
+
+.auth-footer.text-center {
+    text-align: center;
+}
+
+.margin-top-sm {
+    margin-top: 12px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.back-link,
+.auth-link,
+.auth-link-small {
+    color: var(--color-accent);
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.back-link:hover,
+.auth-link:hover,
+.auth-link-small:hover {
+    color: var(--color-accent-dark);
+}
+
+.auth-link-small {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   OTP (verify code) inputs
+   ========================================================================== */
+
+.otp-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.otp-input {
+    width: 48px;
+    height: 56px;
+    padding: 0;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-navy);
+    background-color: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.otp-input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-light);
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 24px;
+    }
+
+    .otp-input {
+        width: 40px;
+        height: 48px;
+        font-size: 18px;
+    }
+}
