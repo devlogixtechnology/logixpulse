@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+=======
 # Environment & Database Configuration
 config/db.local.php
 .env
@@ -16,3 +26,4 @@ Thumbs.db
 .idea/
 .vscode/
 *.log
+>>>>>>> f06b85387a1b5442b68e005998c1dc067217c806
