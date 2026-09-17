@@ -1,0 +1,47 @@
+/* ============================================
+   LogixPulse Design System — Color Theme
+   Figma se extract kiya gaya, WCAG 2.1 AAA compliant
+   ============================================ */
+
+:root {
+  /* Brand / Primary */
+  --lp-primary-indigo: #4F46E5;   /* Main CTA buttons, brand identity */
+  --lp-primary-hover:  #4338CA;   /* Button hover state */
+
+  /* Status colors */
+  --lp-success-emerald: #10B981; /* Won / Paid / positive status */
+  --lp-warning-amber:   #F59E0B; /* Pending / Review / alerts */
+  --lp-danger-red:      #EF4444; /* Delete / overdue / errors */
+
+  /* Surfaces */
+  --lp-canvas:  #F8FAFB; /* Page background */
+  --lp-surface: #FFFFFF; /* Card / container background */
+
+  /* Text */
+  --lp-text-primary: #111827; /* Headings, main copy */
+  --lp-text-muted:   #6B7280; /* Labels, secondary text */
+
+  /* Dark shell (sidebar / nav) */
+  --lp-dark-nav: #111827;
+  --lp-dark-nav-text: #FFFFFF;
+
+  /* Radius scale */
+  --lp-radius-sm: 4px;   /* small elements, inputs, chips */
+  --lp-radius-md: 8px;   /* standard buttons / cells */
+  --lp-radius-lg: 12px;  /* cards, modals */
+
+  /* Spacing baseline */
+  --lp-space-unit: 8px;
+
+  /* Typography */
+  --lp-font-headline: 'Manrope', sans-serif;
+  --lp-font-body: 'Inter', sans-serif;
+}
+
+/* Dark mode variant (agar chahiye) */
+[data-theme="dark"] {
+  --lp-canvas: #111827;
+  --lp-surface: #1F2937;
+  --lp-text-primary: #F9FAFB;
+  --lp-text-muted: #9CA3AF;
+}
