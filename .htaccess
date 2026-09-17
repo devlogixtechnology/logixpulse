@@ -1,0 +1,2 @@
+# Prevent direct web access to stored invoice PDFs.
+Require all denied
