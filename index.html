@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agreement Page | LogixPulse Client Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="portal-navbar">
+        <div class="navbar-inner">
+            <div class="navbar-brand">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="2 12 8 12 10 6 14 18 16 12 22 12"></polyline>
+                    </svg>
+                </span>
+                <span class="brand-text">LogixPulse <span class="brand-subtext">Client Portal</span></span>
+            </div>
+            
+            <nav class="navbar-links">
+                <a href="#" class="nav-link">Dashboard</a>
+                <a href="#" class="nav-link">Projects</a>
+                <a href="#" class="nav-link">Documents</a>
+                <a href="#" class="nav-link">Your Invoices</a>
+                <a href="#" class="nav-link active">Master Agreements</a>
+                <a href="#" class="nav-link">Support</a>
+            </nav>
+
+            <div class="navbar-actions">
+                <span class="workspace-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="7" width="18" height="13" rx="2"></rect>
+                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    Client Workspace
+                </span>
+                
+                <div class="profile-trigger">
+                    <span class="avatar">JD</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-wrapper">
+        <div class="dashboard-content">
+            
+            <div class="page-header">
+                <h1 class="page-title">Master Agreements</h1>
+                <p class="page-subtitle">Review, sign, and download your contracts and legal documents.</p>
+            </div>
+
+            <div class="agreement-layout">
+                <!-- Left Sidebar / Navigation (Optional based on Figma, included for standard layout) -->
+                <aside class="agreement-sidebar">
+                    <div class="sidebar-menu">
+                        <a href="#" class="menu-item active">
+                            <div class="menu-item-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            </div>
+                            <div class="menu-item-text">
+                                <span class="title">Service Agreement</span>
+                                <span class="subtitle">Action Required</span>
+                            </div>
+                            <span class="status-indicator pending"></span>
+                        </a>
+                        
+                        <a href="#" class="menu-item">
+                            <div class="menu-item-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            </div>
+                            <div class="menu-item-text">
+                                <span class="title">Non-Disclosure (NDA)</span>
+                                <span class="subtitle">Signed Aug 15</span>
+                            </div>
+                            <span class="status-indicator signed"></span>
+                        </a>
+                    </div>
+                </aside>
+
+                <!-- Main Agreement Content Area -->
+                <div class="agreement-main">
+                    
+                    <div class="agreement-card">
+                        
+                        <!-- Agreement Header -->
+                        <div class="agreement-header">
+                            <div class="header-status">
+                                <span class="status-badge status-pending">
+                                    <span class="status-dot"></span> Pending Signature
+                                </span>
+                                <span class="document-id">Ref: MSA-2026-0892</span>
+                            </div>
+                            <h2 class="agreement-title">Master Service Agreement</h2>
+                            <p class="agreement-meta">Prepared for <strong>Acme Cloud Infrastructure</strong> on Sep 16, 2026</p>
+                        </div>
+
+                        <!-- Agreement Body (Document Content Shell) -->
+                        <div class="agreement-body">
+                            <div class="document-section">
+                                <h3>1. Scope of Services</h3>
+                                <p>This Master Service Agreement ("Agreement") is entered into by and between LogixPulse ("Provider") and Acme Cloud Infrastructure ("Client"). Provider agrees to deliver the services as outlined in subsequent Statements of Work (SOWs) attached hereto.</p>
+                            </div>
+                            
+                            <div class="document-section">
+                                <h3>2. Term and Termination</h3>
+                                <p>This Agreement shall commence on the Effective Date and shall continue for a period of twelve (12) months. Either party may terminate this Agreement with thirty (30) days written notice.</p>
+                            </div>
+
+                            <div class="document-section">
+                                <h3>3. Payment Terms</h3>
+                                <p>Client agrees to pay all undisputed invoices within Net 30 days of receipt. Late payments may incur a fee of 1.5% per month.</p>
+                                <div class="info-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <span>Please ensure your billing information in the Account Settings is up to date before signing.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Signature Section Shell -->
+                        <div class="agreement-signature-section">
+                            <div class="signature-header">
+                                <h3>E-Signature Required</h3>
+                                <p>By signing below, you agree to the terms and conditions outlined in this document.</p>
+                            </div>
+                            
+                            <div class="signature-grid">
+                                <div class="signature-box provider-box">
+                                    <label>LogixPulse (Provider)</label>
+                                    <div class="signature-line signed">
+                                        <span class="signature-font">Alex Lawson</span>
+                                    </div>
+                                    <div class="signature-details">
+                                        <span>Alex Lawson, VP Sales</span>
+                                        <span>Sep 15, 2026</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="signature-box client-box action-required">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                        <label>Acme Cloud Infrastructure (Client)</label>
+                                        <button class="btn btn-secondary" id="clear-signature-btn" style="padding: 4px 8px; font-size: 11px; margin-top: -4px; display: none;">Clear</button>
+                                    </div>
+                                    <div class="signature-line" id="client-signature-area" style="position: relative; cursor: crosshair; touch-action: none;">
+                                        <canvas id="signature-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+                                        <span id="canvas-placeholder" style="color: var(--color-accent); font-size: 14px; font-weight: 500; pointer-events: none; position: relative;">Draw signature here</span>
+                                    </div>
+                                    <div class="signature-details">
+                                        <span>Client Representative</span>
+                                        <span id="client-date-text">Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Footer -->
+                        <div class="agreement-footer">
+                            <button class="btn btn-outline" id="download-pdf-btn">Download PDF</button>
+                            <button class="btn btn-primary" id="submit-signature-btn" disabled>Submit Signature</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
