@@ -1,6 +1,3 @@
--- LogixPulse / FEA-W7D4-2 ke liye database schema
--- Ye table columns (stages) aur tasks (cards) ko store karti hai
-
 CREATE TABLE IF NOT EXISTS columns_table (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,      -- e.g. "Backlog", "In Progress", "Done"

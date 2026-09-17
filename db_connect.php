@@ -1,5 +1,4 @@
 <?php
-// Apni database details yahan daalein (XAMPP/local server ke hisab se)
  $host = "127.0.0.1";
 $dbname = "logixpulse_kanban";
 $username = "root";

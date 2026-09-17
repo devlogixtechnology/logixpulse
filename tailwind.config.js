@@ -1,6 +1,4 @@
-/** LogixPulse Design System — Tailwind Config
- *  Isay apne project ke tailwind.config.js mein merge kar lein
- */
+
 module.exports = {
   theme: {
     extend: {
