@@ -1,171 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>LogixPulse — Kanban (FEA-W7D4-2)</title>
-<style>
-  :root {
-    --primary: #4F46E5;
-    --primary-hover: #4338CA;
-    --success: #10B981;
-    --warning: #F59E0B;
-    --danger: #EF4444;
-    --canvas: #F8FAFB;
-    --surface: #FFFFFF;
-    --text-primary: #111827;
-    --text-muted: #6B7280;
-    --dark-nav: #111827;
-  }
-  * { box-sizing: border-box; }
-  body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: var(--canvas);
-    color: var(--text-primary);
-    margin: 0;
-    padding: 24px;
-  }
-  h1 {
-    font-family: 'Manrope', sans-serif;
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
-  .board {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-  }
-  .column {
-    background: var(--surface);
-    border-radius: 12px;
-    padding: 12px;
-    min-width: 260px;
-    flex: 1;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    min-height: 300px;
-  }
-  .column h2 {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin: 4px 0 12px 4px;
-  }
-  .card {
-    background: var(--canvas);
-    border: 1px solid #E5E7EB;
-    border-radius: 8px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    font-size: 14px;
-    cursor: grab;
-    transition: box-shadow 0.15s, opacity 0.15s;
-  }
-  .card:active { cursor: grabbing; }
-  .card.dragging { opacity: 0.4; }
-  .column.drag-over { outline: 2px dashed var(--primary); outline-offset: -4px; }
-  #status {
-    margin-top: 16px;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-  #status.success { color: var(--success); }
-  #status.error { color: var(--danger); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | LogixPulse Client Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<h1>LogixPulse Board</h1>
-<p class="subtitle">Card ko drag karke doosre column mein drop karein — refresh karne pe bhi save rahega</p>
+    <header class="auth-navbar">
+        <div class="auth-navbar-inner">
+            <div class="auth-navbar-brand">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="2 12 8 12 10 6 14 18 16 12 22 12"></polyline>
+                    </svg>
+                </span>
+                <span>LogixPulse <span class="auth-navbar-brand-subtext">Client Portal</span></span>
+            </div>
+            <a href="#" class="auth-navbar-cta">Don't have an invite? <span class="auth-navbar-cta-link">Contact us</span></a>
+        </div>
+    </header>
 
-<div class="board" id="board">
-  <div class="column" data-column-id="1">
-    <h2>Backlog</h2>
-    <div class="card" draggable="true" data-task-id="1">FEA-W7D4-2 — Save the Drag into the Database</div>
-  </div>
-  <div class="column" data-column-id="2">
-    <h2>In Progress</h2>
-    <div class="card" draggable="true" data-task-id="2">Design login screen</div>
-  </div>
-  <div class="column" data-column-id="3">
-    <h2>Done</h2>
-    <div class="card" draggable="true" data-task-id="3">Setup MySQL connection</div>
-  </div>
-</div>
+    <main class="auth-wrapper">
+        <div class="auth-page-inner">
 
-<div id="status"></div>
+            <div class="auth-heading">
+                <h1>Sign in to <span class="text-accent">your Client Portal</span></h1>
+            </div>
 
-<script>
-// === Drag & Drop wiring ===
-let draggedCard = null;
+            <div class="auth-card">
+                <form id="traditional-login-form" class="auth-form" action="client-portal-dashboard/index.php" method="GET">
+                    <div class="form-group">
+                        <label for="login-email">Email address</label>
+                        <input
+                            type="email"
+                            id="login-email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                        />
+                    </div>
 
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('dragstart', () => {
-    draggedCard = card;
-    card.classList.add('dragging');
-  });
-  card.addEventListener('dragend', () => {
-    card.classList.remove('dragging');
-    draggedCard = null;
-  });
-});
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <div class="password-field">
+                            <input
+                                type="password"
+                                id="login-password"
+                                name="password"
+                                placeholder="••••••••"
+                                required
+                            />
+                            <button type="button" class="password-toggle" id="password-toggle" aria-label="Show password" aria-pressed="false">
+                                <svg class="icon-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icon-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.62 21.62 0 0 1 5.06-6.06M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
 
-document.querySelectorAll('.column').forEach(column => {
-  column.addEventListener('dragover', e => {
-    e.preventDefault();
-    column.classList.add('drag-over');
-  });
-  column.addEventListener('dragleave', () => {
-    column.classList.remove('drag-over');
-  });
-  column.addEventListener('drop', e => {
-    e.preventDefault();
-    column.classList.remove('drag-over');
-    if (!draggedCard) return;
+                    <button type="submit" id="login-submit" class="btn btn-primary">Sign In</button>
+                </form>
+            </div>
 
-    column.appendChild(draggedCard); // visual move (turant dikhta hai)
+            <div class="auth-footer-links">
+                <p>Forgot your password? <a href="reset-password.html" id="forgot-password-link">Get help signing in</a></p>
+                <p>Prefer not to use passwords? <a href="magic-code.html">Sign in with magic link</a></p>
+            </div>
 
-    const taskId = draggedCard.dataset.taskId;
-    const newColumnId = column.dataset.columnId;
-    const newPosition = [...column.querySelectorAll('.card')].indexOf(draggedCard) + 1;
+        </div>
+    </main>
 
-    saveDragToDatabase(taskId, newColumnId, newPosition);
-  });
-});
-
-// === Ye function asal "save" karta hai — backend ko batata hai ===
-function saveDragToDatabase(taskId, newColumnId, newPosition) {
-  const statusEl = document.getElementById('status');
-  statusEl.className = '';
-  statusEl.textContent = 'Saving...';
-
-  fetch('update-stage.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      task_id: taskId,
-      new_column_id: newColumnId,
-      new_position: newPosition
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      statusEl.textContent = '✓ Saved to database — refresh karke check kar sakte hain';
-      statusEl.className = 'success';
-    } else {
-      statusEl.textContent = '✗ Save fail: ' + data.message;
-      statusEl.className = 'error';
-    }
-  })
-  .catch(err => {
-    statusEl.textContent = '✗ Network error: ' + err.message;
-    statusEl.className = 'error';
-  });
-}
-</script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toggle = document.getElementById('password-toggle');
+            var input = document.getElementById('login-password');
+            if (toggle && input) {
+                toggle.addEventListener('click', function () {
+                    var isHidden = input.type === 'password';
+                    input.type = isHidden ? 'text' : 'password';
+                    toggle.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+                    toggle.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+                    toggle.querySelector('.icon-eye').style.display = isHidden ? 'none' : 'block';
+                    toggle.querySelector('.icon-eye-off').style.display = isHidden ? 'block' : 'none';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

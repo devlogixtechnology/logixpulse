@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FEA-W7D2-2 — Lead Card (LogixPulse theme)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#4F46E5;
+    --indigo-hover:#4338CA;
+    --indigo-tint:#EEF2FF;
+    --emerald:#10B981;
+    --emerald-tint:#ECFDF5;
+    --amber:#F59E0B;
+    --amber-tint:#FFFBEB;
+    --red:#EF4444;
+    --canvas:#FAFAF9;
+    --surface:#FFFFFF;
+    --text:#111827;
+    --muted:#6B7280;
+    --line:#E5E7EB;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--canvas);
+    font-family:'Inter',sans-serif;
+    color:var(--text);
+    padding:24px 16px 60px;
+  }
+  .board-label{
+    font-family:'Inter',sans-serif;
+    font-size:12px;
+    font-weight:500;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .column{
+    max-width:340px;
+    margin:0 auto;
+  }
+  .column-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--indigo-tint);
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:16px;
+  }
+  .column-head h2{
+    font-family:'Manrope',sans-serif;
+    font-size:15px;
+    font-weight:700;
+    margin:0;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--text);
+  }
+  .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--indigo);
+    display:inline-block;
+  }
+  .count{
+    font-size:12px;
+    font-weight:600;
+    color:var(--indigo);
+    background:#FFFFFF;
+    border-radius:999px;
+    padding:2px 9px;
+  }
+  .lead-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:16px;
+    margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(17,24,39,.04);
+  }
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:8px;
+  }
+  .identity{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    min-width:0;
+  }
+  .avatar{
+    width:32px;height:32px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Manrope',sans-serif;
+    font-size:12px;font-weight:700;
+    background:var(--indigo-tint);
+    color:var(--indigo);
+    flex-shrink:0;
+  }
+  .name-block{min-width:0;}
+  .lead-name{
+    font-family:'Manrope',sans-serif;
+    font-size:16px;
+    font-weight:700;
+    color:var(--text);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .lead-company{
+    font-size:13px;
+    font-weight:400;
+    color:var(--muted);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .value{
+    font-size:14px;
+    font-weight:600;
+    color:var(--text);
+    white-space:nowrap;
+  }
+  .stage-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    font-weight:500;
+    padding:4px 10px;
+    border-radius:999px;
+    margin:12px 0 10px;
+  }
+  .stage-pill.new{ background:var(--indigo-tint); color:var(--indigo); }
+  .stage-pill .pdot{ width:6px;height:6px;border-radius:50%; background:currentColor; }
+  .tags{
+    display:flex;
+    gap:6px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+  }
+  .tag{
+    font-size:12px;
+    font-weight:500;
+    padding:3px 8px;
+    border-radius:4px;
+  }
+  .tag.source{ background:#F3F4F6; color:var(--muted); }
+  .tag.hot{ background:var(--amber-tint); color:#B45309; }
+  .card-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-top:12px;
+    border-top:1px solid var(--line);
+  }
+  .meta{
+    font-size:12px;
+    color:var(--muted);
+  }
+  .owner{
+    width:22px;height:22px;
+    border-radius:50%;
+    font-size:10px;
+    font-weight:600;
+    font-family:'Manrope',sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    background:#F3F4F6;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+
+  <div class="column">
+    <div class="board-label">LogixPulse · Squad FE-A</div>
+    <div class="column-head">
+      <h2><span class="dot"></span>New</h2>
+      <span class="count">3</span>
+    </div>
+
+    <!-- Card 1 -->
+    <div class="lead-card">
+      <div class="card-top">
+        <div class="identity">
+          <div class="avatar">AR</div>
+          <div class="name-block">
+            <div class="lead-name">Ayesha Raza</div>
+            <div class="lead-company">Northbridge Textiles</div>
+          </div>
+        </div>
+        <div class="value">$4,200</div>
+      </div>
+      <span class="stage-pill new"><span class="pdot"></span>New Lead</span>
+      <div class="tags">
+        <span class="tag source">Website</span>
+        <span class="tag hot">Priority</span>
+      </div>
+      <div class="card-bottom">
+        <span class="meta">Added 2h ago</span>
+        <div class="owner">HB</div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="lead-card">
+      <div class="card-top">
+        <div class="identity">
+          <div class="avatar">MK</div>
+          <div class="name-block">
+            <div class="lead-name">Malik Khurram</div>
+            <div class="lead-company">Pindi Logistics Co.</div>
+          </div>
+        </div>
+        <div class="value">$980</div>
+      </div>
+      <span class="stage-pill new"><span class="pdot"></span>New Lead</span>
+      <div class="tags">
+        <span class="tag source">Referral</span>
+      </div>
+      <div class="card-bottom">
+        <span class="meta">Added yesterday</span>
+        <div class="owner">SN</div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="lead-card">
+      <div class="card-top">
+        <div class="identity">
+          <div class="avatar">FZ</div>
+          <div class="name-block">
+            <div class="lead-name">Fatima Zahra</div>
+            <div class="lead-company">Zahra & Sons Retail</div>
+          </div>
+        </div>
+        <div class="value">$12,000</div>
+      </div>
+      <span class="stage-pill new"><span class="pdot"></span>New Lead</span>
+      <div class="tags">
+        <span class="tag source">Cold call</span>
+        <span class="tag hot">Priority</span>
+      </div>
+      <div class="card-bottom">
+        <span class="meta">Added 3 days ago</span>
+        <div class="owner">HB</div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
