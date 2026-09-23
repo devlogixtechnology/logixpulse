@@ -128,31 +128,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-    // Update Invoice Download Buttons
-    const downloadInvoiceBtns = document.querySelectorAll('.download-invoice-btn');
-    downloadInvoiceBtns.forEach(btn => {
-        // Remove old alert listener
-        const newBtn = btn.cloneNode(true);
-        btn.parentNode.replaceChild(newBtn, btn);
-        
-        newBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // Visual feedback (blink effect)
-            newBtn.style.transform = 'scale(0.95)';
-            newBtn.style.opacity = '0.7';
-            setTimeout(() => {
-                newBtn.style.transform = 'scale(1)';
-                newBtn.style.opacity = '1';
-                
-                // Actual file download trigger
-                const link = document.createElement('a');
-                link.href = 'dummy-invoice.pdf';
-                link.download = 'LogixPulse_Invoice.pdf';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }, 150);
-        });
-    });
