@@ -118,3 +118,17 @@ Ordering: `ORDER BY created_at DESC, id DESC`.
 Save manual notes on a lead, generating a new `activity_logs` row with `activity_type = "note"` and current timestamp.
 - `add_note.php` — Form and handler to save note.
 - `activity_history.php` — Displays all activity logs including manual notes.
+
+
+---
+
+## BE-W7D5-4 — Build the Dashboard KPI Summary Endpoint
+
+### Requirements
+- Single endpoint returning key metrics for the management dashboard:
+  - Total leads count
+  - Leads grouped by status
+  - Recent activity count
+  - Total invoices and revenue
+- Endpoint: `dashboard_kpi.php`
+- Returns clean JSON response with robust table/column fallbacks.
