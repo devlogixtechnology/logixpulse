@@ -15,7 +15,7 @@
                 <p class="auth-subtitle">We'll send a 6-digit secure code to your email to sign you in instantly.</p>
             </div>
             
-           <form class="auth-form" action="verify-code.html" method="GET">
+            <form id="magic-code-request-form" class="auth-form" action="verify-code.html" method="GET">
                 <div class="form-group">
                     <label for="magic-code-email">Email Address</label>
                     <input 
@@ -30,10 +30,12 @@
                 <button type="submit" id="magic-code-submit" class="btn btn-primary">Send Magic Code</button>
             </form>
 
-            <div class="auth-footer text-center">
-                <a href="index.html" class="back-link">← Back to Login</a>
+            <div class="auth-footer">
+                <a href="index.html" class="auth-link">← Back to Password Login</a>
             </div>
         </div>
     </main>
+
+    <script src="js/script.js"></script>
 </body>
 </html>

@@ -4,19 +4,9 @@
  * Client Portal navbar with branding, navigation links,
  * and profile dropdown trigger.
  */
-// Get data from session
- $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Client User';
- $userEmail = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : 'client@example.com';
-
-// Generate initials from name
- $userInitials = '';
- $nameParts = explode(' ', $userName);
-foreach ($nameParts as $part) {
-    if (!empty($part)) {
-        $userInitials .= strtoupper(substr($part, 0, 1));
-    }
-}
- $userInitials = substr($userInitials, 0, 2);
+$userName = "Sarah Client";
+$userEmail = "sarah@example.com";
+$userInitials = "SC";
 ?>
 <header class="portal-navbar">
     <div class="navbar-inner container-fluid">
@@ -27,14 +17,13 @@ foreach ($nameParts as $part) {
                     <polyline points="2 12 8 12 10 6 14 18 16 12 22 12"></polyline>
                 </svg>
             </span>
-            <span class="brand-text">LogixPulse <span class="brand-subtext">Client Portal</span></span>
+            <span class="brand-text">DevLogix <span class="brand-subtext">Client Portal</span></span>
         </div>
 
         <nav class="navbar-links" aria-label="Primary navigation">
             <a href="#dashboard" class="nav-link active" data-section="dashboard">Dashboard</a>
             <a href="#projects" class="nav-link" data-section="projects">Projects</a>
             <a href="#documents" class="nav-link" data-section="documents">Documents</a>
-            <a href="#invoices" class="nav-link" data-section="invoices">Your Invoices</a>
             <a href="#support" class="nav-link" data-section="support">Support</a>
         </nav>
 
@@ -92,8 +81,7 @@ foreach ($nameParts as $part) {
                         Help &amp; Support
                     </a>
                     <div class="dropdown-divider"></div>
-                    <!-- Logout Link Added Here -->
-                    <a href="../api/logout.php" class="dropdown-item dropdown-item-danger" role="menuitem">
+                    <a href="#" class="dropdown-item dropdown-item-danger" role="menuitem">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                         Log Out
                     </a>
@@ -114,7 +102,6 @@ foreach ($nameParts as $part) {
         <a href="#dashboard" class="nav-link active" data-section="dashboard">Dashboard</a>
         <a href="#projects" class="nav-link" data-section="projects">Projects</a>
         <a href="#documents" class="nav-link" data-section="documents">Documents</a>
-        <a href="#invoices" class="nav-link" data-section="invoices">Your Invoices</a>
         <a href="#support" class="nav-link" data-section="support">Support</a>
     </nav>
 </header>
