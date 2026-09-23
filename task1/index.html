@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FEA-W7D5-1 — Search Bar (LogixPulse theme)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --lp-indigo:#4F46E5; --lp-indigo-hover:#4338CA;
+    --lp-emerald:#10B981; --lp-amber:#F59E0B; --lp-red:#EF4444;
+    --lp-canvas:#F9FAFB; --lp-surface:#FFFFFF;
+    --lp-text:#111827; --lp-muted:#6B7280; --lp-border:#E5E7EB;
+  }
+  body{ font-family:'Inter',sans-serif; background:var(--lp-canvas); color:var(--lp-text); padding:24px; margin:0; }
+
+  .board-search-wrap{ max-width:480px; margin-bottom:18px; }
+  .board-search-box{
+    display:flex; align-items:center; gap:8px; background:var(--lp-surface);
+    border:1px solid var(--lp-border); border-radius:8px; padding:9px 12px;
+    transition:border-color .15s;
+  }
+  .board-search-box:focus-within{ border-color:var(--lp-indigo); box-shadow:0 0 0 3px rgba(79,70,229,0.12); }
+  .board-search-box svg{ flex:none; color:var(--lp-muted); }
+  .board-search-box input{
+    flex:1; border:0; background:transparent; outline:0; color:var(--lp-text);
+    font-family:'Inter',sans-serif; font-size:14px;
+  }
+  .board-search-box input::placeholder{ color:var(--lp-muted); }
+  .board-search-meta{ margin-top:6px; font-size:12px; font-weight:500; color:var(--lp-muted); min-height:1em; }
+
+  .lead-card-demo{
+    background:var(--lp-surface); border:1px solid var(--lp-border); border-radius:8px;
+    padding:12px 14px; margin-bottom:8px; max-width:480px;
+  }
+  .lead-card-demo strong{ font-family:'Manrope',sans-serif; font-weight:700; font-size:14px; }
+  .lead-card-demo small{ color:var(--lp-muted); font-size:12px; }
+</style>
+</head>
+<body>
+<div class="board-search-wrap">
+  <div class="board-search-box">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="boardSearchInput" type="text" placeholder="Search leads by name…" autocomplete="off">
+  </div>
+  <div class="board-search-meta" id="boardSearchMeta"></div>
+</div>
+
+<div id="demoBoard"></div>
+
+<script>
+const DEMO_LEADS = [
+  { id:1, name:"Ayesha Raza",  sub:"Karachi · Textile Exports" },
+  { id:2, name:"Bilal Hameed", sub:"Lahore · Retail Chain" },
+  { id:3, name:"Sana Tariq",   sub:"Islamabad · SaaS" },
+  { id:4, name:"Usman Farooq", sub:"Faisalabad · Manufacturing" },
+  { id:5, name:"Hira Shaikh",  sub:"Karachi · Logistics" },
+];
+function renderBoard(leads){
+  const el = document.getElementById('demoBoard');
+  el.innerHTML = leads.length
+    ? leads.map(l => `<div class="lead-card-demo"><strong>${l.name}</strong><br><small>${l.sub}</small></div>`).join('')
+    : `<p style="color:var(--lp-muted); font-size:14px;">No leads match that search.</p>`;
+}
+
+const searchInput = document.getElementById('boardSearchInput');
+const searchMeta  = document.getElementById('boardSearchMeta');
+let debounceTimer = null;
+
+searchInput.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  const query = searchInput.value.trim();
+  searchMeta.textContent = query ? 'Searching…' : '';
+
+  debounceTimer = setTimeout(() => {
+    const filtered = query
+      ? DEMO_LEADS.filter(l => l.name.toLowerCase().includes(query.toLowerCase()))
+      : DEMO_LEADS;
+    renderBoard(filtered);
+    searchMeta.textContent = query
+      ? `${filtered.length} match${filtered.length === 1 ? '' : 'es'} for "${query}"`
+      : '';
+  }, 400);
+});
+
+renderBoard(DEMO_LEADS);
+</script>
+</body>
+</html>

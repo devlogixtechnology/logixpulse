@@ -1,110 +1,182 @@
 <?php
-require 'db_connect.php';
-
-$columns = $pdo->query("SELECT * FROM columns_table ORDER BY position")->fetchAll(PDO::FETCH_ASSOC);
-$tasks = $pdo->query("SELECT * FROM tasks ORDER BY position")->fetchAll(PDO::FETCH_ASSOC);
-
-$tasksByColumn = [];
-foreach ($tasks as $t) {
-    $tasksByColumn[$t['column_id']][] = $t;
-}
+/**
+ * index.php
+ * Main entry point for the Client Portal Empty Dashboard.
+ * Task: FEB-W7D1-3 - Build the Empty Client Dashboard (Navbar, Profile Dropdown)
+ */
+$pageTitle = "Dashboard - DevLogix Client Portal";
+include 'includes/header.php';
+include 'includes/navbar.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>LogixPulse — Kanban (FEA-W7D4-2)</title>
-<style>
-  :root {
-    --primary: #4F46E5; --primary-hover: #4338CA;
-    --success: #10B981; --warning: #F59E0B; --danger: #EF4444;
-    --canvas: #F8FAFB; --surface: #FFFFFF;
-    --text-primary: #111827; --text-muted: #6B7280;
-  }
-  * { box-sizing: border-box; }
-  body { font-family: Inter, -apple-system, sans-serif; background: var(--canvas); color: var(--text-primary); margin: 0; padding: 24px; }
-  h1 { font-family: Manrope, sans-serif; font-size: 22px; font-weight: 600; margin-bottom: 4px; }
-  .subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
-  .board { display: flex; gap: 16px; overflow-x: auto; align-items: flex-start; }
-  .column { background: var(--surface); border-radius: 12px; padding: 12px; min-width: 260px; flex: 1; box-shadow: 0 1px 3px rgba(0,0,0,.08); min-height: 300px; }
-  .column h2 { font-size: 14px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .03em; margin: 4px 0 12px 4px; }
-  .card { background: var(--canvas); border: 1px solid #E5E7EB; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 14px; cursor: grab; }
-  .card.dragging { opacity: .4; }
-  .column.drag-over { outline: 2px dashed var(--primary); outline-offset: -4px; }
-  #status { margin-top: 16px; font-size: 13px; color: var(--text-muted); }
-  #status.success { color: var(--success); }
-  #status.error { color: var(--danger); }
-</style>
-</head>
-<body>
 
-<h1>LogixPulse Board</h1>
-<p class="subtitle">Tasks loaded from database — drag and drop to update, then refresh to verify.</p>
+<main class="dashboard">
+    <div class="container py-4 py-md-5">
 
-<div class="board" id="board">
-  <?php foreach ($columns as $col): ?>
-    <div class="column" data-column-id="<?= $col['id'] ?>">
-      <h2><?= htmlspecialchars($col['name']) ?></h2>
-      <?php foreach (($tasksByColumn[$col['id']] ?? []) as $task): ?>
-        <div class="card" draggable="true" data-task-id="<?= $task['id'] ?>">
-          <?= htmlspecialchars($task['title']) ?>
-        </div>
-      <?php endforeach; ?>
+        <section id="dashboard" class="app-section active" data-section="dashboard">
+
+            <div class="dashboard-heading">
+                <h1>Dashboard</h1>
+                <p>Welcome to your Client Portal. This is where your project activity will appear.</p>
+            </div>
+
+            <div class="row g-4">
+
+                <article class="col-12 col-md-6">
+                    <div class="dashboard-card h-100">
+                        <div class="card-header">
+                            <h2>Active Projects</h2>
+                            <span class="card-icon-chip chip-indigo" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                            </span>
+                        </div>
+                        <div class="card-empty">
+                            <p>No active projects yet.</p>
+                            <span class="card-empty-hint">Your projects will be listed here once assigned.</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="col-12 col-md-6">
+                    <div class="dashboard-card h-100">
+                        <div class="card-header">
+                            <h2>Recent Documents</h2>
+                            <span class="card-icon-chip chip-blue" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg>
+                            </span>
+                        </div>
+                        <div class="card-empty">
+                            <p>No documents uploaded yet.</p>
+                            <span class="card-empty-hint">Shared files and reports will show up here.</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="col-12 col-md-6">
+                    <div class="dashboard-card h-100">
+                        <div class="card-header">
+                            <h2>Notifications</h2>
+                            <span class="card-icon-chip chip-amber" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                            </span>
+                        </div>
+                        <div class="card-empty">
+                            <p>No new notifications.</p>
+                            <span class="card-empty-hint">Updates about your account will appear here.</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="col-12 col-md-6">
+                    <div class="dashboard-card h-100">
+                        <div class="card-header">
+                            <h2>Support Tickets</h2>
+                            <span class="card-icon-chip chip-green" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+                            </span>
+                        </div>
+                        <div class="card-empty">
+                            <p>No open tickets.</p>
+                            <span class="card-empty-hint">Any support requests will be tracked here.</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="col-12">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Account Overview</h2>
+                            <span class="card-icon-chip chip-indigo" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                            </span>
+                        </div>
+                        <div class="card-empty">
+                            <p>Your account summary is not available yet.</p>
+                            <span class="card-empty-hint">Billing and plan details will be displayed in this section.</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section id="projects" class="app-section" data-section="projects">
+
+            <div class="dashboard-heading">
+                <h1>Projects</h1>
+                <p>Track the status of your ongoing and completed projects here.</p>
+            </div>
+
+            <div class="row g-4">
+                <article class="col-12">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>All Projects</h2>
+                            <span class="card-icon-chip chip-indigo" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                            </span>
+                        </div>
+                        <div class="card-empty">
+                            <p>No projects yet.</p>
+                            <span class="card-empty-hint">Once a project is assigned to you, it will appear in this section.</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="documents" class="app-section" data-section="documents">
+
+            <div class="dashboard-heading">
+                <h1>Documents</h1>
+                <p>Access files, reports, and shared documents from your team.</p>
+            </div>
+
+            <div class="row g-4">
+                <article class="col-12">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>All Documents</h2>
+                            <span class="card-icon-chip chip-blue" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg>
+                            </span>
+                        </div>
+                        <div class="card-empty">
+                            <p>No documents shared yet.</p>
+                            <span class="card-empty-hint">Files shared with you will be listed here.</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="support" class="app-section" data-section="support">
+
+            <div class="dashboard-heading">
+                <h1>Support</h1>
+                <p>Reach out to the team or track your existing support requests.</p>
+            </div>
+
+            <div class="row g-4">
+                <article class="col-12">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Support Tickets</h2>
+                            <span class="card-icon-chip chip-green" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+                            </span>
+                        </div>
+                        <div class="card-empty">
+                            <p>No support tickets yet.</p>
+                            <span class="card-empty-hint">Any request you raise with the team will show up here.</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
     </div>
-  <?php endforeach; ?>
-</div>
+</main>
 
-<div id="status"></div>
-
-<script>
-let draggedCard = null;
-
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('dragstart', () => { draggedCard = card; card.classList.add('dragging'); });
-  card.addEventListener('dragend', () => { card.classList.remove('dragging'); draggedCard = null; });
-});
-
-document.querySelectorAll('.column').forEach(column => {
-  column.addEventListener('dragover', e => { e.preventDefault(); column.classList.add('drag-over'); });
-  column.addEventListener('dragleave', () => column.classList.remove('drag-over'));
-  column.addEventListener('drop', e => {
-    e.preventDefault();
-    column.classList.remove('drag-over');
-    if (!draggedCard) return;
-
-    column.appendChild(draggedCard);
-
-    const taskId = draggedCard.dataset.taskId;
-    const newColumnId = column.dataset.columnId;
-    const newPosition = [...column.querySelectorAll('.card')].indexOf(draggedCard) + 1;
-
-    saveDragToDatabase(taskId, newColumnId, newPosition);
-  });
-});
-
-function saveDragToDatabase(taskId, newColumnId, newPosition) {
-  const statusEl = document.getElementById('status');
-  statusEl.className = '';
-  statusEl.textContent = 'Saving...';
-
-  fetch('update-stage.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ task_id: taskId, new_column_id: newColumnId, new_position: newPosition })
-  })
-  .then(res => res.json())
-  .then(data => {
-    statusEl.textContent = data.success
-      ? '✓ Saved to database — refresh (F5) to verify changes.'
-      : '✗ Save failed: ' + data.message;
-    statusEl.className = data.success ? 'success' : 'error';
-  })
-  .catch(err => {
-    statusEl.textContent = '✗ Network error: ' + err.message;
-    statusEl.className = 'error';
-  });
-}
-</script>
-
+<script src="assets/js/script.js"></script>
 </body>
 </html>
