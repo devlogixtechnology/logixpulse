@@ -10,22 +10,42 @@ body {
     color: #202734;
 }
 
+.nav {
+    background: #17212b;
+    color: #fff;
+    padding: 14px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 16px;
+}
+
 .container {
-    width: min(92%, 560px);
+    width: min(92%, 1050px);
     margin: 0 auto;
-    padding: 60px 0;
+    padding: 40px 0;
 }
 
 .card {
     background: #fff;
     border-radius: 16px;
-    padding: 34px;
+    padding: 30px;
     box-shadow: 0 12px 35px rgba(20, 30, 50, 0.10);
+    margin-bottom: 20px;
 }
 
 h1 {
     margin: 0 0 8px;
     font-size: 30px;
+}
+
+h2 {
+    margin-top: 0;
 }
 
 .subtitle {
@@ -73,7 +93,7 @@ label {
     font-weight: 700;
 }
 
-input {
+input, select {
     width: 100%;
     padding: 12px 13px;
     border: 1px solid #ccd2dd;
@@ -106,6 +126,11 @@ form .btn {
 .alert.error {
     background: #ffe9e9;
     color: #a42323;
+}
+
+.alert.success {
+    background: #e9f8ef;
+    color: #146c37;
 }
 
 .demo-box {
@@ -150,3 +175,52 @@ form .btn {
     color: #202734;
     margin: 8px 0;
 }
+
+.muted {
+    color: #68727d;
+}
+
+.invoice-group {
+    border: 1px solid #e1e5e9;
+    border-radius: 9px;
+    margin: 15px 0;
+    overflow: hidden;
+}
+
+.invoice-group h3 {
+    margin: 0;
+    padding: 13px;
+    background: #f0f3f6;
+}
+
+.table-wrap {
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 11px;
+    border-bottom: 1px solid #e6e8eb;
+    vertical-align: middle;
+}
+
+.login {
+    max-width: 430px;
+    margin: 70px auto;
+}
+
+.small {
+    font-size: 13px;
+}
+
+.top-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+

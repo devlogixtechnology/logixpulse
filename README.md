@@ -95,3 +95,16 @@ Fetch all activity log entries for a specific lead ordered from newest to oldest
 `GET api/lead_activity.php?lead_id=1`
 Ordering: `ORDER BY created_at DESC, id DESC`.
 
+
+
+---
+
+## BE-W7D4-3 — Store Uploaded Invoice Files (Per-Client, Isolated)
+
+### Requirements covered
+- Admin uploads a PDF invoice for a selected client.
+- Invoice amount is stored with the invoice.
+- Every invoice row has a real `client_id` foreign key.
+- Files are stored on the server with generated filenames.
+- Clients can only list/download invoices belonging to their own account.
+- Direct downloads are protected via `uploads/.htaccess` and served via `download.php`.
