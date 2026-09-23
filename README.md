@@ -1,11 +1,56 @@
-# LogixPulse Backend Documentation
+# LogixPulse
+
+## API Endpoints
+
+### BE-W7D4-1 — Save Lead Stage Changes
+Updates a lead stage and creates a matching activity log whenever the stage changes.
+
+**Endpoint:**
+`POST api/update_lead_stage.php`
+
+**JSON Payload:**
+```json
+{
+  "lead_id": 1,
+  "new_stage": "Meeting Booked"
+}
+```
+
+**Expected Log:**
+`Moved from Contacted to Meeting Booked.`
+
+---
+
+## Database Setup
+
+1. Connect to PostgreSQL (pgAdmin or psql)
+2. Run SQL files in order inside `sql/` folder
+3. Update `config/database.php` with your DB credentials
+
+## Login
+
+Demo client credentials (from seed data):
+- Email: see `03_seed_data.sql` for client user emails
+- Password: `Password@123`
+
+## Run Locally
+
+**Prerequisites:** PHP 8+, PostgreSQL, Apache/Nginx
+
+1. Place project in web server document root
+2. Run SQL files to set up the database
+3. Update `config/database.php` with real DB credentials
+4. Access via browser: `http://localhost/LogixPulse/`
+
+---
+
+# Backend Documentation (BE Tasks)
 
 ## BE-W7D2-1 — Connect Traditional Login to the Real Form
 
 Core PHP + MySQL implementation for the task.
 
 ### What is included
-
 - Real HTML internal/team login form using POST.
 - Real HTML client login form using POST.
 - Prepared SQL statements for database lookup.
@@ -18,19 +63,7 @@ Core PHP + MySQL implementation for the task.
 - Login error handling.
 - SQL schema with demo accounts.
 
-### XAMPP setup
-
-1. Put the extracted folder inside:
-   `C:\xampp\htdocs\`
-2. Start Apache and MySQL from XAMPP.
-3. Open phpMyAdmin.
-4. Import:
-   `database/schema.sql`
-5. Open:
-   `http://localhost/BE-W7D2-1_Traditional_Login_Real_Form/`
-
 ### Demo credentials
-
 Internal/team:
 - Email: `admin@logixpulse.test`
 - Password: `Admin@123`
@@ -39,69 +72,28 @@ Client:
 - Email: `client@logixpulse.test`
 - Password: `Client@123`
 
-### Expected result
-
-- Internal credentials -> Main Dashboard.
-- Client credentials -> Client Dashboard.
-- Wrong credentials -> login page with error.
-- Who Is Logged In Check -> JSON showing the current session user.
-- Logout -> returns to the login selection page.
-
-### Database
-
-Default MySQL settings in `db.php`:
-- Host: 127.0.0.1
-- Database: logixpulse_auth
-- User: root
-- Password: empty
-
 ---
 
 ## BE-W7D2-2 — Build "Who Is Logged In" Check
 
-Core PHP only.
-
-### Added
+Core PHP session check.
 - `auth_check.php` — reusable session authentication check.
 - `protected.php` — protected-page example using the check.
-
-### Existing login session
-The existing `login.php` already sets:
-- `$_SESSION['user_id']`
-- `$_SESSION['user_name']`
-- `$_SESSION['user_email']`
-- `$_SESSION['user_role']`
-- `$_SESSION['logged_in'] = true`
-
-The new check uses the existing `$_SESSION['logged_in']` value.
-
-### Acceptance
-Without a valid login session, opening `protected.php` redirects to `login.html`.
-With a valid login session, `protected.php` opens normally.
 
 ---
 
 ## BE-W7D4-2 — Send Activity History to the Details Panel
-
-### Requirement
 Fetch all activity log entries for a specific lead ordered from newest to oldest.
-
-### Included
 - `lead_activity.php` — activity-history endpoint (`api/lead_activity.php`).
 - `lead_details.php` — lead details panel showing the complete history.
 - `lead_activity.html` — test page.
 
-### API
-`GET api/lead_activity.php?lead_id=1`
+API: `GET api/lead_activity.php?lead_id=1`
 Ordering: `ORDER BY created_at DESC, id DESC`.
-
-
 
 ---
 
 ## BE-W7D4-3 — Store Uploaded Invoice Files (Per-Client, Isolated)
-
-### Requirements covered
 - Admin uploads a PDF invoice for a selected client.
 - Invoice amount is stored with the invoice.
 - Every invoice row has a real `client_id` foreign key.
@@ -109,26 +101,19 @@ Ordering: `ORDER BY created_at DESC, id DESC`.
 - Clients can only list/download invoices belonging to their own account.
 - Direct downloads are protected via `uploads/.htaccess` and served via `download.php`.
 
-
 ---
 
 ## BE-W7D5-2 — Save Manual Notes on a Lead
-
-### Requirements
 Save manual notes on a lead, generating a new `activity_logs` row with `activity_type = "note"` and current timestamp.
 - `add_note.php` — Form and handler to save note.
 - `activity_history.php` — Displays all activity logs including manual notes.
 
-
 ---
 
 ## BE-W7D5-4 — Build the Dashboard KPI Summary Endpoint
-
-### Requirements
-- Single endpoint returning key metrics for the management dashboard:
-  - Total leads count
-  - Leads grouped by status
-  - Recent activity count
-  - Total invoices and revenue
+Single endpoint returning key metrics for the management dashboard:
+- Total leads count
+- Leads grouped by status
+- Recent activity count
+- Total invoices and revenue
 - Endpoint: `dashboard_kpi.php`
-- Returns clean JSON response with robust table/column fallbacks.
