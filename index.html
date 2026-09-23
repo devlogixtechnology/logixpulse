@@ -31,7 +31,7 @@
             </div>
 
             <div class="auth-card">
-                <form id="traditional-login-form" class="auth-form">
+                <form id="traditional-login-form" class="auth-form" action="client-portal-dashboard/index.php" method="GET">
                     <div class="form-group">
                         <label for="login-email">Email address</label>
                         <input
@@ -78,7 +78,6 @@
         </div>
     </main>
 
-    <script src="js/auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var toggle = document.getElementById('password-toggle');
