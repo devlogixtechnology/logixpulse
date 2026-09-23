@@ -1,57 +1,97 @@
-# BE-W7D4-2 — Send Activity History to the Details Panel
+# LogixPulse Backend Documentation
 
-## Requirement
-Build a Core PHP script that fetches all activity log entries for one specific lead and returns them from newest to oldest so FE-A can display a complete history when a lead is opened.
+## BE-W7D2-1 — Connect Traditional Login to the Real Form
 
-## Included
-- `api/lead_activity.php` — activity-history endpoint.
-- `lead_details.php` — lead details panel showing the complete history.
-- `index.php` — simple test page.
-- `config/db.php` — PDO MySQL connection.
-- `sql/schema.sql` — database/table structure and demo data.
+Core PHP + MySQL implementation for the task.
 
-## Activity ordering
-The query uses:
+### What is included
 
-`ORDER BY created_at DESC, id DESC`
+- Real HTML internal/team login form using POST.
+- Real HTML client login form using POST.
+- Prepared SQL statements for database lookup.
+- Password verification using `password_verify()`.
+- PHP session login state.
+- Internal/team users redirect to `main_dashboard.php`.
+- Clients redirect to `client_dashboard.php`.
+- "Who Is Logged In" endpoint connected to the same session.
+- Logout functionality.
+- Login error handling.
+- SQL schema with demo accounts.
 
-This guarantees newest activities are shown first. The `id DESC` tie-breaker keeps entries with the same timestamp deterministic.
+### XAMPP setup
 
-## XAMPP setup
-1. Put the extracted folder inside `C:\xampp\htdocs\`.
+1. Put the extracted folder inside:
+   `C:\xampp\htdocs\`
 2. Start Apache and MySQL from XAMPP.
 3. Open phpMyAdmin.
-4. Import `sql/schema.sql`.
-5. If your database credentials differ, update `config/db.php`.
-6. Open:
-   `http://localhost/BE-W7D4-2_Send-Activity-History/`
-7. Enter lead ID `1` (or the ID created by the SQL demo data).
-8. The details panel can also be opened directly:
-   `http://localhost/BE-W7D4-2_Send-Activity-History/lead_details.php?lead_id=1`
+4. Import:
+   `database/schema.sql`
+5. Open:
+   `http://localhost/BE-W7D2-1_Traditional_Login_Real_Form/`
 
-## API
-GET:
+### Demo credentials
 
-`api/lead_activity.php?lead_id=1`
+Internal/team:
+- Email: `admin@logixpulse.test`
+- Password: `Admin@123`
 
-Example response:
+Client:
+- Email: `client@logixpulse.test`
+- Password: `Client@123`
 
-```json
-{
-  "success": true,
-  "lead_id": 1,
-  "count": 3,
-  "activities": [
-    {
-      "id": 1,
-      "lead_id": 1,
-      "activity_type": "Note Added",
-      "description": "Customer requested a callback.",
-      "created_by": "Areesha Sarwar",
-      "created_at": "2026-09-23 16:30:00"
-    }
-  ]
-}
-```
+### Expected result
 
-The endpoint validates the lead ID, uses a prepared statement, fetches all matching activity rows, and orders them newest to oldest.
+- Internal credentials -> Main Dashboard.
+- Client credentials -> Client Dashboard.
+- Wrong credentials -> login page with error.
+- Who Is Logged In Check -> JSON showing the current session user.
+- Logout -> returns to the login selection page.
+
+### Database
+
+Default MySQL settings in `db.php`:
+- Host: 127.0.0.1
+- Database: logixpulse_auth
+- User: root
+- Password: empty
+
+---
+
+## BE-W7D2-2 — Build "Who Is Logged In" Check
+
+Core PHP only.
+
+### Added
+- `auth_check.php` — reusable session authentication check.
+- `protected.php` — protected-page example using the check.
+
+### Existing login session
+The existing `login.php` already sets:
+- `$_SESSION['user_id']`
+- `$_SESSION['user_name']`
+- `$_SESSION['user_email']`
+- `$_SESSION['user_role']`
+- `$_SESSION['logged_in'] = true`
+
+The new check uses the existing `$_SESSION['logged_in']` value.
+
+### Acceptance
+Without a valid login session, opening `protected.php` redirects to `login.html`.
+With a valid login session, `protected.php` opens normally.
+
+---
+
+## BE-W7D4-2 — Send Activity History to the Details Panel
+
+### Requirement
+Fetch all activity log entries for a specific lead ordered from newest to oldest.
+
+### Included
+- `lead_activity.php` — activity-history endpoint (`api/lead_activity.php`).
+- `lead_details.php` — lead details panel showing the complete history.
+- `lead_activity.html` — test page.
+
+### API
+`GET api/lead_activity.php?lead_id=1`
+Ordering: `ORDER BY created_at DESC, id DESC`.
+

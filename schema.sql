@@ -4,6 +4,26 @@ CREATE DATABASE IF NOT EXISTS logixpulse
 
 USE logixpulse;
 
+CREATE TABLE IF NOT EXISTS internal_users (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(190) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'user',
+    status ENUM('active','inactive') NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS clients (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(190) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'client',
+    status ENUM('active','inactive') NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS leads (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(150) NOT NULL,
@@ -27,7 +47,25 @@ CREATE TABLE IF NOT EXISTS activity_logs (
         ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- Demo data. Safe to remove after testing.
+-- Demo password for internal user: Admin@123
+INSERT INTO internal_users (name, email, password, role)
+VALUES (
+    'Admin User',
+    'admin@logixpulse.test',
+    '$2y$12$BiMOP34TRyCzcYKekoS4vOVIp5GHANli5qkAe7RaxIBouVF.wFwaq',
+    'admin'
+) ON DUPLICATE KEY UPDATE name=VALUES(name);
+
+-- Demo password for client: Client@123
+INSERT INTO clients (name, email, password, role)
+VALUES (
+    'Demo Client',
+    'client@logixpulse.test',
+    '$2y$12$yVPF3xit1YvQwTXfwlrrBuxx8qgJcQKAjEuUngzcVZfXMYIlCydR.',
+    'client'
+) ON DUPLICATE KEY UPDATE name=VALUES(name);
+
+-- Demo leads and activity logs
 INSERT INTO leads (name, email, phone, status)
 SELECT 'Ali Khan', 'ali@example.com', '03001234567', 'Contacted'
 WHERE NOT EXISTS (SELECT 1 FROM leads WHERE email = 'ali@example.com');
@@ -35,28 +73,10 @@ WHERE NOT EXISTS (SELECT 1 FROM leads WHERE email = 'ali@example.com');
 SET @demo_lead_id = (SELECT id FROM leads WHERE email = 'ali@example.com' LIMIT 1);
 
 INSERT INTO activity_logs (lead_id, activity_type, description, created_by, created_at)
-SELECT @demo_lead_id, 'Note Added', 'Customer requested a callback.', 'Areesha Sarwar', '2026-09-23 16:30:00'
-WHERE NOT EXISTS (
-    SELECT 1 FROM activity_logs
-    WHERE lead_id = @demo_lead_id
-      AND activity_type = 'Note Added'
-      AND created_at = '2026-09-23 16:30:00'
-);
-
-INSERT INTO activity_logs (lead_id, activity_type, description, created_by, created_at)
-SELECT @demo_lead_id, 'Status Changed', 'Lead status changed from New to Contacted.', 'Areesha Sarwar', '2026-09-23 15:10:00'
-WHERE NOT EXISTS (
-    SELECT 1 FROM activity_logs
-    WHERE lead_id = @demo_lead_id
-      AND activity_type = 'Status Changed'
-      AND created_at = '2026-09-23 15:10:00'
-);
-
-INSERT INTO activity_logs (lead_id, activity_type, description, created_by, created_at)
 SELECT @demo_lead_id, 'Lead Created', 'Lead was added to the CRM.', 'Areesha Sarwar', '2026-09-23 14:00:00'
 WHERE NOT EXISTS (
     SELECT 1 FROM activity_logs
     WHERE lead_id = @demo_lead_id
       AND activity_type = 'Lead Created'
-      AND created_at = '2026-09-23 14:00:00'
 );
+
