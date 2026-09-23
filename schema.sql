@@ -47,6 +47,17 @@ CREATE TABLE IF NOT EXISTS activity_logs (
         ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS invoices (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    client_id INT UNSIGNED NOT NULL,
+    original_filename VARCHAR(255) NOT NULL,
+    stored_filename VARCHAR(100) NOT NULL UNIQUE,
+    amount DECIMAL(12,2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_invoices_client_id (client_id),
+    INDEX idx_invoices_created_at (created_at)
+) ENGINE=InnoDB;
+
 -- Demo password for internal user: Admin@123
 INSERT INTO internal_users (name, email, password, role)
 VALUES (
