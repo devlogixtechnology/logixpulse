@@ -1,8 +1,10 @@
-# BE-W7D2-1 — Connect Traditional Login to the Real Form
+# LogixPulse Backend Documentation
+
+## BE-W7D2-1 — Connect Traditional Login to the Real Form
 
 Core PHP + MySQL implementation for the task.
 
-## What is included
+### What is included
 
 - Real HTML internal/team login form using POST.
 - Real HTML client login form using POST.
@@ -16,7 +18,7 @@ Core PHP + MySQL implementation for the task.
 - Login error handling.
 - SQL schema with demo accounts.
 
-## XAMPP setup
+### XAMPP setup
 
 1. Put the extracted folder inside:
    `C:\xampp\htdocs\`
@@ -27,7 +29,7 @@ Core PHP + MySQL implementation for the task.
 5. Open:
    `http://localhost/BE-W7D2-1_Traditional_Login_Real_Form/`
 
-## Demo credentials
+### Demo credentials
 
 Internal/team:
 - Email: `admin@logixpulse.test`
@@ -37,7 +39,7 @@ Client:
 - Email: `client@logixpulse.test`
 - Password: `Client@123`
 
-## Expected result
+### Expected result
 
 - Internal credentials -> Main Dashboard.
 - Client credentials -> Client Dashboard.
@@ -45,12 +47,35 @@ Client:
 - Who Is Logged In Check -> JSON showing the current session user.
 - Logout -> returns to the login selection page.
 
-## Database
+### Database
 
-Default XAMPP MySQL settings are used in `config/db.php`:
+Default MySQL settings in `db.php`:
 - Host: 127.0.0.1
 - Database: logixpulse_auth
 - User: root
 - Password: empty
 
-If your XAMPP MySQL password is different, update `config/db.php`.
+---
+
+## BE-W7D2-2 — Build "Who Is Logged In" Check
+
+Core PHP only.
+
+### Added
+- `auth_check.php` — reusable session authentication check.
+- `protected.php` — protected-page example using the check.
+
+### Existing login session
+The existing `login.php` already sets:
+- `$_SESSION['user_id']`
+- `$_SESSION['user_name']`
+- `$_SESSION['user_email']`
+- `$_SESSION['user_role']`
+- `$_SESSION['logged_in'] = true`
+
+The new check uses the existing `$_SESSION['logged_in']` value.
+
+### Acceptance
+Without a valid login session, opening `protected.php` redirects to `login.html`.
+With a valid login session, `protected.php` opens normally.
+
