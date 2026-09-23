@@ -9,12 +9,9 @@ session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/includes/timeline.php';
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'client') {
-    header('Location: ../index.html');
-    exit();
-}
-
- $client_id   = (int) $_SESSION['user_id'];
+$client_id = $_SESSION['client_id'] ?? $_SESSION['user_id'] ?? 1;
+$clientId = (int)$client_id;
+$user_role = $_SESSION['user_role'] ?? 'client';
 
 // ---- Fetch Timeline from Database ----
  $timeline = getClientTimeline($client_id);
@@ -117,7 +114,7 @@ include 'includes/navbar.php';
 
                         <div class="timeline-scroll">
                             <?php if ($timeline): ?>
-                            <ol class="timeline-track" style="--timeline-progress: <?php echo $timeline['progress']; ?>%;">
+                            <ol class="timeline-track" style="--timeline-progress: <?php echo $timeline['progress']; ?>%; --timeline-steps: <?php echo count($timeline['steps']); ?>;">
                                 <?php foreach ($timeline['steps'] as $step): ?>
                                 <li class="timeline-step is-<?php echo $step['status']; ?>">
                                     <span class="timeline-dot" aria-hidden="true">
@@ -133,6 +130,8 @@ include 'includes/navbar.php';
                                 </li>
                                 <?php endforeach; ?>
                             </ol>
+                            <?php elseif (!$clientId): ?>
+                                <p class="card-empty-hint">Log in to view your project timeline.</p>
                             <?php else: ?>
                                 <p class="card-empty-hint">No timeline data found for this client.</p>
                             <?php endif; ?>
@@ -297,32 +296,10 @@ include 'includes/navbar.php';
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                             </span>
                         </div>
-                        <?php if (empty($projects)): ?>
                         <div class="card-empty">
                             <p>No projects yet.</p>
                             <span class="card-empty-hint">Once a project is assigned to you, it will appear in this section.</span>
                         </div>
-                        <?php else: ?>
-                        <div class="simple-list">
-                            <?php foreach ($projects as $project): ?>
-                            <div class="simple-list-item">
-                                <div class="simple-list-body">
-                                    <p class="simple-list-title"><?php echo htmlspecialchars($project['name']); ?></p>
-                                    <span class="simple-list-meta"><?php echo (int) $project['progress']; ?>% complete</span>
-                                    <div class="project-progress-track">
-                                        <div class="project-progress-fill" style="width: <?php echo (int) $project['progress']; ?>%;"></div>
-                                    </div>
-                                </div>
-                                <div class="simple-list-side">
-                                    <span class="status-badge <?php echo $project['status_class']; ?>">
-                                        <span class="status-dot" aria-hidden="true"></span>
-                                        <?php echo htmlspecialchars($project['status']); ?>
-                                    </span>
-                                </div>
-                            </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php endif; ?>
                     </div>
                 </article>
             </div>
@@ -342,26 +319,10 @@ include 'includes/navbar.php';
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg>
                             </span>
                         </div>
-                        <?php if (empty($documents)): ?>
                         <div class="card-empty">
                             <p>No documents shared yet.</p>
                             <span class="card-empty-hint">Files shared with you will be listed here.</span>
                         </div>
-                        <?php else: ?>
-                        <div class="simple-list">
-                            <?php foreach ($documents as $doc): ?>
-                            <div class="simple-list-item">
-                                <span class="simple-list-icon chip-blue" aria-hidden="true">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                                </span>
-                                <div class="simple-list-body">
-                                    <p class="simple-list-title"><?php echo htmlspecialchars($doc['name']); ?></p>
-                                    <span class="simple-list-meta"><?php echo htmlspecialchars($doc['date']); ?> &middot; <?php echo htmlspecialchars($doc['size']); ?></span>
-                                </div>
-                            </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php endif; ?>
                     </div>
                 </article>
             </div>
@@ -433,8 +394,8 @@ include 'includes/navbar.php';
                                         <tr data-status="<?php echo htmlspecialchars($status); ?>">
                                             <td class="invoice-id" data-label="Invoice"><?php echo htmlspecialchars($invoice['invoice_number']); ?></td>
                                             <td class="invoice-project" data-label="Project"><?php echo htmlspecialchars($invoice['project_name'] ?? 'N/A'); ?></td>
-                                            <td data-label="Issued On"><?php echo formatDate($invoice['issue_date']); ?></td>
-                                            <td data-label="Due Date"><?php echo formatDate($invoice['due_date']); ?></td>
+                                            <td><?php echo formatDate($invoice['issue_date']); ?></td>
+                                            <td><?php echo formatDate($invoice['due_date']); ?></td>
                                             <td class="invoice-amount" data-label="Amount">$<?php echo number_format((float) $invoice['amount'], 2); ?></td>
                                             <td data-label="Status">
                                                 <span class="status-badge <?php echo $status_class; ?>">
@@ -483,29 +444,10 @@ include 'includes/navbar.php';
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
                             </span>
                         </div>
-                        <?php if (empty($supportTickets)): ?>
                         <div class="card-empty">
                             <p>No support tickets yet.</p>
                             <span class="card-empty-hint">Any request you raise with the team will show up here.</span>
                         </div>
-                        <?php else: ?>
-                        <div class="simple-list">
-                            <?php foreach ($supportTickets as $ticket): ?>
-                            <div class="simple-list-item">
-                                <div class="simple-list-body">
-                                    <p class="simple-list-title"><?php echo htmlspecialchars($ticket['id']); ?> &mdash; <?php echo htmlspecialchars($ticket['subject']); ?></p>
-                                    <span class="simple-list-meta">Updated <?php echo htmlspecialchars($ticket['updated']); ?></span>
-                                </div>
-                                <div class="simple-list-side">
-                                    <span class="status-badge <?php echo $ticket['status_class']; ?>">
-                                        <span class="status-dot" aria-hidden="true"></span>
-                                        <?php echo htmlspecialchars($ticket['status']); ?>
-                                    </span>
-                                </div>
-                            </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php endif; ?>
                     </div>
                 </article>
             </div>

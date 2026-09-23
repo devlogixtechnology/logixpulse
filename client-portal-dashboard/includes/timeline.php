@@ -3,22 +3,24 @@
  * includes/timeline.php
  * Task: FEB-W7D3-1 - Connect the Timeline to Real Data
  *
- * Replaces the hardcoded timeline steps on the dashboard with the
- * logged-in client's real current phase, pulled from the database.
- * Falls back to an in-memory mock dataset with the same shape if the
- * database isn't reachable, so the dashboard never breaks.
+ * Replaces the old made-up/hardcoded timeline steps with the real
+ * current phase pulled from the database, for a given client.
+ * Falls back to an in-memory mock dataset (same shape as the DB
+ * tables) when no DB connection is available.
  */
 
-require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 /**
- * Mock dataset used only when the database connection fails.
- * Same shape as the `timeline_steps` table, keyed by client (user) id.
+ * Mock "database" used only when a real DB connection isn't available.
+ * Shape mirrors the `clients` + `timeline_steps` tables exactly, so
+ * switching to the real DB later needs no changes outside this file.
  */
 function getMockTimelineDataset(): array
 {
     return [
-        10 => [
+        1 => [
+            'client_name' => 'Acme Cloud Technologies',
             'current_step_order' => 3,
             'steps' => [
                 ['step_order' => 1, 'title' => 'Project Started', 'date_label' => 'Jan 6'],
@@ -28,7 +30,8 @@ function getMockTimelineDataset(): array
                 ['step_order' => 5, 'title' => 'Delivery', 'date_label' => 'Est. Mar 20'],
             ],
         ],
-        11 => [
+        2 => [
+            'client_name' => 'Vertex FinTech Core',
             'current_step_order' => 2,
             'steps' => [
                 ['step_order' => 1, 'title' => 'Project Started', 'date_label' => 'Feb 2'],
@@ -42,54 +45,44 @@ function getMockTimelineDataset(): array
 }
 
 /**
- * Returns the logged-in client's timeline: each step with a computed
- * status (completed / current / upcoming) and the overall progress
- * percentage used for the track fill.
+ * Returns the timeline for a client: real client name, each step's
+ * computed status (completed / current / upcoming), and the overall
+ * progress percentage for the track fill.
  *
- * @return array{progress:float, steps:array}|null
+ * @return array{client_name:string, progress:float, steps:array}|null
  */
 function getClientTimeline(int $clientId): ?array
 {
-    $currentStepOrder = null;
-    $steps = [];
+    $pdo = getDbConnection();
 
-    try {
-        $pdo = getDatabaseConnection();
+    if ($pdo !== null) {
+        $clientStmt = $pdo->prepare('SELECT name, current_step_order FROM clients WHERE id = ?');
+        $clientStmt->execute([$clientId]);
+        $client = $clientStmt->fetch(PDO::FETCH_ASSOC);
 
-        $progressStmt = $pdo->prepare(
-            'SELECT current_step_order FROM client_timeline_progress WHERE client_id = :client_id'
-        );
-        $progressStmt->execute([':client_id' => $clientId]);
-        $progressRow = $progressStmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($progressRow) {
-            $currentStepOrder = (int) $progressRow['current_step_order'];
-
-            $stepsStmt = $pdo->prepare(
-                'SELECT step_order, title, date_label FROM timeline_steps WHERE client_id = :client_id ORDER BY step_order ASC'
-            );
-            $stepsStmt->execute([':client_id' => $clientId]);
-            $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
+        if (!$client) {
+            return null;
         }
-    } catch (PDOException $e) {
-        $currentStepOrder = null;
-        $steps = [];
-    }
 
-    // No row found in the DB (or DB unreachable) - fall back to mock data.
-    if ($currentStepOrder === null) {
+        $stepsStmt = $pdo->prepare(
+            'SELECT step_order, title, date_label FROM timeline_steps WHERE client_id = ? ORDER BY step_order ASC'
+        );
+        $stepsStmt->execute([$clientId]);
+        $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $clientName = $client['name'];
+        $currentStepOrder = (int) $client['current_step_order'];
+    } else {
+        // No live DB connection available - use the mock dataset instead.
         $dataset = getMockTimelineDataset();
 
         if (!isset($dataset[$clientId])) {
             return null;
         }
 
+        $clientName = $dataset[$clientId]['client_name'];
         $currentStepOrder = $dataset[$clientId]['current_step_order'];
         $steps = $dataset[$clientId]['steps'];
-    }
-
-    if (empty($steps)) {
-        return null;
     }
 
     $totalSteps = count($steps);
@@ -115,11 +108,13 @@ function getClientTimeline(int $clientId): ?array
         ];
     }
 
-    // Progress fill: 0% at step 1, 100% at the last step.
+    // Progress fill = how far along the current step is, proportional
+    // to the total number of steps (0% at step 1, 100% at the last step).
     $completedCount = max(0, $currentStepOrder - 1);
     $progress = $totalSteps > 1 ? ($completedCount / ($totalSteps - 1)) * 100 : 0;
 
     return [
+        'client_name' => $clientName,
         'progress' => round($progress, 1),
         'steps' => $formattedSteps,
     ];
