@@ -1,0 +1,372 @@
+/* ==========================================================================
+   Agreement Page Shell - Consistent with LogixPulse Client Portal
+   ========================================================================== */
+
+:root {
+    --color-navy: #1E2432;
+    --color-gray-dark: #5F6B73;
+    --color-gray-muted: #8A93A3;
+    --color-white: #FFFFFF;
+    --color-accent: #4F46E5;
+    --color-accent-dark: #4338CA;
+    --color-accent-light: #EEF0FF;
+    --border-color: #E5E7EE;
+    --page-bg: #F6F7FB;
+    
+    --radius-md: 14px;
+    --radius-sm: 8px;
+    
+    --shadow-card: 0 1px 2px rgba(30, 36, 50, 0.05), 0 1px 8px rgba(30, 36, 50, 0.04);
+}
+
+body {
+    background-color: var(--page-bg);
+    color: var(--color-navy);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Base styles matching previous tasks (simplified for shell) */
+.portal-navbar {
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 24px;
+}
+.navbar-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; }
+.brand-mark { width: 32px; height: 32px; background: var(--color-accent); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.brand-subtext { color: var(--color-gray-muted); font-weight: 400; font-size: 13px; margin-left: 4px; }
+.navbar-links { display: flex; gap: 4px; }
+.nav-link { padding: 8px 16px; border-radius: 99px; font-size: 14px; font-weight: 500; color: var(--color-gray-dark); text-decoration: none; }
+.nav-link.active { background: var(--color-accent); color: white; }
+.navbar-actions { display: flex; align-items: center; gap: 10px; }
+.workspace-badge { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--color-accent-light); color: var(--color-accent-dark); border-radius: 99px; font-size: 12px; font-weight: 600; }
+.avatar { width: 32px; height: 32px; background: var(--color-accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+
+.dashboard-wrapper {
+    padding: 32px 24px;
+}
+.dashboard-content {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.page-header { margin-bottom: 24px; }
+.page-title { font-size: 24px; font-weight: 700; margin: 0 0 6px 0; }
+.page-subtitle { color: var(--color-gray-dark); margin: 0; font-size: 14px; }
+
+
+/* ==========================================================================
+   Agreement Specific Layout
+   ========================================================================== */
+
+.agreement-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Sidebar */
+.agreement-sidebar {
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    padding: 12px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--color-navy);
+    transition: background 0.2s;
+}
+
+.menu-item:hover {
+    background: var(--page-bg);
+}
+
+.menu-item.active {
+    background: var(--color-accent-light);
+    border: 1px solid #D0D4F7;
+}
+
+.menu-item-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-dark);
+}
+
+.menu-item.active .menu-item-icon {
+    color: var(--color-accent);
+    border-color: var(--color-accent-light);
+}
+
+.menu-item-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item-text .title {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.menu-item-text .subtitle {
+    font-size: 12px;
+    color: var(--color-gray-muted);
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.status-indicator.pending { background: #F59E0B; } /* Amber */
+.status-indicator.signed { background: #108981; } /* Emerald */
+
+
+/* Main Agreement Card */
+.agreement-card {
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+
+/* Header */
+.agreement-header {
+    padding: 32px;
+    border-bottom: 1px solid var(--border-color);
+    background: #FAFBFC;
+}
+
+.header-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.status-pending {
+    background: #FEF3DC;
+    color: #92600B;
+    border: 1px solid #FBE3AE;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+    background: #F59E0B;
+}
+
+.document-id {
+    font-size: 13px;
+    color: var(--color-gray-muted);
+    font-family: monospace;
+}
+
+.agreement-title {
+    font-size: 24px;
+    margin: 0 0 8px 0;
+}
+
+.agreement-meta {
+    margin: 0;
+    font-size: 14px;
+    color: var(--color-gray-dark);
+}
+
+/* Body / Content */
+.agreement-body {
+    padding: 40px 48px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #374151;
+}
+
+.document-section {
+    margin-bottom: 32px;
+}
+
+.document-section h3 {
+    font-size: 16px;
+    color: var(--color-navy);
+    margin: 0 0 12px 0;
+}
+
+.document-section p {
+    margin: 0 0 12px 0;
+}
+
+.info-box {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: var(--color-accent-light);
+    border: 1px solid #D0D4F7;
+    border-radius: var(--radius-sm);
+    color: var(--color-accent-dark);
+    font-size: 13px;
+    margin-top: 16px;
+}
+.info-box svg { flex-shrink: 0; }
+
+
+/* Signature Section */
+.agreement-signature-section {
+    padding: 32px 48px;
+    border-top: 1px solid var(--border-color);
+    background: #FAFBFC;
+}
+
+.signature-header h3 {
+    font-size: 16px;
+    margin: 0 0 4px 0;
+}
+.signature-header p {
+    margin: 0 0 24px 0;
+    font-size: 13px;
+    color: var(--color-gray-dark);
+}
+
+.signature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.signature-box {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 24px;
+    background: var(--color-white);
+}
+
+.signature-box.action-required {
+    border: 2px dashed var(--color-accent);
+    background: var(--color-accent-light);
+}
+
+.signature-box label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-gray-dark);
+    margin-bottom: 16px;
+}
+
+.signature-line {
+    height: 60px;
+    border-bottom: 1px solid var(--color-navy);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 8px;
+    justify-content: center;
+}
+
+.signature-font {
+    font-family: 'Brush Script MT', cursive, serif;
+    font-size: 28px;
+    color: var(--color-navy);
+}
+
+.signature-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--color-gray-muted);
+}
+
+/* Footer / Actions */
+.agreement-footer {
+    padding: 24px 32px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background: var(--color-white);
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--color-accent);
+    color: white;
+}
+.btn-primary:hover:not(:disabled) { background: var(--color-accent-dark); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-secondary {
+    background: white;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+}
+.btn-secondary:hover { background: var(--color-accent-light); }
+
+.btn-outline {
+    background: white;
+    color: var(--color-gray-dark);
+    border: 1px solid var(--border-color);
+}
+.btn-outline:hover { background: var(--page-bg); border-color: var(--color-gray-muted); }
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+    .agreement-layout {
+        grid-template-columns: 1fr;
+    }
+    .signature-grid {
+        grid-template-columns: 1fr;
+    }
+    .agreement-body, .agreement-signature-section {
+        padding: 24px;
+    }
+}
