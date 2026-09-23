@@ -1,56 +1,56 @@
 <?php
-declare(strict_types=1);
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/auth.php';
-require_once __DIR__ . '/../config/helpers.php';
+/**
+ * login.php
+ * BE-W7D1-3 — Traditional Login Checker (Core PHP only)
+ *
+ * Expects a POST request with:
+ *   - email
+ *   - password
+ *
+ * Checks credentials against the `users` table, verifies the password
+ * with password_verify(), and on success stores the user's info and
+ * role in a PHP session.
+ */
 
-if (!empty($_SESSION['user'])) {
-    redirect($_SESSION['user']['role'] === 'admin' ? 'admin/index.php' : 'client/index.php');
+session_start();
+
+require __DIR__ . '/db.php';
+
+// Only allow POST requests (normal form submission or Postman POST).
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo 'login failed';
+    exit;
 }
 
-$error = '';
+$email    = trim($_POST['email'] ?? '');
+$password = $_POST['password'] ?? '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim((string)($_POST['email'] ?? ''));
-    $password = (string)($_POST['password'] ?? '');
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
-        $error = 'Enter a valid email and password.';
-    } else {
-        $stmt = db()->prepare('SELECT id, name, email, password_hash, role FROM users WHERE email = ? LIMIT 1');
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
-
-        if ($user && password_verify($password, $user['password_hash'])) {
-            session_regenerate_id(true);
-            unset($user['password_hash']);
-            $_SESSION['user'] = $user;
-            redirect($user['role'] === 'admin' ? 'admin/index.php' : 'client/index.php');
-        }
-
-        $error = 'Invalid login details.';
-    }
+// Basic input validation.
+if ($email === '' || $password === '') {
+    echo 'login failed';
+    exit;
 }
-?>
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Invoice Portal Login</title><link rel="stylesheet" href="assets/style.css"></head>
-<body>
-<div class="card login">
-    <h1>Invoice Portal</h1>
-    <p class="muted">Login as admin or client.</p>
-    <?php if ($error): ?><div class="alert error"><?= h($error) ?></div><?php endif; ?>
-    <form method="post">
-        <label>Email</label>
-        <input type="email" name="email" required autocomplete="username">
-        <label>Password</label>
-        <input type="password" name="password" required autocomplete="current-password">
-        <button type="submit">Login</button>
-    </form>
-    <hr>
-    <p class="small"><b>Demo admin:</b> admin@example.com / admin123</p>
-    <p class="small"><b>Client A:</b> clienta@example.com / client123</p>
-    <p class="small"><b>Client B:</b> clientb@example.com / client456</p>
-</div>
-</body>
-</html>
+
+// Look up the user by email using a prepared statement.
+$stmt = $pdo->prepare('SELECT id, name, email, password, role FROM users WHERE email = :email LIMIT 1');
+$stmt->execute(['email' => $email]);
+$user = $stmt->fetch();
+
+// Verify the user exists and the password matches the stored hash.
+if ($user && password_verify($password, $user['password'])) {
+
+    // Regenerate session ID to prevent session fixation.
+    session_regenerate_id(true);
+
+    // Store login info and role in the session.
+    $_SESSION['user_id']       = $user['id'];
+    $_SESSION['user_name']     = $user['name'] ?? null;
+    $_SESSION['user_email']    = $user['email'];
+    $_SESSION['user_role']     = $user['role'];
+    $_SESSION['logged_in']     = true;
+
+    echo 'login successful';
+} else {
+    echo 'login failed';
+}
