@@ -3,7 +3,7 @@
  * header.php
  * Shared document head for the Client Portal pages.
  */
-$pageTitle = isset($pageTitle) ? $pageTitle : "Client Portal - LogixPulse";
+$pageTitle = isset($pageTitle) ? $pageTitle : "Client Portal - DevLogix";
 ?>
 <!DOCTYPE html>
 <html lang="en">
