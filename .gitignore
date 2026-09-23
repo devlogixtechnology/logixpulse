@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 node_modules/
 build/
 dist/
@@ -7,23 +6,3 @@ coverage/
 *.log
 .env*
 !.env.example
-=======
-# Environment & Database Configuration
-config/db.local.php
-.env
-.env.*
-!.env.example
-
-# File Uploads (Ignore uploaded content, keep directory structure)
-uploads/invoices/*
-!uploads/invoices/.gitkeep
-uploads/signatures/*
-!uploads/signatures/.gitkeep
-
-# Operating System & IDE Files
-.DS_Store
-Thumbs.db
-.idea/
-.vscode/
-*.log
->>>>>>> f06b85387a1b5442b68e005998c1dc067217c806
