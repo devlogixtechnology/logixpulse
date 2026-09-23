@@ -79,3 +79,19 @@ The new check uses the existing `$_SESSION['logged_in']` value.
 Without a valid login session, opening `protected.php` redirects to `login.html`.
 With a valid login session, `protected.php` opens normally.
 
+---
+
+## BE-W7D4-2 — Send Activity History to the Details Panel
+
+### Requirement
+Fetch all activity log entries for a specific lead ordered from newest to oldest.
+
+### Included
+- `lead_activity.php` — activity-history endpoint (`api/lead_activity.php`).
+- `lead_details.php` — lead details panel showing the complete history.
+- `lead_activity.html` — test page.
+
+### API
+`GET api/lead_activity.php?lead_id=1`
+Ordering: `ORDER BY created_at DESC, id DESC`.
+
