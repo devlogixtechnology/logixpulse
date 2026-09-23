@@ -45,3 +45,9 @@ function getDbConnection(): ?PDO
 
     return $pdo;
 }
+
+if (!function_exists("getDatabaseConnection")) {
+    function getDatabaseConnection(): ?PDO {
+        return getDbConnection();
+    }
+}
