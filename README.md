@@ -108,3 +108,13 @@ Ordering: `ORDER BY created_at DESC, id DESC`.
 - Files are stored on the server with generated filenames.
 - Clients can only list/download invoices belonging to their own account.
 - Direct downloads are protected via `uploads/.htaccess` and served via `download.php`.
+
+
+---
+
+## BE-W7D5-2 — Save Manual Notes on a Lead
+
+### Requirements
+Save manual notes on a lead, generating a new `activity_logs` row with `activity_type = "note"` and current timestamp.
+- `add_note.php` — Form and handler to save note.
+- `activity_history.php` — Displays all activity logs including manual notes.
