@@ -4,7 +4,7 @@
  * Main entry point for the Client Portal Empty Dashboard.
  * Task: FEB-W7D1-3 - Build the Empty Client Dashboard (Navbar, Profile Dropdown)
  */
-$pageTitle = "Dashboard - LogixPulse Client Portal";
+$pageTitle = "Dashboard - DevLogix Client Portal";
 include 'includes/header.php';
 include 'includes/navbar.php';
 ?>
@@ -17,66 +17,6 @@ include 'includes/navbar.php';
             <div class="dashboard-heading">
                 <h1>Dashboard</h1>
                 <p>Welcome to your Client Portal. This is where your project activity will appear.</p>
-            </div>
-
-            <div class="row g-4 mb-4">
-                <article class="col-12">
-                    <div class="dashboard-card timeline-card">
-                        <div class="card-header">
-                            <h2>Project Timeline</h2>
-                            <span class="card-icon-chip chip-indigo" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            </span>
-                        </div>
-
-                        <div class="timeline-scroll">
-                            <ol class="timeline-track" style="--timeline-progress: 37.5%;">
-
-                                <li class="timeline-step is-completed">
-                                    <span class="timeline-dot" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                    </span>
-                                    <span class="timeline-title">Project Started</span>
-                                    <span class="timeline-status">Completed</span>
-                                    <span class="timeline-date">Jan 6</span>
-                                </li>
-
-                                <li class="timeline-step is-completed">
-                                    <span class="timeline-dot" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                    </span>
-                                    <span class="timeline-title">Requirements &amp; Planning</span>
-                                    <span class="timeline-status">Completed</span>
-                                    <span class="timeline-date">Jan 20</span>
-                                </li>
-
-                                <li class="timeline-step is-current">
-                                    <span class="timeline-dot" aria-hidden="true">
-                                        <span class="timeline-dot-pulse"></span>
-                                    </span>
-                                    <span class="timeline-title">Development</span>
-                                    <span class="timeline-status">In Progress</span>
-                                    <span class="timeline-date">Est. Feb 28</span>
-                                </li>
-
-                                <li class="timeline-step is-upcoming">
-                                    <span class="timeline-dot" aria-hidden="true"></span>
-                                    <span class="timeline-title">Review &amp; Approval</span>
-                                    <span class="timeline-status">Upcoming</span>
-                                    <span class="timeline-date">Est. Mar 10</span>
-                                </li>
-
-                                <li class="timeline-step is-upcoming">
-                                    <span class="timeline-dot" aria-hidden="true"></span>
-                                    <span class="timeline-title">Delivery</span>
-                                    <span class="timeline-status">Upcoming</span>
-                                    <span class="timeline-date">Est. Mar 20</span>
-                                </li>
-
-                            </ol>
-                        </div>
-                    </div>
-                </article>
             </div>
 
             <div class="row g-4">

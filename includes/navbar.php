@@ -17,7 +17,7 @@ $userInitials = "SC";
                     <polyline points="2 12 8 12 10 6 14 18 16 12 22 12"></polyline>
                 </svg>
             </span>
-            <span class="brand-text">LogixPulse <span class="brand-subtext">Client Portal</span></span>
+            <span class="brand-text">DevLogix <span class="brand-subtext">Client Portal</span></span>
         </div>
 
         <nav class="navbar-links" aria-label="Primary navigation">
