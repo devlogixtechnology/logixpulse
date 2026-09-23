@@ -392,18 +392,18 @@ include 'includes/navbar.php';
                                             $status_label = ucfirst($status);
                                         ?>
                                         <tr data-status="<?php echo htmlspecialchars($status); ?>">
-                                            <td class="invoice-id"><?php echo htmlspecialchars($invoice['invoice_number']); ?></td>
-                                            <td class="invoice-project"><?php echo htmlspecialchars($invoice['project_name'] ?? 'N/A'); ?></td>
+                                            <td class="invoice-id" data-label="Invoice"><?php echo htmlspecialchars($invoice['invoice_number']); ?></td>
+                                            <td class="invoice-project" data-label="Project"><?php echo htmlspecialchars($invoice['project_name'] ?? 'N/A'); ?></td>
                                             <td><?php echo formatDate($invoice['issue_date']); ?></td>
                                             <td><?php echo formatDate($invoice['due_date']); ?></td>
-                                            <td class="invoice-amount">$<?php echo number_format((float) $invoice['amount'], 2); ?></td>
-                                            <td>
+                                            <td class="invoice-amount" data-label="Amount">$<?php echo number_format((float) $invoice['amount'], 2); ?></td>
+                                            <td data-label="Status">
                                                 <span class="status-badge <?php echo $status_class; ?>">
                                                     <span class="status-dot" aria-hidden="true"></span>
                                                     <?php echo $status_label; ?>
                                                 </span>
                                             </td>
-                                            <td class="text-end">
+                                            <td class="text-end" data-label="Action">
                                                 <div class="invoice-actions">
                                                     <a href="../api/download-invoice.php?id=<?php echo urlencode($invoice['id']); ?>" class="invoice-action-btn" title="Download Invoice" aria-label="Download invoice" style="text-decoration: none;">
                                                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>

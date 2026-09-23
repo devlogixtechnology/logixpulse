@@ -417,3 +417,20 @@ input::placeholder {
         font-size: 22px;
     }
 }
+/* Back link utility from FEB-W7D5-1 */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-primary, #2563eb);
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+.back-link:hover {
+    color: var(--color-primary-hover, #1d4ed8);
+    text-decoration: underline;
+}
+.back-link::before {
+    content: '\2190';
+    margin-right: 4px;
+}
