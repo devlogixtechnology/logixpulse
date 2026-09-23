@@ -100,4 +100,61 @@ document.addEventListener("DOMContentLoaded", function () {
         profileDropdown.classList.remove("open");
         profileButton.setAttribute("aria-expanded", "false");
     }
+
+    var invoiceTable = document.getElementById("invoiceTable");
+    var invoiceRows = invoiceTable ? invoiceTable.querySelectorAll("tbody tr") : [];
+    var invoiceFilters = document.querySelectorAll(".invoice-filters .filter-chip");
+    var invoiceSearch = document.getElementById("invoiceSearch");
+    var invoiceEmptyState = document.getElementById("invoiceEmptyState");
+    var invoiceCount = document.getElementById("invoiceCount");
+    var activeInvoiceFilter = "all";
+
+    if (invoiceRows.length) {
+        if (invoiceFilters.length) {
+            invoiceFilters.forEach(function (chip) {
+                chip.addEventListener("click", function () {
+                    invoiceFilters.forEach(function (btn) {
+                        btn.classList.remove("is-active");
+                    });
+                    chip.classList.add("is-active");
+                    activeInvoiceFilter = chip.getAttribute("data-filter");
+                    applyInvoiceFilters();
+                });
+            });
+        }
+
+        if (invoiceSearch) {
+            invoiceSearch.addEventListener("input", function () {
+                applyInvoiceFilters();
+            });
+        }
+
+        applyInvoiceFilters();
+    }
+
+    function applyInvoiceFilters() {
+        var query = invoiceSearch ? invoiceSearch.value.trim().toLowerCase() : "";
+        var visibleCount = 0;
+
+        invoiceRows.forEach(function (row) {
+            var status = row.getAttribute("data-status");
+            var matchesFilter = activeInvoiceFilter === "all" || status === activeInvoiceFilter;
+            var matchesSearch = !query || row.textContent.toLowerCase().indexOf(query) !== -1;
+            var isVisible = matchesFilter && matchesSearch;
+
+            row.classList.toggle("is-hidden", !isVisible);
+            if (isVisible) {
+                visibleCount += 1;
+            }
+        });
+
+        if (invoiceEmptyState) {
+            invoiceEmptyState.classList.toggle("is-visible", visibleCount === 0);
+            invoiceEmptyState.hidden = visibleCount !== 0 ? true : false;
+        }
+
+        if (invoiceCount) {
+            invoiceCount.textContent = "Showing " + visibleCount + " of " + invoiceRows.length + " invoices";
+        }
+    }
 });
