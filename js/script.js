@@ -158,4 +158,65 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1000);
         });
     }
+
+    /* ========================================================
+       4. RESET PASSWORD REQUEST FORM HANDLING
+       ======================================================== */
+    const resetRequestForm = document.getElementById('reset-password-request-form');
+    if (resetRequestForm) {
+        resetRequestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('reset-email').value;
+            const btn = document.getElementById('reset-request-submit');
+            
+            const originalText = btn.innerText;
+            btn.innerText = 'Sending Link...';
+            btn.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.opacity = '1';
+                // For demo purposes, automatically navigate to set new password screen
+                // In a real app, the user would click a link in their email
+                alert(`Frontend Demo: Reset link sent to ${email}!\n\n(Redirecting to "Set New Password" screen for demo purposes).`);
+                window.location.href = 'set-new-password.html';
+            }, 800);
+        });
+    }
+
+    /* ========================================================
+       5. SET NEW PASSWORD FORM HANDLING
+       ======================================================== */
+    const setNewPasswordForm = document.getElementById('set-new-password-form');
+    if (setNewPasswordForm) {
+        setNewPasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const btn = document.getElementById('set-password-submit');
+            
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match. Please try again.');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                alert('Password must be at least 6 characters long.');
+                return;
+            }
+            
+            const originalText = btn.innerText;
+            btn.innerText = 'Updating...';
+            btn.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.opacity = '1';
+                alert('Frontend Demo: Password successfully reset!\n\n(Redirecting to Login).');
+                window.location.href = 'index.html';
+            }, 800);
+        });
+    }
 });
