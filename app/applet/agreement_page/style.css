@@ -62,7 +62,6 @@ body {
 .page-title { font-size: 24px; font-weight: 700; margin: 0 0 6px 0; }
 .page-subtitle { color: var(--color-gray-dark); margin: 0; font-size: 14px; }
 
-
 /* ==========================================================================
    Agreement Specific Layout
    ========================================================================== */
@@ -149,7 +148,6 @@ body {
 }
 .status-indicator.pending { background: #F59E0B; } /* Amber */
 .status-indicator.signed { background: #108981; } /* Emerald */
-
 
 /* Main Agreement Card */
 .agreement-card {
@@ -248,7 +246,6 @@ body {
     margin-top: 16px;
 }
 .info-box svg { flex-shrink: 0; }
-
 
 /* Signature Section */
 .agreement-signature-section {

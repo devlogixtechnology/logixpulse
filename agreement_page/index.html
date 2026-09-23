@@ -140,13 +140,17 @@
                                 </div>
                                 
                                 <div class="signature-box client-box action-required">
-                                    <label>Acme Cloud Infrastructure (Client)</label>
-                                    <div class="signature-line" id="client-signature-area">
-                                        <button class="btn btn-secondary sign-trigger-btn">Click here to sign</button>
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                        <label>Acme Cloud Infrastructure (Client)</label>
+                                        <button class="btn btn-secondary" id="clear-signature-btn" style="padding: 4px 8px; font-size: 11px; margin-top: -4px; display: none;">Clear</button>
+                                    </div>
+                                    <div class="signature-line" id="client-signature-area" style="position: relative; cursor: crosshair; touch-action: none;">
+                                        <canvas id="signature-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+                                        <span id="canvas-placeholder" style="color: var(--color-accent); font-size: 14px; font-weight: 500; pointer-events: none; position: relative;">Draw signature here</span>
                                     </div>
                                     <div class="signature-details">
                                         <span>Client Representative</span>
-                                        <span>Pending</span>
+                                        <span id="client-date-text">Pending</span>
                                     </div>
                                 </div>
                             </div>
