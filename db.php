@@ -1,10 +1,15 @@
 <?php
 declare(strict_types=1);
 
-$host = '127.0.0.1';
-$db   = 'logixpulse_auth';
-$user = 'root';
-$pass = '';
+/**
+ * db.php
+ * Core PHP database connection using PDO.
+ */
+
+$host = getenv('DB_HOST') ?: '127.0.0.1';
+$db   = getenv('DB_NAME') ?: 'logixpulse_auth';
+$user = getenv('DB_USER') ?: 'root';
+$pass = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host={$host};dbname={$db};charset={$charset}";
@@ -19,5 +24,6 @@ try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (PDOException $e) {
     http_response_code(500);
-    exit('Database connection failed. Please import database/schema.sql in phpMyAdmin and make sure MySQL is running in XAMPP.');
+    die('Database connection failed: ' . $e->getMessage());
 }
+
