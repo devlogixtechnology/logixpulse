@@ -9,7 +9,8 @@ session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/includes/timeline.php';
 
-$client_id = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : 1;
+$client_id = $_SESSION['client_id'] ?? $_SESSION['user_id'] ?? 1;
+$clientId = (int)$client_id;
 $user_role = $_SESSION['user_role'] ?? 'client';
 
 // ---- Fetch Timeline from Database ----
@@ -113,7 +114,7 @@ include 'includes/navbar.php';
 
                         <div class="timeline-scroll">
                             <?php if ($timeline): ?>
-                            <ol class="timeline-track" style="--timeline-progress: <?php echo $timeline['progress']; ?>%;">
+                            <ol class="timeline-track" style="--timeline-progress: <?php echo $timeline['progress']; ?>%; --timeline-steps: <?php echo count($timeline['steps']); ?>;">
                                 <?php foreach ($timeline['steps'] as $step): ?>
                                 <li class="timeline-step is-<?php echo $step['status']; ?>">
                                     <span class="timeline-dot" aria-hidden="true">
@@ -129,6 +130,8 @@ include 'includes/navbar.php';
                                 </li>
                                 <?php endforeach; ?>
                             </ol>
+                            <?php elseif (!$clientId): ?>
+                                <p class="card-empty-hint">Log in to view your project timeline.</p>
                             <?php else: ?>
                                 <p class="card-empty-hint">No timeline data found for this client.</p>
                             <?php endif; ?>
