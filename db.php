@@ -1,30 +1,41 @@
 <?php
+declare(strict_types=1);
 
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "crm_leads";
+/**
+ * db.php
+ * Core PHP database connection using PDO and MySQLi.
+ */
 
-$conn = new mysqli($host, $user, $password);
+$host = getenv('DB_HOST') ?: '127.0.0.1';
+$db   = getenv('DB_NAME') ?: 'logixpulse';
+$user = getenv('DB_USER') ?: 'root';
+$pass = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
+$charset = 'utf8mb4';
 
-if ($conn->connect_error) {
-    http_response_code(500);
-    die("Database connection failed.");
+$dsn = "mysql:host={$host};dbname={$db};charset={$charset}";
+
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    $pdo = null;
 }
 
-$conn->query("CREATE DATABASE IF NOT EXISTS `$database`");
-$conn->select_db($database);
+// MySQLi connection for scripts requiring $conn
+$conn = @new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    $conn = @new mysqli($host, $user, $pass);
+    if ($conn && !$conn->connect_error) {
+        $conn->query("CREATE DATABASE IF NOT EXISTS `$db`");
+        $conn->select_db($db);
+    }
+}
+if ($conn && !$conn->connect_error) {
+    $conn->set_charset("utf8mb4");
+}
 
-$conn->query("
-    CREATE TABLE IF NOT EXISTS leads (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL,
-        phone VARCHAR(50) NOT NULL,
-        source VARCHAR(255) NOT NULL,
-        status VARCHAR(50) NOT NULL DEFAULT 'New'
-    )
-");
-
-$conn->set_charset("utf8mb4");
-?>
