@@ -1,7 +1,13 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../config/db.php';
+if (file_exists(__DIR__ . "/config/db.php")) {
+    require_once __DIR__ . "/config/db.php";
+} elseif (file_exists(__DIR__ . "/../config/db.php")) {
+    require_once __DIR__ . "/../config/db.php";
+} else {
+    require_once __DIR__ . "/db.php";
+}
 
 header('Content-Type: application/json; charset=utf-8');
 
