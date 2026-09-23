@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FEA-W7D5-2 — Notes Panel (LogixPulse theme)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --lp-indigo:#4F46E5; --lp-indigo-hover:#4338CA;
+    --lp-emerald:#10B981; --lp-amber:#F59E0B; --lp-red:#EF4444;
+    --lp-canvas:#F9FAFB; --lp-surface:#FFFFFF;
+    --lp-text:#111827; --lp-muted:#6B7280; --lp-border:#E5E7EB;
+  }
+  body{ font-family:'Inter',sans-serif; background:var(--lp-canvas); color:var(--lp-text); padding:24px; margin:0; }
+
+  .note-form{ display:flex; flex-direction:column; gap:8px; margin-bottom:16px; max-width:420px; }
+  .note-form textarea{
+    resize:vertical; min-height:64px; border:1px solid var(--lp-border); border-radius:8px;
+    padding:10px; font-family:'Inter',sans-serif; font-size:14px; background:var(--lp-surface);
+    color:var(--lp-text); outline:0; transition:border-color .15s;
+  }
+  .note-form textarea::placeholder{ color:var(--lp-muted); }
+  .note-form textarea:focus{ border-color:var(--lp-indigo); box-shadow:0 0 0 3px rgba(79,70,229,0.12); }
+
+  .note-actions{ display:flex; align-items:center; gap:10px; }
+  .note-hint{ font-size:12px; color:var(--lp-muted); margin-right:auto; }
+  .note-hint.error{ color:var(--lp-red); font-weight:500; }
+  button.add-note{
+    background:var(--lp-indigo); color:#FFFFFF; border:0; border-radius:8px;
+    padding:9px 16px; font-weight:600; font-size:13px; cursor:pointer;
+    font-family:'Inter',sans-serif; transition:background .15s;
+  }
+  button.add-note:hover:not(:disabled){ background:var(--lp-indigo-hover); }
+  button.add-note:disabled{ background:#C7C9F4; cursor:not-allowed; }
+
+  .notes-history{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; max-width:420px; }
+  .note-card{
+    background:var(--lp-surface); border:1px solid var(--lp-border); border-radius:8px;
+    padding:10px 12px; animation:appear .25s ease;
+  }
+  @keyframes appear{ from{opacity:0; transform:translateY(-4px);} to{opacity:1; transform:translateY(0);} }
+  .note-card .note-time{ font-size:11px; font-weight:500; color:var(--lp-muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:.02em; }
+  .note-card .note-text{ font-size:14px; line-height:1.5; color:var(--lp-text); white-space:pre-wrap; }
+  .no-notes{ color:var(--lp-muted); font-size:14px; }
+
+  .panel-label{ font-family:'Manrope',sans-serif; font-weight:700; font-size:16px; margin:0 0 12px; }
+</style>
+</head>
+<body>
+
+<h2 class="panel-label">Notes</h2>
+
+<div class="note-form">
+  <textarea id="noteInput" placeholder="Add a note about this lead…"></textarea>
+  <div class="note-actions">
+    <span class="note-hint" id="noteHint"></span>
+    <button class="add-note" id="addNoteBtn">Add Note</button>
+  </div>
+</div>
+<ul class="notes-history" id="notesHistory"></ul>
+
+<script>
+function getCurrentLeadId(){
+  return 1; 
+}
+async function saveNoteToBackend(leadId, text){
+  // Local testing without real backend API
+  return new Promise((resolve) => setTimeout(resolve, 300));
+}
+
+const notesCache = {};
+
+const noteInput    = document.getElementById('noteInput');
+const addNoteBtn   = document.getElementById('addNoteBtn');
+const notesHistory = document.getElementById('notesHistory');
+const noteHint     = document.getElementById('noteHint');
+
+function renderNotes(leadId){
+  const notes = notesCache[leadId] || [];
+  notesHistory.innerHTML = notes.length
+    ? notes.map(n => `
+        <li class="note-card">
+          <div class="note-time">${escapeHtml(n.time)}</div>
+          <div class="note-text">${escapeHtml(n.text)}</div>
+        </li>`).join('')
+    : `<li class="no-notes">No notes yet for this lead.</li>`;
+}
+
+function updateButtonState(){
+  addNoteBtn.disabled = noteInput.value.trim().length === 0;
+}
+
+addNoteBtn.addEventListener('click', async () => {
+  const leadId = getCurrentLeadId();
+  const text = noteInput.value.trim();
+  if(!text) return;
+
+  addNoteBtn.disabled = true;
+  addNoteBtn.textContent = 'Saving…';
+  noteHint.classList.remove('error');
+  noteHint.textContent = '';
+
+  try{
+    await saveNoteToBackend(leadId, text);
+    if(!notesCache[leadId]) notesCache[leadId] = [];
+    notesCache[leadId].unshift({
+      text,
+      time: new Date().toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
+    });
+    noteInput.value = '';
+    renderNotes(leadId);
+  } catch(err){
+    noteHint.textContent = 'Could not save — try again.';
+    noteHint.classList.add('error');
+  } finally {
+    addNoteBtn.textContent = 'Add Note';
+    updateButtonState();
+  }
+});
+
+noteInput.addEventListener('input', updateButtonState);
+
+renderNotes(getCurrentLeadId());
+updateButtonState();
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>
