@@ -1,123 +1,200 @@
 -- ============================================
--- LogixPulse — Step 2: Schema (8 Tables) - MySQL Compatible
+-- LogixPulse — Step 2: Unified Schema
+-- Supports all Frontend and Backend endpoints
 -- ============================================
 
--- 1. users
-CREATE TABLE users (
+USE logix_pulse;
+
+-- 1. users (supports both first_name/last_name and full name, all roles)
+CREATE TABLE IF NOT EXISTS users (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     email         VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    first_name    VARCHAR(100) NOT NULL,
-    last_name     VARCHAR(100) NOT NULL,
+    first_name    VARCHAR(100) NOT NULL DEFAULT '',
+    last_name     VARCHAR(100) NOT NULL DEFAULT '',
+    name          VARCHAR(200) NOT NULL DEFAULT '',
     role          VARCHAR(50)  NOT NULL DEFAULT 'client',
     status        VARCHAR(50)  NOT NULL DEFAULT 'active',
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
 
--- 2. leads
-CREATE TABLE leads (
+-- 2. leads (supports name, first/last_name, status, and stage)
+CREATE TABLE IF NOT EXISTS leads (
     id            INT AUTO_INCREMENT PRIMARY KEY,
-    first_name    VARCHAR(100),
-    last_name     VARCHAR(100),
-    email         VARCHAR(255),
-    phone         VARCHAR(50),
-    company       VARCHAR(255),
-    source        VARCHAR(100),
+    name          VARCHAR(200) NOT NULL DEFAULT '',
+    first_name    VARCHAR(100) DEFAULT '',
+    last_name     VARCHAR(100) DEFAULT '',
+    email         VARCHAR(255) DEFAULT '',
+    phone         VARCHAR(50)  DEFAULT '',
+    company       VARCHAR(255) DEFAULT '',
+    source        VARCHAR(100) DEFAULT '',
     status        VARCHAR(50)  NOT NULL DEFAULT 'new',
-    assigned_to   INT,
-    notes         TEXT,
+    stage         VARCHAR(50)  NOT NULL DEFAULT 'new',
+    assigned_to   INT          DEFAULT NULL,
+    notes         TEXT         DEFAULT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (assigned_to) REFERENCES users(id)
-);
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
 
--- 3. activity_logs
-CREATE TABLE activity_logs (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    user_id       INT,
-    action        VARCHAR(255) NOT NULL,
-    entity_type   VARCHAR(100),
-    entity_id     INT,
-    details       JSON,
+-- 3. activity_logs (supports both CRM lead notes/history and generic user audits)
+CREATE TABLE IF NOT EXISTS activity_logs (
+    id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id       INT          DEFAULT NULL,
+    lead_id       INT          DEFAULT NULL,
+    action        VARCHAR(255) DEFAULT NULL,
+    activity_type VARCHAR(100) DEFAULT NULL,
+    description   TEXT         DEFAULT NULL,
+    note          TEXT         DEFAULT NULL,
+    created_by    VARCHAR(150) DEFAULT NULL,
+    entity_type   VARCHAR(100) DEFAULT NULL,
+    entity_id     INT          DEFAULT NULL,
+    details       JSON         DEFAULT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
+    INDEX idx_activity_lead (lead_id),
+    INDEX idx_activity_user (user_id),
+    INDEX idx_activity_lead_created (lead_id, created_at, id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- 4. projects
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     name          VARCHAR(255) NOT NULL,
     client_id     INT          NOT NULL,
     status        VARCHAR(50)  NOT NULL DEFAULT 'active',
-    start_date    DATE,
-    end_date      DATE,
-    description   TEXT,
+    start_date    DATE         DEFAULT NULL,
+    end_date      DATE         DEFAULT NULL,
+    description   TEXT         DEFAULT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (client_id) REFERENCES users(id)
-);
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
--- 5. invoices
-CREATE TABLE invoices (
-    id              INT AUTO_INCREMENT PRIMARY KEY,
-    invoice_number  VARCHAR(50)  NOT NULL UNIQUE,
-    client_id       INT          NOT NULL,
-    project_id      INT,
-    amount          DECIMAL(12,2) NOT NULL DEFAULT 0.00,
-    status          VARCHAR(50)  NOT NULL DEFAULT 'draft',
-    issue_date      DATE,
-    due_date        DATE,
-    paid_date       DATE,
-    notes           TEXT,
-    created_at      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (client_id) REFERENCES users(id),
-    FOREIGN KEY (project_id) REFERENCES projects(id)
-);
+-- 5. invoices (supports both portal invoices and secure uploaded files)
+CREATE TABLE IF NOT EXISTS invoices (
+    id                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    invoice_number    VARCHAR(50)    DEFAULT NULL,
+    client_id         INT            NOT NULL,
+    project_id        INT            DEFAULT NULL,
+    amount            DECIMAL(12,2)  NOT NULL DEFAULT 0.00,
+    status            VARCHAR(50)    NOT NULL DEFAULT 'draft',
+    original_filename VARCHAR(255)   DEFAULT NULL,
+    stored_filename   VARCHAR(100)   DEFAULT NULL UNIQUE,
+    issue_date        DATE           DEFAULT NULL,
+    due_date          DATE           DEFAULT NULL,
+    paid_date         DATE           DEFAULT NULL,
+    notes             TEXT           DEFAULT NULL,
+    created_at        TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at        TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_invoices_client_id (client_id),
+    INDEX idx_invoices_status (status),
+    INDEX idx_invoices_created_at (created_at),
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
 
 -- 6. agreements
-CREATE TABLE agreements (
+CREATE TABLE IF NOT EXISTS agreements (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     client_id     INT          NOT NULL,
-    project_id    INT,
+    project_id    INT          DEFAULT NULL,
     title         VARCHAR(255) NOT NULL,
-    content       TEXT,
+    content       TEXT         DEFAULT NULL,
     status        VARCHAR(50)  NOT NULL DEFAULT 'draft',
-    signed_date   DATE,
+    signed_date   DATE         DEFAULT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (client_id) REFERENCES users(id),
-    FOREIGN KEY (project_id) REFERENCES projects(id)
-);
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
 
 -- 7. magic_codes
-CREATE TABLE magic_codes (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    user_id       INT,
-    code          VARCHAR(6)   NOT NULL,
-    expires_at    TIMESTAMP    NOT NULL,
-    used_at       TIMESTAMP NULL,
+CREATE TABLE IF NOT EXISTS magic_codes (
+    id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id       INT          DEFAULT NULL,
+    email         VARCHAR(190) DEFAULT NULL,
+    code          VARCHAR(10)  DEFAULT NULL,
+    code_hash     VARCHAR(255) DEFAULT NULL,
+    expires_at    DATETIME     NOT NULL,
+    attempts      INT UNSIGNED NOT NULL DEFAULT 0,
+    used_at       DATETIME     DEFAULT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
+    INDEX idx_magic_email (email),
+    INDEX idx_magic_expiry (expires_at),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- 8. password_resets
-CREATE TABLE password_resets (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    user_id       INT,
-    token         VARCHAR(255) NOT NULL UNIQUE,
-    expires_at    TIMESTAMP    NOT NULL,
-    used_at       TIMESTAMP NULL,
+CREATE TABLE IF NOT EXISTS password_resets (
+    id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id       INT          DEFAULT NULL,
+    email         VARCHAR(190) DEFAULT NULL,
+    token         VARCHAR(255) DEFAULT NULL,
+    token_hash    CHAR(64)     DEFAULT NULL,
+    expires_at    DATETIME     NOT NULL,
+    attempts      INT UNSIGNED NOT NULL DEFAULT 0,
+    used_at       DATETIME     DEFAULT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
+    INDEX idx_reset_email (email),
+    INDEX idx_reset_expiry (expires_at),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
--- Indexes for performance
-CREATE INDEX idx_invoices_client_id    ON invoices(client_id);
-CREATE INDEX idx_invoices_status       ON invoices(status);
-CREATE INDEX idx_projects_client_id    ON projects(client_id);
-CREATE INDEX idx_activity_logs_user_id ON activity_logs(user_id);
-CREATE INDEX idx_leads_assigned_to     ON leads(assigned_to);
+-- 9. Kanban Board tables (columns_table and tasks)
+CREATE TABLE IF NOT EXISTS columns_table (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    name          VARCHAR(100) NOT NULL,
+    position      INT          NOT NULL DEFAULT 0
+) ENGINE=InnoDB;
 
-SELECT '✅  All 8 tables and indexes created.' AS Status;
+CREATE TABLE IF NOT EXISTS tasks (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    title         VARCHAR(255) NOT NULL,
+    column_id     INT          NOT NULL,
+    position      INT          NOT NULL DEFAULT 0,
+    created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (column_id) REFERENCES columns_table(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 10. Client Timeline tables
+CREATE TABLE IF NOT EXISTS client_timeline_progress (
+    client_id           INT NOT NULL PRIMARY KEY,
+    current_step_order  INT NOT NULL DEFAULT 1,
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS timeline_steps (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    client_id   INT NOT NULL,
+    step_order  INT NOT NULL,
+    title       VARCHAR(150) NOT NULL,
+    date_label  VARCHAR(50) NOT NULL,
+    INDEX idx_timeline_steps_client_id (client_id),
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 11. Legacy compatibility tables for BE demo forms
+CREATE TABLE IF NOT EXISTS internal_users (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(100) NOT NULL,
+    email      VARCHAR(190) NOT NULL UNIQUE,
+    password   VARCHAR(255) NOT NULL,
+    role       VARCHAR(50)  NOT NULL DEFAULT 'user',
+    status     ENUM('active','inactive') NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS clients (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(100) NOT NULL,
+    email      VARCHAR(190) NOT NULL UNIQUE,
+    password   VARCHAR(255) NOT NULL,
+    role       VARCHAR(50)  NOT NULL DEFAULT 'client',
+    status     ENUM('active','inactive') NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+SELECT '✅ Unified schema with all 13 tables and indexes verified.' AS Status;
