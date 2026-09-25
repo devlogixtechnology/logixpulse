@@ -45,6 +45,8 @@ $user = currentUser();
 
         <h3 style="font-size: 15px; margin-top: 24px; margin-bottom: 8px;">Quick Management Tools</h3>
         <div class="links-grid">
+            <a href="lead_search.php">Lead Search & CRM</a>
+            <a href="save_lead.php">Add New Lead</a>
             <a href="upload.php">Upload Invoices</a>
             <a href="dashboard_kpi.php">KPI Analytics API</a>
             <a href="who_is_logged_in.php">Session Check</a>

@@ -100,11 +100,13 @@ devlogixpulse/
 │   ├── process_internal_login.php    # Staff login authentication processor
 │   ├── process_client_login.php      # Client login authentication processor
 │   ├── main_dashboard.php            # Internal staff dashboard view
+│   ├── lead_search.php               # Multi-column debounced lead search & management view
+│   ├── save_lead.php                 # Lead creation form
 │   ├── client_dashboard.php          # Client redirect router
 │   ├── upload.php                    # Admin invoice upload page
 │   ├── download.php                  # Isolated invoice streaming
 │   ├── client_invoices.php           # Client invoice listing view
-│   ├── lead_details.php              # Lead profile view with timeline
+│   ├── lead_details.php              # Lead profile view with interactive note composer
 │   ├── activity_history.php          # Activity history view
 │   └── add_note.php                  # Manual note creation view
 ├── config/

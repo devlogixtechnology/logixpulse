@@ -92,14 +92,26 @@ function e(?string $value): string
 
     <div class="card">
         <div class="header">
-            <h2>Activity History</h2>
-            <a href="add_note.php?lead_id=<?= (int)$lead['id'] ?>" style="font-size: 13px; color: #4f46e5; text-decoration: none; font-weight: 600;">+ Add Note</a>
+            <h2>Activity History & Notes</h2>
+            <a href="add_note.php?lead_id=<?= (int)$lead['id'] ?>" style="font-size: 13px; color: #4f46e5; text-decoration: none; font-weight: 600;">Full Form +</a>
+        </div>
+
+        <!-- Interactive Quick Note Composer (FEA-W7D5-2) -->
+        <div class="note-composer" style="margin-bottom: 24px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <label for="inlineNoteInput" style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 8px; color: #334155;">Quick Note</label>
+            <textarea id="inlineNoteInput" placeholder="Add an internal note about this lead..." style="width: 100%; min-height: 64px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; font-family: inherit; font-size: 13px; box-sizing: border-box; resize: vertical;"></textarea>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                <span id="noteHint" style="font-size: 12px; color: #64748b;">Max 5,000 characters</span>
+                <button type="button" id="saveInlineNoteBtn" style="background: #4f46e5; color: #fff; border: 0; border-radius: 6px; padding: 7px 16px; font-weight: 600; font-size: 13px; cursor: pointer;">Save Note</button>
+            </div>
+            <div id="noteStatusMsg" style="font-size: 12px; margin-top: 6px; display: none;"></div>
         </div>
 
         <?php if (empty($activities)): ?>
-            <p class="empty">No activity history found for this lead.</p>
+            <p class="empty" id="emptyStateMsg">No activity history found for this lead.</p>
+            <div class="activity-timeline" id="activityTimeline" style="display: none;"></div>
         <?php else: ?>
-            <div class="activity-timeline">
+            <div class="activity-timeline" id="activityTimeline">
                 <?php foreach ($activities as $act): ?>
                     <div class="activity-item">
                         <div class="activity-dot"></div>
@@ -119,5 +131,77 @@ function e(?string $value): string
         <?php endif; ?>
     </div>
 </div>
+
+<script>
+// Interactive Note Submission (FEA-W7D5-2)
+(function() {
+    const btn = document.getElementById('saveInlineNoteBtn');
+    const input = document.getElementById('inlineNoteInput');
+    const statusMsg = document.getElementById('noteStatusMsg');
+    const timeline = document.getElementById('activityTimeline');
+    const emptyState = document.getElementById('emptyStateMsg');
+    const leadId = <?= (int)$lead['id'] ?>;
+
+    if (!btn || !input) return;
+
+    btn.addEventListener('click', async function() {
+        const note = input.value.trim();
+        if (!note) {
+            statusMsg.style.display = 'block';
+            statusMsg.style.color = '#ef4444';
+            statusMsg.textContent = 'Please enter a note before saving.';
+            input.focus();
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+        statusMsg.style.display = 'none';
+
+        try {
+            const res = await fetch(`add_note.php?lead_id=${leadId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ lead_id: leadId, note: note })
+            });
+
+            const data = await res.json();
+            if (res.ok && data.success) {
+                // Show success
+                statusMsg.style.display = 'block';
+                statusMsg.style.color = '#10b981';
+                statusMsg.textContent = '✓ Note saved successfully.';
+                input.value = '';
+
+                // Create new activity item element dynamically
+                const item = document.createElement('div');
+                item.className = 'activity-item';
+                item.innerHTML = `
+                    <div class="activity-dot"></div>
+                    <div class="activity-title">note</div>
+                    <div class="activity-time">Just now · By Current User</div>
+                    <div class="activity-desc">${note.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</div>
+                `;
+
+                if (emptyState) emptyState.style.display = 'none';
+                timeline.style.display = 'block';
+                timeline.prepend(item);
+            } else {
+                throw new Error(data.message || 'Failed to save note.');
+            }
+        } catch (err) {
+            statusMsg.style.display = 'block';
+            statusMsg.style.color = '#ef4444';
+            statusMsg.textContent = '✗ ' + err.message;
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Save Note';
+        }
+    });
+})();
+</script>
 </body>
 </html>

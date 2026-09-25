@@ -31,7 +31,20 @@ foreach ($tasks as $t) {
   .column h2 { font-size: 14px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .03em; margin: 4px 0 12px 4px; }
   .card { background: var(--canvas); border: 1px solid #E5E7EB; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 14px; cursor: grab; }
   .card.dragging { opacity: .4; }
-  .column.drag-over { outline: 2px dashed var(--primary); outline-offset: -4px; }
+  .board-search-wrap { max-width: 480px; margin-bottom: 20px; }
+  .board-search-box {
+    display: flex; align-items: center; gap: 8px; background: var(--surface);
+    border: 1px solid #E5E7EB; border-radius: 8px; padding: 9px 12px;
+    transition: border-color .15s;
+  }
+  .board-search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.12); }
+  .board-search-box svg { flex: none; color: var(--text-muted); }
+  .board-search-box input {
+    flex: 1; border: 0; background: transparent; outline: 0; color: var(--text-primary);
+    font-family: inherit; font-size: 14px;
+  }
+  .board-search-box input::placeholder { color: var(--text-muted); }
+  .board-search-meta { margin-top: 6px; font-size: 12px; font-weight: 500; color: var(--text-muted); min-height: 1em; }
   #status { margin-top: 16px; font-size: 13px; color: var(--text-muted); }
   #status.success { color: var(--success); }
   #status.error { color: var(--danger); }
@@ -39,8 +52,21 @@ foreach ($tasks as $t) {
 </head>
 <body>
 
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+  <a href="../backend/main_dashboard.php" style="color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 500;">← Back to Dashboard</a>
+  <a href="../backend/lead_search.php" style="color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 500;">Lead Search & CRM →</a>
+</div>
+
 <h1>LogixPulse Board</h1>
-<p class="subtitle">Tasks loaded from database — drag and drop to update, then refresh to verify.</p>
+<p class="subtitle">Tasks loaded from database — drag and drop to update, search in real-time, and track workflow.</p>
+
+<div class="board-search-wrap">
+  <div class="board-search-box">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="boardSearchInput" type="text" placeholder="Search tasks by title..." autocomplete="off">
+  </div>
+  <div class="board-search-meta" id="boardSearchMeta"></div>
+</div>
 
 <div class="board" id="board">
   <?php foreach ($columns as $col): ?>
@@ -105,6 +131,36 @@ function saveDragToDatabase(taskId, newColumnId, newPosition) {
     statusEl.className = 'error';
   });
 }
+
+// Real-Time Search & Filtering (FEA-W7D5-1)
+(function() {
+  const searchInput = document.getElementById('boardSearchInput');
+  const searchMeta = document.getElementById('boardSearchMeta');
+  const allCards = Array.from(document.querySelectorAll('.card'));
+
+  if (!searchInput) return;
+
+  searchInput.addEventListener('input', function() {
+    const q = this.value.trim().toLowerCase();
+    let visibleCount = 0;
+
+    allCards.forEach(card => {
+      const text = card.textContent.trim().toLowerCase();
+      if (q === '' || text.includes(q)) {
+        card.style.display = '';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (q === '') {
+      searchMeta.textContent = '';
+    } else {
+      searchMeta.textContent = `Showing ${visibleCount} of ${allCards.length} tasks matching "${this.value.trim()}"`;
+    }
+  });
+})();
 </script>
 
 </body>
