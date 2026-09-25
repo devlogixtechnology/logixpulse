@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LogixPulse Module 1 — Executive Intern Performance Review</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 14mm 12mm 14mm 12mm;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      color: #94a3b8;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #1e293b;
+    background: #ffffff;
+    font-size: 9pt;
+    line-height: 1.45;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page-break { page-break-before: always; }
+  .no-break { page-break-inside: avoid; }
+
+  /* Header Bar */
+  .header-card {
+    border-bottom: 2px solid #4f46e5;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .header-left h1 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 18pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 4px;
+    letter-spacing: -0.02em;
+  }
+  .header-left .subtitle {
+    font-size: 9pt;
+    color: #4f46e5;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .meta-grid {
+    text-align: right;
+    font-size: 8pt;
+    color: #64748b;
+    line-height: 1.4;
+  }
+  .meta-grid strong { color: #1e293b; }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge-a { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+  .badge-aminus { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+  .badge-bplus { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+  .badge-unrated { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+
+  /* KPI Summary Banner */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .kpi-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  .kpi-box .val {
+    font-family: 'Manrope', sans-serif;
+    font-size: 16pt;
+    font-weight: 800;
+    color: #4f46e5;
+    line-height: 1.1;
+  }
+  .kpi-box .lbl {
+    font-size: 7.5pt;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-top: 3px;
+  }
+
+  /* Section Titles */
+  h2.sec-title {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11pt;
+    font-weight: 700;
+    color: #0f172a;
+    border-left: 3.5px solid #4f46e5;
+    padding-left: 8px;
+    margin: 16px 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Tables */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+    font-size: 8pt;
+  }
+  table.data-table th {
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+    text-align: left;
+    padding: 7px 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  table.data-table td {
+    padding: 6px 8px;
+    border: 1px solid #e2e8f0;
+    vertical-align: middle;
+  }
+  table.data-table tr:nth-child(even) td { background: #fafafa; }
+  table.data-table tr:hover td { background: #f8fafc; }
+
+  /* Intern Card */
+  .intern-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: #ffffff;
+    page-break-inside: avoid;
+  }
+  .intern-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+  .intern-name {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11pt;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .intern-role {
+    font-size: 8pt;
+    color: #64748b;
+    font-weight: 500;
+  }
+  .intern-score {
+    text-align: right;
+  }
+  .score-num {
+    font-family: 'Manrope', sans-serif;
+    font-size: 13pt;
+    font-weight: 800;
+    color: #4f46e5;
+  }
+
+  .metric-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 8px 0;
+  }
+  .mini-stat {
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 6px 8px;
+    border: 1px solid #f1f5f9;
+  }
+  .mini-stat .m-lbl { font-size: 7pt; color: #64748b; text-transform: uppercase; font-weight: 600; }
+  .mini-stat .m-val { font-size: 8.5pt; font-weight: 700; color: #1e293b; margin-top: 1px; }
+
+  .review-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 8px;
+    font-size: 8pt;
+  }
+  .box-green { background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 6px; padding: 8px; }
+  .box-amber { background: #fffbeb; border: 1px solid #fef3c7; border-radius: 6px; padding: 8px; }
+  .box-title { font-weight: 700; font-size: 8pt; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+  .box-green .box-title { color: #166534; }
+  .box-amber .box-title { color: #92400e; }
+  .review-list { margin: 0; padding-left: 14px; color: #334155; }
+  .review-list li { margin-bottom: 3px; }
+
+  /* Deliverable pill */
+  .pill { display: inline-block; background: #e2e8f0; color: #334155; border-radius: 4px; padding: 2px 6px; font-size: 7pt; font-family: 'JetBrains Mono', monospace; margin: 1px; }
+
+  /* Signoff Block */
+  .signoff-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #cbd5e1;
+    page-break-inside: avoid;
+  }
+  .signoff-box {
+    border-top: 1.5px solid #64748b;
+    padding-top: 6px;
+    font-size: 8pt;
+  }
+  .signoff-box .s-name { font-weight: 700; color: #0f172a; }
+  .signoff-box .s-title { color: #64748b; font-size: 7.5pt; }
+
+  .progress-bar-bg {
+    background: #e2e8f0;
+    border-radius: 99px;
+    height: 6px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .progress-bar-fill {
+    background: #4f46e5;
+    height: 100%;
+    border-radius: 99px;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: EXECUTIVE SUMMARY & MASTER SCOREBOARD -->
+<div class="header-card">
+  <div class="header-left">
+    <div class="subtitle">DevLogix Strategic Internship Program (SIP'26)</div>
+    <h1>Executive Review & Intern Performance Rating</h1>
+    <div style="font-size: 8.5pt; color: #475569; margin-top: 2px;">
+      LogixPulse Module 1: CRM & Client Onboarding &bull; Technical Audit, DoD & Deliverables Evaluation
+    </div>
+  </div>
+  <div class="meta-grid">
+    <div><strong>Date:</strong> September 25, 2026</div>
+    <div><strong>Doc ID:</strong> LP-EXEC-REV-2026-V1</div>
+    <div><strong>Track:</strong> PHP Engineering Practice</div>
+    <div><strong>Status:</strong> <span class="badge badge-a">Audit Certified</span></div>
+  </div>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi-box">
+    <div class="val">87.6%</div>
+    <div class="lbl">Sprint 1 Completion Rate</div>
+  </div>
+  <div class="kpi-box">
+    <div class="val">5 / 5</div>
+    <div class="lbl">Active Interns Evaluated</div>
+  </div>
+  <div class="kpi-box">
+    <div class="val">25 / 25</div>
+    <div class="lbl">Verified Live Endpoints</div>
+  </div>
+  <div class="kpi-box">
+    <div class="val">8.64 / 10</div>
+    <div class="lbl">Cohort Overall Average</div>
+  </div>
+</div>
+
+<h2 class="sec-title">1. Executive Master Scoreboard</h2>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th style="width: 22%;">Intern Name</th>
+      <th style="width: 18%;">Assigned Squad</th>
+      <th style="width: 26%;">Key Module Deliverables</th>
+      <th style="width: 12%;">Completion</th>
+      <th style="width: 10%;">Score</th>
+      <th style="width: 12%;">Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Sayeda Arooj</strong><br/><span style="color: #64748b; font-size: 7pt;">sayedaarooj702@gmail.com</span></td>
+      <td>Squad PHP-FE-B<br/><span style="font-size: 7pt; color: #64748b;">Client Onboarding Portal</span></td>
+      <td>Client Timeline, Dynamic Invoices Table, Invoice Download Button</td>
+      <td><strong>92.0%</strong><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 92%;"></div></div></td>
+      <td><span class="score-num" style="font-size: 10pt;">9.2</span> / 10</td>
+      <td><span class="badge badge-a">A (Top Performer)</span></td>
+    </tr>
+    <tr>
+      <td><strong>Akash Rana</strong><br/><span style="color: #64748b; font-size: 7pt;">muskanarshad2580@gmail.com</span></td>
+      <td>Squad PHP-FE-A<br/><span style="font-size: 7pt; color: #64748b;">CRM Board & Quick Tools</span></td>
+      <td>HTML5 Drag & Drop Kanban, Real-time Debounced Search, Notes Panel</td>
+      <td><strong>90.0%</strong><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 90%;"></div></div></td>
+      <td><span class="score-num" style="font-size: 10pt;">8.8</span> / 10</td>
+      <td><span class="badge badge-aminus">A- (Very Strong)</span></td>
+    </tr>
+    <tr>
+      <td><strong>Kaneez Fatima</strong><br/><span style="color: #64748b; font-size: 7pt;">faziz9121@gmail.com</span></td>
+      <td>Squad PHP-FE-B<br/><span style="font-size: 7pt; color: #64748b;">Responsive QA & Auth</span></td>
+      <td>6-Device Viewport QA Audit, Mobile Breakpoint CSS, OTP Input Fixes</td>
+      <td><strong>86.0%</strong><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 86%;"></div></div></td>
+      <td><span class="score-num" style="font-size: 10pt;">8.7</span> / 10</td>
+      <td><span class="badge badge-aminus">A- (High Diligence)</span></td>
+    </tr>
+    <tr>
+      <td><strong>Zainab Batool</strong><br/><span style="color: #64748b; font-size: 7pt;">zainab.batool@devlogix.online</span></td>
+      <td>Squad PHP-BE (Lead)<br/><span style="font-size: 7pt; color: #64748b;">Unified Core Engine</span></td>
+      <td>Lead Stage API, Activity Logging, Magic Codes, Parameterized Search API</td>
+      <td><strong>88.0%</strong><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 88%;"></div></div></td>
+      <td><span class="score-num" style="font-size: 10pt;">8.5</span> / 10</td>
+      <td><span class="badge badge-aminus">A- (Solid Architect)</span></td>
+    </tr>
+    <tr>
+      <td><strong>Halima Sadia</strong><br/><span style="color: #64748b; font-size: 7pt;">halima.sadia@devlogix.online</span></td>
+      <td>Squad PHP-FE-B<br/><span style="font-size: 7pt; color: #64748b;">Agreements & Signature</span></td>
+      <td>Master Agreement Layout Shell, Canvas Signature Pad (Touch/Mouse)</td>
+      <td><strong>82.0%</strong><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 82%;"></div></div></td>
+      <td><span class="score-num" style="font-size: 10pt;">8.0</span> / 10</td>
+      <td><span class="badge badge-bplus">B+ (Good Technical)</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="sec-title">2. Squad Participation & Attendance Roster Audit</h2>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th style="width: 25%;">Roster Name (SRS List)</th>
+      <th style="width: 20%;">Squad</th>
+      <th style="width: 15%;">Git Activity</th>
+      <th style="width: 25%;">Audit Findings</th>
+      <th style="width: 15%;">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Zainab Batool</strong></td>
+      <td>Squad PHP-BE (Lead)</td>
+      <td>12 Commits / 4 PRs</td>
+      <td>Primary contributor and author for backend APIs.</td>
+      <td><span class="badge badge-a">Active / Evaluated</span></td>
+    </tr>
+    <tr>
+      <td><strong>Akash Rana / Muskan Arshad</strong></td>
+      <td>Squad PHP-FE-A</td>
+      <td>9 Commits / 3 PRs</td>
+      <td>Primary contributor for Kanban board and quick tools.</td>
+      <td><span class="badge badge-a">Active / Evaluated</span></td>
+    </tr>
+    <tr>
+      <td><strong>Sayeda Arooj</strong></td>
+      <td>Squad PHP-FE-B</td>
+      <td>8 Commits / 5 PRs</td>
+      <td>Primary contributor for Client Portal and Invoice table.</td>
+      <td><span class="badge badge-a">Active / Evaluated</span></td>
+    </tr>
+    <tr>
+      <td><strong>Kaneez Fatima</strong></td>
+      <td>Squad PHP-FE-B</td>
+      <td>7 Commits / 4 PRs</td>
+      <td>Primary contributor for mobile testing and responsive polish.</td>
+      <td><span class="badge badge-a">Active / Evaluated</span></td>
+    </tr>
+    <tr>
+      <td><strong>Halima Sadia / Haleema Butt</strong></td>
+      <td>Squad PHP-FE-B</td>
+      <td>5 Commits / 2 PRs</td>
+      <td>Primary contributor for Master Agreement canvas signature.</td>
+      <td><span class="badge badge-a">Active / Evaluated</span></td>
+    </tr>
+    <tr>
+      <td>Atiqa Maqbool, Areesha Sarwar</td>
+      <td>Squad PHP-BE</td>
+      <td>0 Commits</td>
+      <td>No individual git commits or PRs recorded under account.</td>
+      <td><span class="badge badge-unrated">Unrated / Inactive</span></td>
+    </tr>
+    <tr>
+      <td>Fatima Nadeem, Minahil Imran, Momna Hafeez</td>
+      <td>Squad PHP-FE-A</td>
+      <td>0 Commits</td>
+      <td>Work submitted via Akash Rana or no individual contributions.</td>
+      <td><span class="badge badge-unrated">Unrated / Inactive</span></td>
+    </tr>
+    <tr>
+      <td>Momna Munir</td>
+      <td>Squad PHP-FE-B (Lead)</td>
+      <td>0 Commits</td>
+      <td>Work submitted via team members; no code commits recorded.</td>
+      <td><span class="badge badge-unrated">Unrated / Inactive</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- PAGE BREAK: DETAILED SCORECARDS -->
+<div class="page-break"></div>
+
+<h2 class="sec-title">3. Individual Intern Deep-Dive Scorecards</h2>
+
+<!-- SAYEDA AROOJ -->
+<div class="intern-card">
+  <div class="intern-header">
+    <div>
+      <span class="badge badge-a">Grade: A (Top Performer)</span>
+      <div class="intern-name" style="margin-top: 4px;">Sayeda Arooj &mdash; Client Portal & Data Integration</div>
+      <div class="intern-role">Squad PHP-FE-B &bull; Email: sayedaarooj702@gmail.com</div>
+    </div>
+    <div class="intern-score">
+      <div class="score-num">9.2 / 10</div>
+      <div style="font-size: 7.5pt; color: #64748b;">Completion: 92.0%</div>
+    </div>
+  </div>
+
+  <div class="metric-mini-grid">
+    <div class="mini-stat"><div class="m-lbl">Architecture & UI</div><div class="m-val">9.5 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">DoD Compliance</div><div class="m-val">9.2 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Security & Privacy</div><div class="m-val">9.0 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Git Collaboration</div><div class="m-val">9.0 / 10</div></div>
+  </div>
+
+  <div style="margin: 6px 0; font-size: 7.5pt;">
+    <strong>Deliverables:</strong>
+    <span class="pill">FEB-W7D2-2 (Timeline UI)</span>
+    <span class="pill">FEB-W7D2-3 (Invoice UI)</span>
+    <span class="pill">FEB-W7D3-1 (Timeline DB Sync)</span>
+    <span class="pill">FEB-W7D3-2 (Invoice DB Sync)</span>
+    <span class="pill">FEB-W7D4-1 (Download Button)</span>
+  </div>
+
+  <div class="review-cols">
+    <div class="box-green">
+      <div class="box-title">&check; Code Strengths & Key Achievements</div>
+      <ul class="review-list">
+        <li>Implemented beautiful, brand-accurate Client Portal dashboard matching Figma tokens.</li>
+        <li>Architected graceful degradation: if database is offline, UI seamlessly serves mock datasets without crashing.</li>
+        <li>Clean client isolation query (`WHERE client_id = :client_id`) preventing IDOR leaks.</li>
+        <li>Fastest turnaround on sprint review adjustments with zero merge collisions.</li>
+      </ul>
+    </div>
+    <div class="box-amber">
+      <div class="box-title">&excl; Deficiencies & Areas for Growth</div>
+      <ul class="review-list">
+        <li>Initial timeline calculation inverted progress (`$progress = 100 - ...`).</li>
+        <li>Created redundant database config in `client-portal-dashboard/config/` instead of root singleton.</li>
+        <li>Initially wired download button to static demo PDF before integrating backend streaming.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- AKASH RANA -->
+<div class="intern-card">
+  <div class="intern-header">
+    <div>
+      <span class="badge badge-aminus">Grade: A- (Very Strong)</span>
+      <div class="intern-name" style="margin-top: 4px;">Akash Rana &mdash; Kanban Board & Interactive Components</div>
+      <div class="intern-role">Squad PHP-FE-A &bull; Email: muskanarshad2580@gmail.com</div>
+    </div>
+    <div class="intern-score">
+      <div class="score-num">8.8 / 10</div>
+      <div style="font-size: 7.5pt; color: #64748b;">Completion: 90.0%</div>
+    </div>
+  </div>
+
+  <div class="metric-mini-grid">
+    <div class="mini-stat"><div class="m-lbl">Technical Complexity</div><div class="m-val">9.6 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">DoD Compliance</div><div class="m-val">9.0 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Code Professionalism</div><div class="m-val">7.8 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Git Collaboration</div><div class="m-val">8.8 / 10</div></div>
+  </div>
+
+  <div style="margin: 6px 0; font-size: 7.5pt;">
+    <strong>Deliverables:</strong>
+    <span class="pill">FEA-W7D4-2 (Kanban Board)</span>
+    <span class="pill">FEA-W7D4-2 (Drag/Drop Backend)</span>
+    <span class="pill">Task 1 (Debounced Search)</span>
+    <span class="pill">Task 2 (Notes Panel)</span>
+  </div>
+
+  <div class="review-cols">
+    <div class="box-green">
+      <div class="box-title">&check; Code Strengths & Key Achievements</div>
+      <ul class="review-list">
+        <li>Built native HTML5 Drag and Drop Kanban with high responsiveness and drag states.</li>
+        <li>Implemented asynchronous database persistence (`update-stage.php`) syncing column & position.</li>
+        <li>Developed debounced search input component with live match count calculation.</li>
+        <li>Clean micro-animations on quick note insertion into activity timeline.</li>
+      </ul>
+    </div>
+    <div class="box-amber">
+      <div class="box-title">&excl; Deficiencies & Areas for Growth</div>
+      <ul class="review-list">
+        <li>Used Roman-Urdu in API error messages (e.g. <em>"Sirf POST allowed hai"</em>) violating enterprise conventions.</li>
+        <li>Created redundant DB connection `db_connect.php` pointing to non-standard database.</li>
+        <li>Dumped files in root directory rather than creating a dedicated `kanban/` folder.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- KANEEZ FATIMA -->
+<div class="intern-card">
+  <div class="intern-header">
+    <div>
+      <span class="badge badge-aminus">Grade: A- (High Diligence)</span>
+      <div class="intern-name" style="margin-top: 4px;">Kaneez Fatima &mdash; Responsive Design & Quality Assurance</div>
+      <div class="intern-role">Squad PHP-FE-B &bull; Email: faziz9121@gmail.com</div>
+    </div>
+    <div class="intern-score">
+      <div class="score-num">8.7 / 10</div>
+      <div style="font-size: 7.5pt; color: #64748b;">Completion: 86.0%</div>
+    </div>
+  </div>
+
+  <div class="metric-mini-grid">
+    <div class="mini-stat"><div class="m-lbl">QA & Testing</div><div class="m-val">9.8 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">CSS & Responsive</div><div class="m-val">9.0 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Backend Integration</div><div class="m-val">7.8 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Documentation</div><div class="m-val">9.5 / 10</div></div>
+  </div>
+
+  <div style="margin: 6px 0; font-size: 7.5pt;">
+    <strong>Deliverables:</strong>
+    <span class="pill">FEB-W7D1-1 (Login UI)</span>
+    <span class="pill">FEB-W7D1-2 (Reset Password UI)</span>
+    <span class="pill">FEB-W7D4-3 (Mobile QA Report)</span>
+    <span class="pill">FEB-W7D5-1 (Phone Breakpoints)</span>
+  </div>
+
+  <div class="review-cols">
+    <div class="box-green">
+      <div class="box-title">&check; Code Strengths & Key Achievements</div>
+      <ul class="review-list">
+        <li>Authored outstanding 6-device viewport test audit in `docs/MOBILE-TESTING-REPORT.md`.</li>
+        <li>Resolved critical mobile usability defects: OTP layout wrapping, navigation collapse, table overflow.</li>
+        <li>Enforced 44px minimum mobile tap targets as specified in Apple/Google guidelines.</li>
+        <li>Clean, modular CSS media queries with high cross-device fidelity.</li>
+      </ul>
+    </div>
+    <div class="box-amber">
+      <div class="box-title">&excl; Deficiencies & Areas for Growth</div>
+      <ul class="review-list">
+        <li>Early login PRs were static HTML mockups pointing to dummy actions without PHP auth wiring.</li>
+        <li>Merge conflict in early sprint accidentally zeroed out empty `.gitkeep` placeholder files.</li>
+        <li>Needs to expand full-stack capabilities beyond CSS and front-end markup.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE BREAK: REMAINING SCORECARDS & RECOMMENDATIONS -->
+<div class="page-break"></div>
+
+<!-- ZAINAB BATOOL -->
+<div class="intern-card">
+  <div class="intern-header">
+    <div>
+      <span class="badge badge-aminus">Grade: A- (Solid Architect)</span>
+      <div class="intern-name" style="margin-top: 4px;">Zainab Batool &mdash; Backend Lead & CRM API Engine</div>
+      <div class="intern-role">Squad PHP-BE (Squad Lead) &bull; Email: zainab.batool@devlogix.online</div>
+    </div>
+    <div class="intern-score">
+      <div class="score-num">8.5 / 10</div>
+      <div style="font-size: 7.5pt; color: #64748b;">Completion: 88.0%</div>
+    </div>
+  </div>
+
+  <div class="metric-mini-grid">
+    <div class="mini-stat"><div class="m-lbl">Backend Logic</div><div class="m-val">9.2 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Security / SQL</div><div class="m-val">9.0 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Git Hygiene</div><div class="m-val">6.8 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">System Consistency</div><div class="m-val">8.0 / 10</div></div>
+  </div>
+
+  <div style="margin: 6px 0; font-size: 7.5pt;">
+    <strong>Deliverables:</strong>
+    <span class="pill">BE-W7D2-3 (Magic Codes/OTP)</span>
+    <span class="pill">BE-W7D4-1 (Lead Stage Updates)</span>
+    <span class="pill">BE-W7D5-1 (Lead Search API)</span>
+    <span class="pill">BE-W7D5-3 (Cleanup/Guards)</span>
+  </div>
+
+  <div class="review-cols">
+    <div class="box-green">
+      <div class="box-title">&check; Code Strengths & Key Achievements</div>
+      <ul class="review-list">
+        <li>Implemented reliable transactions (`beginTransaction`, `FOR UPDATE`, `commit`) in stage updates.</li>
+        <li>Automated audit trail generation: writing transitions into `activity_logs` table upon lead updates.</li>
+        <li>Parameterized SQL queries preventing SQL injection across search and stage changes.</li>
+        <li>Delivered comprehensive passwordless OTP expiration and verification logic.</li>
+      </ul>
+    </div>
+    <div class="box-amber">
+      <div class="box-title">&excl; Deficiencies & Areas for Growth</div>
+      <ul class="review-list">
+        <li>Major Git Incident: Overwrote root `README.md` with 12-line snippet in commit `450cd5d`.</li>
+        <li>Committed `test_request.php` with hardcoded machine URL (`http://localhost/BE-W7D4-1...`).</li>
+        <li>PR #19 called `LeadRepository.php` without committing the class file, causing fatal error.</li>
+        <li>Schema drift: queried `leads.stage` while early database schema had `leads.status`.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- HALIMA SADIA -->
+<div class="intern-card">
+  <div class="intern-header">
+    <div>
+      <span class="badge badge-bplus">Grade: B+ (Good Technical)</span>
+      <div class="intern-name" style="margin-top: 4px;">Halima Sadia &mdash; Agreement Page & Canvas Signature</div>
+      <div class="intern-role">Squad PHP-FE-B &bull; Email: halima.sadia@devlogix.online</div>
+    </div>
+    <div class="intern-score">
+      <div class="score-num">8.0 / 10</div>
+      <div style="font-size: 7.5pt; color: #64748b;">Completion: 82.0%</div>
+    </div>
+  </div>
+
+  <div class="metric-mini-grid">
+    <div class="mini-stat"><div class="m-lbl">Canvas / JS Logic</div><div class="m-val">9.0 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">UI Aesthetics</div><div class="m-val">8.4 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Backend Integration</div><div class="m-val">6.8 / 10</div></div>
+    <div class="mini-stat"><div class="m-lbl">Git Discipline</div><div class="m-val">7.2 / 10</div></div>
+  </div>
+
+  <div style="margin: 6px 0; font-size: 7.5pt;">
+    <strong>Deliverables:</strong>
+    <span class="pill">FEB-W7D3-3 (Agreement Shell)</span>
+    <span class="pill">FEB-W7D4-2 (Drawable Signature Pad)</span>
+  </div>
+
+  <div class="review-cols">
+    <div class="box-green">
+      <div class="box-title">&check; Code Strengths & Key Achievements</div>
+      <ul class="review-list">
+        <li>Implemented full HTML5 Canvas signature pad supporting mouse and touch input.</li>
+        <li>Interactive validation: submit button remains disabled until signature is drawn.</li>
+        <li>Clean canvas clear functionality, auto-timestamping, and stroke smoothing.</li>
+        <li>Modern legal agreement shell layout with PDF viewer placeholders.</li>
+      </ul>
+    </div>
+    <div class="box-amber">
+      <div class="box-title">&excl; Deficiencies & Areas for Growth</div>
+      <ul class="review-list">
+        <li>Signature data was purely client-side; failed to post Base64 PNG to backend database.</li>
+        <li>Dumped duplicate `style.css` and `script.js` into root directory to preview standalone mockup.</li>
+        <li>Committed raw tarball `agreement_page.tar.gz` to git repository.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2 class="sec-title">4. Executive Recommendations for Sprint 2</h2>
+
+<div class="box-green" style="margin-bottom: 12px; font-size: 8pt;">
+  <div class="box-title" style="font-size: 8.5pt;">Strategic Staffing & Progression Decisions</div>
+  <ul class="review-list">
+    <li><strong>Top Performer Recognition:</strong> Commend <strong>Sayeda Arooj</strong> for highest deliverable completion, visual polish, and graceful degradation architecture. Recommended for Client Portal feature ownership in Sprint 2.</li>
+    <li><strong>Technical Lead Role:</strong> Promote <strong>Akash Rana</strong> to Lead Frontend Developer for internal CRM, pairing him with a senior mentor to instill international coding and naming standards.</li>
+    <li><strong>Backend Governance:</strong> Retain <strong>Zainab Batool</strong> as Backend Engineer with mandatory PR template enforcement, branch protection, and schema migration checklists to prevent repository overwrites.</li>
+    <li><strong>QA & Mobile Leadership:</strong> Appoint <strong>Kaneez Fatima</strong> as Cross-Squad QA Lead to maintain responsiveness and test coverage.</li>
+    <li><strong>Full-Stack Growth:</strong> Assign <strong>Halima Sadia</strong> backend pairing sessions to connect client-side Canvas components to persistent database endpoints.</li>
+  </ul>
+</div>
+
+<div class="signoff-grid">
+  <div class="signoff-box">
+    <div class="s-name">David Chen</div>
+    <div class="s-title">Technical Head &bull; DevLogix Engineering Track</div>
+  </div>
+  <div class="signoff-box">
+    <div class="s-name">Abdullah Bin Masood</div>
+    <div class="s-title">Lead Technical Architect & Supervisor</div>
+  </div>
+  <div class="signoff-box">
+    <div class="s-name">Practice Management Office</div>
+    <div class="s-title">Strategic Internship Program (SIP'26)</div>
+  </div>
+</div>
+
+</body>
+</html>
