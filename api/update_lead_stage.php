@@ -17,7 +17,8 @@ if (!is_array($data)) {
 }
 
 $leadId = isset($data['lead_id']) ? (int)$data['lead_id'] : (int)($_POST['lead_id'] ?? 0);
-$newStage = trim((string)($data['new_stage'] ?? $data['status'] ?? $data['new_status'] ?? $_POST['new_stage'] ?? $_POST['status'] ?? ''));
+$newStage = trim((string)($data['new_stage'] ?? $data['stage'] ?? $data['status'] ?? $data['new_status'] ?? $_POST['new_stage'] ?? $_POST['stage'] ?? $_POST['status'] ?? ''));
+
 
 if ($leadId <= 0 || $newStage === '') {
     http_response_code(400);

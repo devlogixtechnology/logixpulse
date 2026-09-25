@@ -16,7 +16,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'client') {
     die('Unauthorized');
 }
 
- $invoice_id = $_GET['id'] ?? null;
+$invoice_id = $_GET['id'] ?? $_GET['invoice_id'] ?? null;
+
 
 if (!$invoice_id || !is_numeric($invoice_id)) {
     http_response_code(400);
