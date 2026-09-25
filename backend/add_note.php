@@ -15,10 +15,10 @@ if (!$leadId) {
 try {
     $pdo = getDatabaseConnection();
     $stmt = $pdo->prepare(
-        'SELECT id, 
-                COALESCE(NULLIF(name, ""), CONCAT(COALESCE(first_name, ""), " ", COALESCE(last_name, ""))) AS name,
+        "SELECT id, 
+                COALESCE(NULLIF(name, ''), CONCAT(COALESCE(first_name, ''), ' ', COALESCE(last_name, ''))) AS name,
                 email, phone 
-         FROM leads WHERE id = ?'
+         FROM leads WHERE id = ?"
     );
     $stmt->execute([$leadId]);
     $lead = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         try {
             $insert = $pdo->prepare(
-                'INSERT INTO activity_logs (lead_id, activity_type, note, description, created_by, created_at)
-                 VALUES (:lead_id, "note", :note, :desc, "User", NOW())'
+                "INSERT INTO activity_logs (lead_id, activity_type, note, description, created_by, created_at)
+                 VALUES (:lead_id, 'note', :note, :desc, 'User', NOW())"
             );
             $insert->execute([
                 ':lead_id' => $leadId,

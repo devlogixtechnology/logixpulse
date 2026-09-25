@@ -21,11 +21,11 @@ $pdo = getDatabaseConnection();
 
 // Try users table first
 $stmt = $pdo->prepare(
-    'SELECT id, 
-            COALESCE(NULLIF(name, ""), CONCAT(COALESCE(first_name, ""), " ", COALESCE(last_name, ""))) AS name,
+    "SELECT id, 
+            COALESCE(NULLIF(name, ''), CONCAT(COALESCE(first_name, ''), ' ', COALESCE(last_name, ''))) AS name,
             email, password_hash, role, status
      FROM users 
-     WHERE email = :email AND status = "active" LIMIT 1'
+     WHERE email = :email AND status = 'active' LIMIT 1"
 );
 $stmt->execute(['email' => $email]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -39,7 +39,7 @@ if ($user && password_verify($password, $user['password_hash'])) {
 // Fallback to internal_users table if present
 try {
     $stmt2 = $pdo->prepare(
-        'SELECT id, name, email, password, role FROM internal_users WHERE email = :email AND status = "active" LIMIT 1'
+        "SELECT id, name, email, password, role FROM internal_users WHERE email = :email AND status = 'active' LIMIT 1"
     );
     $stmt2->execute(['email' => $email]);
     $internalUser = $stmt2->fetch(PDO::FETCH_ASSOC);

@@ -12,12 +12,12 @@ $clientId = (int)($user['id'] ?? 0);
 
 $pdo = getDatabaseConnection();
 $stmt = $pdo->prepare(
-    'SELECT id, 
-            COALESCE(original_filename, invoice_number, CONCAT("Invoice #", id)) AS original_filename,
+    "SELECT id, 
+            COALESCE(original_filename, invoice_number, CONCAT('Invoice #', id)) AS original_filename,
             amount, status, created_at
      FROM invoices
      WHERE client_id = ?
-     ORDER BY created_at DESC'
+     ORDER BY created_at DESC"
 );
 $stmt->execute([$clientId]);
 $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);

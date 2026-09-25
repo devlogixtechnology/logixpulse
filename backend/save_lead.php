@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-header('Content-Type: application/json; charset=utf-8');
+if (!headers_sent()) {
+    header('Content-Type: application/json; charset=utf-8');
+}
 require_once __DIR__ . '/../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -57,8 +59,8 @@ try {
     $pdo = getDatabaseConnection();
 
     $stmt = $pdo->prepare(
-        'INSERT INTO leads (name, first_name, last_name, email, phone, source, status, stage)
-         VALUES (:name, :first_name, :last_name, :email, :phone, :source, "new", "New")'
+        "INSERT INTO leads (name, first_name, last_name, email, phone, source, status, stage)
+         VALUES (:name, :first_name, :last_name, :email, :phone, :source, 'new', 'New')"
     );
     $stmt->execute([
         ':name'       => $name,
@@ -74,8 +76,8 @@ try {
     // Log the lead creation in activity_logs
     try {
         $logStmt = $pdo->prepare(
-            'INSERT INTO activity_logs (lead_id, activity_type, description, note, created_by, created_at)
-             VALUES (?, "Lead Created", "Lead was added to the CRM.", "Lead was added to the CRM.", "System", NOW())'
+            "INSERT INTO activity_logs (lead_id, activity_type, description, note, created_by, created_at)
+             VALUES (?, 'Lead Created', 'Lead was added to the CRM.', 'Lead was added to the CRM.', 'System', NOW())"
         );
         $logStmt->execute([$leadId]);
     } catch (Throwable $e) {

@@ -204,14 +204,14 @@ CREATE TABLE IF NOT EXISTS clients (
 -- Seed Data (Password for all accounts: Password@123)
 -- ============================================
 INSERT INTO users (email, password_hash, first_name, last_name, name, role, status) VALUES
-    ('admin@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'System',      'Administrator', 'System Administrator', 'admin',         'active'),
-    ('exec@logixpulse.com',     '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Sarah',       'Mitchell',      'Sarah Mitchell',      'executive',     'active'),
-    ('staff@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Michael',     'Torres',        'Michael Torres',        'administrator', 'active'),
-    ('head@logixpulse.com',     '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'David',       'Chen',          'David Chen',          'head',          'active'),
-    ('team1@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Alice',       'Nelson',        'Alice Nelson',        'team',          'active'),
-    ('client1@acmecorp.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'John',        'Harris',        'John Harris',        'client',        'active'),
-    ('client2@nova.com',        '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Lisa',        'Wang',          'Lisa Wang',          'client',        'active'),
-    ('client3@bluewave.io',     '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Robert',      'Gomez',         'Robert Gomez',        'client',        'active')
+    ('admin@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'System',      'Administrator', 'System Administrator', 'admin',         'active'),
+    ('exec@logixpulse.com',     '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Sarah',       'Mitchell',      'Sarah Mitchell',      'executive',     'active'),
+    ('staff@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Michael',     'Torres',        'Michael Torres',        'administrator', 'active'),
+    ('head@logixpulse.com',     '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'David',       'Chen',          'David Chen',          'head',          'active'),
+    ('team1@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Alice',       'Nelson',        'Alice Nelson',        'team',          'active'),
+    ('client1@acmecorp.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'John',        'Harris',        'John Harris',        'client',        'active'),
+    ('client2@nova.com',        '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Lisa',        'Wang',          'Lisa Wang',          'client',        'active'),
+    ('client3@bluewave.io',     '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Robert',      'Gomez',         'Robert Gomez',        'client',        'active')
 ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash), name=VALUES(name);
 
 INSERT INTO leads (first_name, last_name, name, email, phone, company, source, status, stage, assigned_to) VALUES
@@ -230,9 +230,9 @@ INSERT INTO tasks (title, column_id, position) VALUES
     ('Unify authentication & session handling', 2, 1);
 
 INSERT INTO internal_users (name, email, password, role)
-VALUES ('Admin User', 'admin@logixpulse.test', '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'admin')
+VALUES ('Admin User', 'admin@logixpulse.test', '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'admin')
 ON DUPLICATE KEY UPDATE password=VALUES(password);
 
 INSERT INTO clients (name, email, password, role)
-VALUES ('Demo Client', 'client@logixpulse.test', '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'client')
+VALUES ('Demo Client', 'client@logixpulse.test', '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'client')
 ON DUPLICATE KEY UPDATE password=VALUES(password);

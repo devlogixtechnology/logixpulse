@@ -6,23 +6,23 @@ USE logix_pulse;
 
 -- ---- Users ----
 -- Password for ALL users: Password@123
--- Bcrypt Hash: $2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6
+-- Bcrypt Hash: $2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy
 INSERT INTO users (email, password_hash, first_name, last_name, name, role, status) VALUES
-    ('admin@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'System',      'Administrator', 'System Administrator', 'admin',         'active'),
-    ('exec@logixpulse.com',     '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Sarah',       'Mitchell',      'Sarah Mitchell',      'executive',     'active'),
-    ('staff@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Michael',     'Torres',        'Michael Torres',        'administrator', 'active'),
-    ('head@logixpulse.com',     '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'David',       'Chen',          'David Chen',          'head',          'active'),
-    ('team1@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Alice',       'Nelson',        'Alice Nelson',        'team',          'active'),
-    ('team2@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Bob',         'Reed',          'Bob Reed',          'team',          'active'),
-    ('team3@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Carol',       'Palmer',        'Carol Palmer',        'team',          'active'),
-    ('team4@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Derek',       'Simmons',       'Derek Simmons',       'team',          'active'),
-    ('team5@logixpulse.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Eva',         'Martinez',      'Eva Martinez',        'team',          'active'),
+    ('admin@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'System',      'Administrator', 'System Administrator', 'admin',         'active'),
+    ('exec@logixpulse.com',     '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Sarah',       'Mitchell',      'Sarah Mitchell',      'executive',     'active'),
+    ('staff@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Michael',     'Torres',        'Michael Torres',        'administrator', 'active'),
+    ('head@logixpulse.com',     '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'David',       'Chen',          'David Chen',          'head',          'active'),
+    ('team1@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Alice',       'Nelson',        'Alice Nelson',        'team',          'active'),
+    ('team2@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Bob',         'Reed',          'Bob Reed',          'team',          'active'),
+    ('team3@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Carol',       'Palmer',        'Carol Palmer',        'team',          'active'),
+    ('team4@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Derek',       'Simmons',       'Derek Simmons',       'team',          'active'),
+    ('team5@logixpulse.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Eva',         'Martinez',      'Eva Martinez',        'team',          'active'),
     -- Client Accounts (Password@123)
-    ('client1@acmecorp.com',    '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'John',        'Harris',        'John Harris',        'client',        'active'),
-    ('client2@nova.com',        '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Lisa',        'Wang',          'Lisa Wang',          'client',        'active'),
-    ('client3@bluewave.io',     '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Robert',      'Gomez',         'Robert Gomez',        'client',        'active'),
-    ('client4@steelvent.com',   '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Patricia',    'Ortiz',         'Patricia Ortiz',      'client',        'active'),
-    ('client5@brightcore.com',  '$2y$10$wA8hZ9.1vK8m2pQ9s7L6v.KDMPcidYLXlnBwsaYbtJcCpAKnJdnl6', 'Kevin',       'Brooks',        'Kevin Brooks',        'client',        'active')
+    ('client1@acmecorp.com',    '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'John',        'Harris',        'John Harris',        'client',        'active'),
+    ('client2@nova.com',        '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Lisa',        'Wang',          'Lisa Wang',          'client',        'active'),
+    ('client3@bluewave.io',     '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Robert',      'Gomez',         'Robert Gomez',        'client',        'active'),
+    ('client4@steelvent.com',   '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Patricia',    'Ortiz',         'Patricia Ortiz',      'client',        'active'),
+    ('client5@brightcore.com',  '$2y$10$hBeRpcdHiE5QH9Hj/OqOburPpWY0IeyQMRVwXCyviARxo3hdrrufy', 'Kevin',       'Brooks',        'Kevin Brooks',        'client',        'active')
 ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash), name=VALUES(name);
 
 -- ---- Leads ----

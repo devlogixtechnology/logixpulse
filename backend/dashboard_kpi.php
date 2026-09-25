@@ -1,25 +1,43 @@
 <?php
 declare(strict_types=1);
 
-header('Content-Type: application/json; charset=utf-8');
+if (!headers_sent()) {
+    header('Content-Type: application/json; charset=utf-8');
+}
 require_once __DIR__ . '/../config/database.php';
 
 function tableExists(PDO $pdo, string $table): bool
 {
-    $stmt = $pdo->prepare(
-        "SELECT COUNT(*) FROM information_schema.tables
-         WHERE table_schema = DATABASE() AND table_name = ?"
-    );
+    $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+    if ($driver === 'pgsql') {
+        $stmt = $pdo->prepare(
+            "SELECT COUNT(*) FROM information_schema.tables
+             WHERE table_schema = 'public' AND table_name = ?"
+        );
+    } else {
+        $stmt = $pdo->prepare(
+            "SELECT COUNT(*) FROM information_schema.tables
+             WHERE table_schema = DATABASE() AND table_name = ?"
+        );
+    }
     $stmt->execute([$table]);
     return (bool)$stmt->fetchColumn();
 }
 
 function columns(PDO $pdo, string $table): array
 {
-    $stmt = $pdo->prepare(
-        "SELECT COLUMN_NAME FROM information_schema.columns
-         WHERE table_schema = DATABASE() AND table_name = ?"
-    );
+    $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+    if ($driver === 'pgsql') {
+        $stmt = $pdo->prepare(
+            "SELECT column_name FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = ?"
+        );
+    } else {
+        $stmt = $pdo->prepare(
+            "SELECT COLUMN_NAME FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ?"
+        );
+    }
     $stmt->execute([$table]);
     return array_map('strtolower', $stmt->fetchAll(PDO::FETCH_COLUMN));
 }
@@ -71,7 +89,7 @@ try {
         $leadDate = firstColumn($leadColumns, ['created_at', 'createdat', 'date_created', 'created_date']);
 
         if ($leadDate) {
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM leads WHERE `$leadDate` BETWEEN ? AND ?");
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM leads WHERE {$leadDate} BETWEEN ? AND ?");
             $stmt->execute([$monthStart->format('Y-m-d H:i:s'), $todayEnd->format('Y-m-d H:i:s')]);
             $totalLeads = (int)$stmt->fetchColumn();
 
@@ -101,9 +119,9 @@ try {
 
         if ($dealDate && $dealStatus) {
             $stmt = $pdo->prepare(
-                "SELECT COUNT(*) FROM `$dealTable`
-                 WHERE `$dealDate` BETWEEN ? AND ?
-                 AND LOWER(`$dealStatus`) IN ('active','open','in progress','in_progress','negotiation','qualified')"
+                "SELECT COUNT(*) FROM {$dealTable}
+                 WHERE {$dealDate} BETWEEN ? AND ?
+                 AND LOWER({$dealStatus}) IN ('active','open','in progress','in_progress','negotiation','qualified')"
             );
             $stmt->execute([$monthStart->format('Y-m-d H:i:s'), $todayEnd->format('Y-m-d H:i:s')]);
             $activeDeals = (int)$stmt->fetchColumn();
@@ -111,7 +129,7 @@ try {
             $stmt->execute([$previousMonthStart->format('Y-m-d H:i:s'), $previousMonthEnd->format('Y-m-d H:i:s')]);
             $previousActiveDeals = (int)$stmt->fetchColumn();
         } else {
-            $activeDeals = (int)$pdo->query("SELECT COUNT(*) FROM `$dealTable`")->fetchColumn();
+            $activeDeals = (int)$pdo->query("SELECT COUNT(*) FROM {$dealTable}")->fetchColumn();
         }
         $activeDealsSource = $dealTable;
     }
@@ -130,7 +148,7 @@ try {
         $meetingColumns = columns($pdo, 'meetings');
         $meetingDate = firstColumn($meetingColumns, ['meeting_date', 'scheduled_at', 'start_at', 'created_at', 'date']);
         if ($meetingDate) {
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM `meetings` WHERE `$meetingDate` BETWEEN ? AND ?");
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM meetings WHERE {$meetingDate} BETWEEN ? AND ?");
             $stmt->execute([$weekStart->format('Y-m-d H:i:s'), $weekEnd->format('Y-m-d H:i:s')]);
             $meetings = (int)$stmt->fetchColumn();
 
@@ -167,9 +185,9 @@ try {
 
         if ($closedDate && $closedStatus) {
             $stmt = $pdo->prepare(
-                "SELECT COUNT(*) FROM `$closedTable`
-                 WHERE `$closedDate` BETWEEN ? AND ?
-                 AND LOWER(`$closedStatus`) IN ('closed','won','completed','paid','settled')"
+                "SELECT COUNT(*) FROM {$closedTable}
+                 WHERE {$closedDate} BETWEEN ? AND ?
+                 AND LOWER({$closedStatus}) IN ('closed','won','completed','paid','settled')"
             );
             $stmt->execute([$monthStart->format('Y-m-d H:i:s'), $todayEnd->format('Y-m-d H:i:s')]);
             $closedDeals = (int)$stmt->fetchColumn();
@@ -177,7 +195,7 @@ try {
             $stmt->execute([$previousMonthStart->format('Y-m-d H:i:s'), $previousMonthEnd->format('Y-m-d H:i:s')]);
             $previousClosedDeals = (int)$stmt->fetchColumn();
         } else {
-            $closedDeals = (int)$pdo->query("SELECT COUNT(*) FROM `$closedTable`")->fetchColumn();
+            $closedDeals = (int)$pdo->query("SELECT COUNT(*) FROM {$closedTable}")->fetchColumn();
         }
         $closedDealsSource = $closedTable;
     }

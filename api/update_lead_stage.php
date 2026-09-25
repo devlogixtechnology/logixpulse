@@ -76,8 +76,8 @@ try {
     // Insert into activity_logs
     try {
         $log = $pdo->prepare(
-            'INSERT INTO activity_logs (lead_id, activity_type, description, note, created_by, created_at)
-             VALUES (?, "Stage Changed", ?, ?, "System", NOW())'
+            "INSERT INTO activity_logs (lead_id, activity_type, description, note, created_by, created_at)
+             VALUES (?, 'Stage Changed', ?, ?, 'System', NOW())"
         );
         $log->execute([$leadId, $note, $note]);
     } catch (Throwable $logEx) {

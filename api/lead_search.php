@@ -11,16 +11,16 @@ try {
 
     if ($search === '') {
         $stmt = $pdo->query(
-            'SELECT id, 
-                    COALESCE(NULLIF(name, ""), CONCAT(COALESCE(first_name, ""), " ", COALESCE(last_name, ""))) AS name,
+            "SELECT id, 
+                    COALESCE(NULLIF(name, ''), CONCAT(COALESCE(first_name, ''), ' ', COALESCE(last_name, ''))) AS name,
                     email, phone, company, status, stage, created_at
              FROM leads 
-             ORDER BY id ASC'
+             ORDER BY id ASC"
         );
     } else {
         $stmt = $pdo->prepare(
-            'SELECT id, 
-                    COALESCE(NULLIF(name, ""), CONCAT(COALESCE(first_name, ""), " ", COALESCE(last_name, ""))) AS name,
+            "SELECT id, 
+                    COALESCE(NULLIF(name, ''), CONCAT(COALESCE(first_name, ''), ' ', COALESCE(last_name, ''))) AS name,
                     email, phone, company, status, stage, created_at
              FROM leads 
              WHERE name LIKE :q1 
@@ -29,7 +29,7 @@ try {
                 OR email LIKE :q4 
                 OR phone LIKE :q5 
                 OR company LIKE :q6
-             ORDER BY id ASC'
+             ORDER BY id ASC"
         );
         $term = "%{$search}%";
         $stmt->execute([

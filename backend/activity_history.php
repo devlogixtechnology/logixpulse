@@ -11,10 +11,10 @@ if (!$leadId) {
 try {
     $pdo = getDatabaseConnection();
     $stmt = $pdo->prepare(
-        'SELECT id, 
-                COALESCE(NULLIF(name, ""), CONCAT(COALESCE(first_name, ""), " ", COALESCE(last_name, ""))) AS name,
+        "SELECT id, 
+                COALESCE(NULLIF(name, ''), CONCAT(COALESCE(first_name, ''), ' ', COALESCE(last_name, ''))) AS name,
                 email, phone, status, stage
-         FROM leads WHERE id = ?'
+         FROM leads WHERE id = ?"
     );
     $stmt->execute([$leadId]);
     $lead = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -25,13 +25,13 @@ try {
     }
 
     $stmt = $pdo->prepare(
-        'SELECT id, 
-                COALESCE(activity_type, action, "Note") AS activity_type,
-                COALESCE(note, description, "") AS note,
+        "SELECT id, 
+                COALESCE(activity_type, action, 'Note') AS activity_type,
+                COALESCE(note, description, '') AS note,
                 created_by, created_at
          FROM activity_logs
          WHERE lead_id = ?
-         ORDER BY created_at DESC, id DESC'
+         ORDER BY created_at DESC, id DESC"
     );
     $stmt->execute([$leadId]);
     $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);

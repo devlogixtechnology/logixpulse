@@ -59,11 +59,11 @@ function getClientTimeline(int $clientId): ?array
         $client = null;
         try {
             $clientStmt = $pdo->prepare(
-                'SELECT COALESCE(NULLIF(u.name, ""), CONCAT(u.first_name, " ", u.last_name)) AS name,
+                "SELECT COALESCE(NULLIF(u.name, ''), CONCAT(u.first_name, ' ', u.last_name)) AS name,
                         COALESCE(p.current_step_order, 3) AS current_step_order
                  FROM users u
                  LEFT JOIN client_timeline_progress p ON p.client_id = u.id
-                 WHERE u.id = ?'
+                 WHERE u.id = ?"
             );
             $clientStmt->execute([$clientId]);
             $client = $clientStmt->fetch(PDO::FETCH_ASSOC);

@@ -8,7 +8,7 @@ require_once __DIR__ . '/helpers.php';
 require_admin();
 
 $pdo = getDatabaseConnection();
-$clients = $pdo->query('SELECT id, COALESCE(NULLIF(name, ""), CONCAT(COALESCE(first_name, ""), " ", COALESCE(last_name, ""))) AS name, email FROM users WHERE role = "client" ORDER BY name ASC')->fetchAll(PDO::FETCH_ASSOC);
+$clients = $pdo->query("SELECT id, COALESCE(NULLIF(name, ''), CONCAT(COALESCE(first_name, ''), ' ', COALESCE(last_name, ''))) AS name, email FROM users WHERE role = 'client' ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!$errors) {
-        $clientStmt = $pdo->prepare('SELECT id FROM users WHERE id = ? AND role = "client" LIMIT 1');
+        $clientStmt = $pdo->prepare("SELECT id FROM users WHERE id = ? AND role = 'client' LIMIT 1");
         $clientStmt->execute([$clientId]);
         if (!$clientStmt->fetch()) {
             $errors[] = 'Selected client account does not exist.';
@@ -69,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             try {
                 $stmt = $pdo->prepare(
-                    'INSERT INTO invoices (client_id, original_filename, stored_filename, amount, invoice_number, status, issue_date)
-                     VALUES (?, ?, ?, ?, ?, "pending", CURDATE())'
+                    "INSERT INTO invoices (client_id, original_filename, stored_filename, amount, invoice_number, status, issue_date)
+                     VALUES (?, ?, ?, ?, ?, 'pending', CURRENT_DATE)"
                 );
                 $invNumber = 'INV-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
                 $stmt->execute([
