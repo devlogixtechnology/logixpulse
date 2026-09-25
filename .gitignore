@@ -1,18 +1,3 @@
-# Environment & Database Configuration
-config/db.local.php
 .env
 .env.*
 !.env.example
-
-# File Uploads (Ignore uploaded content, keep directory structure)
-uploads/invoices/*
-!uploads/invoices/.gitkeep
-uploads/signatures/*
-!uploads/signatures/.gitkeep
-
-# Operating System & IDE Files
-.DS_Store
-Thumbs.db
-.idea/
-.vscode/
-*.log
