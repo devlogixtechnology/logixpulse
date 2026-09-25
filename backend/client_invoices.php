@@ -49,7 +49,7 @@ $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <strong>LogixPulse Client Portal</strong>
         <div>
             <a href="../client-portal-dashboard/index.php">Dashboard</a> · 
-            <a href="../logout.php">Logout</a>
+            <a href="../auth/logout.php">Logout</a>
         </div>
     </div>
 

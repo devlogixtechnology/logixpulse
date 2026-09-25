@@ -24,7 +24,7 @@ $user = currentUser();
         <h1>Protected Area</h1>
         <p>Welcome, <strong><?= htmlspecialchars($user['name'] ?? 'User') ?></strong>!</p>
         <p style="color: #64748b; font-size: 14px;">Your session is authenticated (Role: <?= htmlspecialchars($user['role'] ?? '') ?>).</p>
-        <p><a href="../logout.php">Log Out</a></p>
+        <p><a href="../auth/logout.php">Log Out</a></p>
     </div>
 </body>
 </html>

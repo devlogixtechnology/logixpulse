@@ -1,5 +1,6 @@
 <?php
-require 'db_connect.php';
+require_once __DIR__ . '/../config/database.php';
+
 
 $columns = $pdo->query("SELECT * FROM columns_table ORDER BY position")->fetchAll(PDO::FETCH_ASSOC);
 $tasks = $pdo->query("SELECT * FROM tasks ORDER BY position")->fetchAll(PDO::FETCH_ASSOC);

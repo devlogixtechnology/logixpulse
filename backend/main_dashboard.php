@@ -48,11 +48,11 @@ $user = currentUser();
             <a href="upload.php">Upload Invoices</a>
             <a href="dashboard_kpi.php">KPI Analytics API</a>
             <a href="who_is_logged_in.php">Session Check</a>
-            <a href="../kanban.php">Kanban Board</a>
+            <a href="../kanban/index.php">Kanban Board</a>
         </div>
 
         <div class="actions">
-            <a class="btn danger" href="../logout.php">Logout</a>
+            <a class="btn danger" href="../auth/logout.php">Logout</a>
         </div>
     </div>
 </div>

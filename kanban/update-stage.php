@@ -1,7 +1,8 @@
 <?php
 
 header('Content-Type: application/json');
-require 'db_connect.php';
+require_once __DIR__ . '/../config/database.php';
+
 
 // Sirf POST requests allow karein
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

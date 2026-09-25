@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <strong>Admin Invoice Portal</strong>
         <div>
             <a href="client_invoices.php">All Invoices</a> · 
-            <a href="../logout.php">Logout</a>
+            <a href="../auth/logout.php">Logout</a>
         </div>
     </div>
 

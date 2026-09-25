@@ -30,8 +30,8 @@ if ($isLoggedIn) {
     }
 
     // Team, staff, executive, or admin roles
-    if (file_exists(__DIR__ . '/main_dashboard.php')) {
-        header('Location: main_dashboard.php');
+    if (file_exists(__DIR__ . '/backend/main_dashboard.php')) {
+        header('Location: backend/main_dashboard.php');
         exit;
     }
 

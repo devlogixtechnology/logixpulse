@@ -434,3 +434,29 @@ input::placeholder {
     content: '\2190';
     margin-right: 4px;
 }
+
+/* Invoices Table & Data Display */
+.invoice-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.invoice-table th { text-align: left; padding: 12px; border-bottom: 2px solid var(--color-border, #E5E7EE); color: var(--color-text-muted, #5F6B73); font-weight: 600; }
+.invoice-table td { padding: 16px 12px; border-bottom: 1px solid var(--color-border, #E5E7EE); color: var(--color-text-main, #1E2432); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+
+/* Navbar Link Utilities */
+.nav-link.active { 
+    background: var(--color-primary, #4F46E5); 
+    color: white; 
+    border-radius: 99px; 
+    padding: 8px 16px; 
+}
+.nav-link { 
+    padding: 8px 16px; 
+    border-radius: 99px; 
+    font-size: 14px; 
+    font-weight: 500; 
+    color: var(--color-text-muted, #5F6B73); 
+    text-decoration: none; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+

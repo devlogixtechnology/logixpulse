@@ -44,9 +44,17 @@ devlogixpulse/
 ├── .env.example                      # Template for environment configuration
 ├── index.php                         # Root session router (routes client vs unauthenticated)
 ├── index.html                        # Client portal sign-in screen
-├── dashboard.html                    # Static dashboard shell
-├── kanban.php                        # Interactive drag-and-drop Kanban board
-├── update-stage.php                  # Kanban card position sync handler
+├── auth/                             # Client authentication & recovery screens
+│   ├── magic-code.html               # 6-digit OTP request screen
+│   ├── verify-code.html              # OTP input verification screen
+│   ├── reset-password.html           # Password reset request screen
+│   ├── set-new-password.html         # New password configuration screen
+│   └── logout.php                    # Session termination handler
+├── kanban/                           # Interactive drag-and-drop Kanban module
+│   ├── index.php                     # Kanban board with live database cards
+│   ├── kanban.html                   # Static Kanban layout prototype
+│   ├── kanban.php                    # Backward-compatible redirect wrapper
+│   └── update-stage.php              # Real-time card column & position sync handler
 ├── agreement_page/                   # Master Agreement & drawable digital signature screen
 │   ├── index.html
 │   ├── script.js
