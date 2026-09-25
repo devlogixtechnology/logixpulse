@@ -5,7 +5,9 @@ coverage/
 .DS_Store
 *.log
 .env*
-!.env.example
 .agents/
 skills-lock.json
 
+# Local documentation & sensitive intern performance/SRS reviews
+docs/
+*.pdf
