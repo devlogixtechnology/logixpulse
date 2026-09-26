@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanban Board</title>
+<style>
+  :root {
+    --primary-indigo: #4F46E5;
+    --primary-hover: #4338CA;
+    --success-emerald: #10B981;
+    --warning-amber: #F59E0B;
+    --danger-red: #EF4444;
+    --canvas: #F8FAFB;
+    --pure-surface: #FFFFFF;
+    --primary-text: #111827;
+    --muted-text: #6B7280;
+    --dark-nav: #111827;
+    --border: #E5E7EB;
+
+    --accent: var(--primary-indigo);
+    --accent-soft: rgba(79, 70, 229, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--primary-text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  .board-title {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Manrope', -apple-system, sans-serif;
+    color: var(--primary-text);
+    margin: 0 0 4px;
+  }
+
+  .board-subtitle {
+    font-size: 13px;
+    color: var(--muted-text);
+    margin: 0 0 20px;
+  }
+
+  .board {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .column {
+    flex: 1 1 0;
+    min-width: 0;
+    background: var(--pure-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.04);
+  }
+
+  .column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+  }
+
+  .column-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .column-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .column-title {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .column-count {
+    font-size: 12px;
+    color: var(--primary-indigo);
+    background: var(--accent-soft);
+    padding: 2px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+
+  .column-body {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .column-empty {
+    width: 100%;
+    border: 1.5px dashed var(--border);
+    border-radius: 8px;
+    padding: 28px 12px;
+    text-align: center;
+    color: var(--muted-text);
+    font-size: 13px;
+  }
+
+  .column[data-col="backlog"] .column-header { background: #F3F4F6; }
+  .column[data-col="backlog"] .column-dot { background: var(--muted-text); }
+
+  .column[data-col="todo"] .column-header { background: var(--accent-soft); }
+  .column[data-col="todo"] .column-dot { background: var(--primary-indigo); }
+
+  .column[data-col="inprogress"] .column-header { background: rgba(245, 158, 11, 0.12); }
+  .column[data-col="inprogress"] .column-dot { background: var(--warning-amber); }
+
+  .column[data-col="done"] .column-header { background: rgba(16, 185, 129, 0.12); }
+  .column[data-col="done"] .column-dot { background: var(--success-emerald); }
+
+  @media (max-width: 700px) {
+    .board {
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .column {
+      flex: 0 0 240px;
+    }
+  }
+
+  .column-body { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 10px; }
+  .column.drag-over { outline: 2px dashed var(--primary-indigo); outline-offset: -4px; }
+
+  .lead-card {
+    background: var(--pure-surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: grab;
+    box-shadow: 0 1px 2px rgba(17,24,39,0.05);
+  }
+  .lead-card:active { cursor: grabbing; }
+  .lead-card.dragging { opacity: 0.4; }
+  .lead-card h4 { margin: 0 0 6px; font-size: 13.5px; font-weight: 600; }
+  .lead-card .lead-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted-text); }
+  .lead-card .lead-value { color: var(--primary-indigo); font-weight: 600; }
+
+  .overlay {
+    position: fixed; inset: 0; background: rgba(17,24,39,0.32);
+    opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 20;
+  }
+  .overlay.show { opacity: 1; pointer-events: auto; }
+
+  .panel {
+    position: fixed; top: 0; right: 0; height: 100%; width: min(380px, 92vw);
+    background: var(--pure-surface); transform: translateX(100%);
+    transition: transform .25s ease; z-index: 21; display: flex; flex-direction: column;
+    box-shadow: -6px 0 24px rgba(17,24,39,0.12);
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .panel.show { transform: translateX(0); }
+  .panel-head {
+    padding: 18px 20px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .panel-head h3 { margin: 0 0 4px; font-size: 15px; font-family: 'Manrope', sans-serif; }
+  .panel-head .panel-sub { font-size: 12px; color: var(--muted-text); }
+  .panel-close { background: none; border: none; font-size: 18px; color: var(--muted-text); cursor: pointer; }
+  .panel-body { padding: 18px 20px; overflow-y: auto; flex: 1; }
+
+  .stat-grid { display: flex; gap: 10px; margin-bottom: 20px; }
+  .stat-box { flex: 1; background: var(--canvas); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
+  .stat-box .stat-n { font-weight: 700; font-size: 13.5px; }
+  .stat-box .stat-l { font-size: 11px; color: var(--muted-text); margin-top: 2px; }
+
+  .panel-body h4 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: .03em;
+    color: var(--muted-text); margin: 0 0 12px; font-weight: 600;
+  }
+  .history-list { list-style: none; margin: 0; padding: 0; }
+  .history-list li {
+    position: relative; padding: 0 0 14px 20px; font-size: 13px;
+  }
+  .history-list li::before {
+    content: ""; position: absolute; left: 4px; top: 4px;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--primary-indigo);
+  }
+  .history-list li::after {
+    content: ""; position: absolute; left: 7px; top: 12px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .history-list li:last-child::after { display: none; }
+  .history-list .hist-time { color: var(--muted-text); font-size: 11.5px; margin-top: 2px; }
+  .history-list li.fresh { animation: freshPop .6s ease; }
+  @keyframes freshPop { from { background: var(--accent-soft); } to { background: transparent; } }
+</style>
+</head>
+<body>
+
+  <h1 class="board-title">Sprint Board</h1>
+  <p class="board-subtitle">Drag a lead card between columns — open its details panel to see the activity history update live</p>
+
+  <div class="board" id="board">
+    <div class="column" data-col="backlog">
+      <div class="column-header">
+        <div class="column-header-left">
+          <span class="column-dot"></span>
+          <span class="column-title">Backlog</span>
+        </div>
+        <span class="column-count">0</span>
+      </div>
+      <div class="column-body"></div>
+    </div>
+
+    <div class="column" data-col="todo">
+      <div class="column-header">
+        <div class="column-header-left">
+          <span class="column-dot"></span>
+          <span class="column-title">To Do</span>
+        </div>
+        <span class="column-count">0</span>
+      </div>
+      <div class="column-body"></div>
+    </div>
+
+    <div class="column" data-col="inprogress">
+      <div class="column-header">
+        <div class="column-header-left">
+          <span class="column-dot"></span>
+          <span class="column-title">In Progress</span>
+        </div>
+        <span class="column-count">0</span>
+      </div>
+      <div class="column-body"></div>
+    </div>
+
+    <div class="column" data-col="done">
+      <div class="column-header">
+        <div class="column-header-left">
+          <span class="column-dot"></span>
+          <span class="column-title">Done</span>
+        </div>
+        <span class="column-count">0</span>
+      </div>
+      <div class="column-body"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <aside class="panel" id="panel">
+    <div class="panel-head">
+      <div>
+        <h3 id="p-name"></h3>
+        <div class="panel-sub" id="p-sub"></div>
+      </div>
+      <button class="panel-close" id="p-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-n" id="p-value"></div><div class="stat-l">Deal value</div></div>
+        <div class="stat-box"><div class="stat-n" id="p-stage"></div><div class="stat-l">Stage</div></div>
+      </div>
+      <h4>Activity History</h4>
+      <ul class="history-list" id="p-history"></ul>
+    </div>
+  </aside>
+
+<script>
+const colNames = { backlog: 'Backlog', todo: 'To Do', inprogress: 'In Progress', done: 'Done' };
+
+let leads = [
+  { id: 1, name: 'Acme Tech Pod — Renewal', value: '$42,800', col: 'backlog',
+    history: [{ a: 'Card created in Backlog', t: 'Sep 17, 9:02 AM' }] },
+  { id: 2, name: 'Stratos Dynamics — Upsell', value: '$18,500', col: 'todo',
+    history: [{ a: 'Moved from Backlog to To Do', t: 'Sep 19, 3:14 PM' },
+              { a: 'Card created in Backlog', t: 'Sep 17, 9:10 AM' }] },
+  { id: 3, name: 'Vance Global — New Business', value: '$65,000', col: 'inprogress',
+    history: [{ a: 'Moved from To Do to In Progress', t: 'Sep 22, 11:40 AM' },
+              { a: 'Moved from Backlog to To Do', t: 'Sep 18, 2:05 PM' },
+              { a: 'Card created in Backlog', t: 'Sep 17, 9:15 AM' }] }
+];
+
+let currentId = null;
+
+function nowStr() {
+  const d = new Date();
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ', ' +
+         d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+function render() {
+  document.querySelectorAll('.column').forEach(colEl => {
+    const colId = colEl.dataset.col;
+    const body = colEl.querySelector('.column-body');
+    const inCol = leads.filter(l => l.col === colId);
+    colEl.querySelector('.column-count').textContent = inCol.length;
+    body.innerHTML = '';
+    if (inCol.length === 0) {
+      body.innerHTML = '<div class="column-empty">No cards yet</div>';
+    } else {
+      inCol.forEach(l => {
+        const card = document.createElement('div');
+        card.className = 'lead-card';
+        card.draggable = true;
+        card.dataset.id = l.id;
+        card.innerHTML = `<h4>${l.name}</h4><div class="lead-meta"><span class="lead-value">${l.value}</span><span>Lead #${l.id}</span></div>`;
+        card.addEventListener('click', () => openPanel(l.id));
+        card.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', l.id); card.classList.add('dragging'); });
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        body.appendChild(card);
+      });
+    }
+  });
+}
+
+document.querySelectorAll('.column').forEach(colEl => {
+  colEl.addEventListener('dragover', e => { e.preventDefault(); colEl.classList.add('drag-over'); });
+  colEl.addEventListener('dragleave', () => colEl.classList.remove('drag-over'));
+  colEl.addEventListener('drop', e => {
+    e.preventDefault();
+    colEl.classList.remove('drag-over');
+    const id = parseInt(e.dataTransfer.getData('text/plain'), 10);
+    const lead = leads.find(l => l.id === id);
+    const toCol = colEl.dataset.col;
+    if (!lead || lead.col === toCol) return;
+    lead.history.unshift({ a: `Moved from ${colNames[lead.col]} to ${colNames[toCol]}`, t: nowStr(), fresh: true });
+    lead.col = toCol;
+    render();
+    if (document.getElementById('panel').classList.contains('show') && currentId === id) openPanel(id);
+  });
+});
+
+function openPanel(id) {
+  currentId = id;
+  const l = leads.find(x => x.id === id);
+  document.getElementById('p-name').textContent = l.name;
+  document.getElementById('p-sub').textContent = 'Lead #' + l.id;
+  document.getElementById('p-value').textContent = l.value;
+  document.getElementById('p-stage').textContent = colNames[l.col];
+  const histEl = document.getElementById('p-history');
+  histEl.innerHTML = '';
+  l.history.forEach(h => {
+    const li = document.createElement('li');
+    if (h.fresh) li.className = 'fresh';
+    li.innerHTML = `${h.a}<div class="hist-time">${h.t}</div>`;
+    histEl.appendChild(li);
+  });
+  document.getElementById('panel').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+}
+function closePanel() {
+  document.getElementById('panel').classList.remove('show');
+  document.getElementById('overlay').classList.remove('show');
+}
+document.getElementById('p-close').addEventListener('click', closePanel);
+document.getElementById('overlay').addEventListener('click', closePanel);
+
+render();
+</script>
+</body>
+</html>
