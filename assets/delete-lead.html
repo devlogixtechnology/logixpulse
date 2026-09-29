@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lead Details - Delete Lead</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, sans-serif; background: #f3f4f6; color: #111; }
+  .topbar { display: flex; gap: 12px; align-items: center; padding: 14px 18px; background: #111827; color: #fff; }
+  .topbar select { padding: 6px; border-radius: 6px; }
+  .page { padding: 18px; }
+  .lead-row { background: #fff; padding: 14px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .btn { padding: 8px 16px; border-radius: 6px; border: 1px solid #9ca3af; background: #fff; cursor: pointer; font-weight: 600; }
+  .btn-danger { background: #dc2626; color: #fff; border-color: #b91c1c; }
+  .btn-danger:hover { background: #b91c1c; }
+  .btn-danger:disabled { opacity: .6; cursor: not-allowed; }
+  .drawer { position: fixed; top: 0; right: -100%; width: min(100%, 380px); height: 100%; background: #fff; box-shadow: -4px 0 16px rgba(0,0,0,.25); transition: right .25s; padding: 20px; display: flex; flex-direction: column; z-index: 100; }
+  .drawer.open { right: 0; }
+  .drawer h2 { margin-top: 0; }
+  .drawer .info p { margin: 8px 0; }
+  .drawer-footer { margin-top: auto; display: flex; justify-content: space-between; gap: 10px; }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 200; }
+  .overlay.show { display: flex; }
+  .confirm-box { background: #fff; padding: 20px; border-radius: 10px; width: min(92vw, 380px); }
+  .confirm-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <strong>Leads</strong>
+  <label>Role:
+    <select id="roleSelect">
+      <option value="admin">admin</option>
+      <option value="bd_rep">bd_rep</option>
+    </select>
+  </label>
+</div>
+
+<div class="page" id="list"></div>
+
+<div class="drawer" id="drawer">
+  <h2>Lead Details</h2>
+  <div class="info" id="info"></div>
+  <div class="drawer-footer">
+    <button class="btn" id="closeBtn">Close</button>
+    <button class="btn btn-danger" id="deleteBtn" style="display:none">Delete Lead</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="confirm-box">
+    <h3>Delete this lead?</h3>
+    <p><strong id="confirmName"></strong> permanently delete ho jayegi. Ye action undo nahi hoga.</p>
+    <div class="confirm-actions">
+      <button class="btn" id="cancelBtn">Cancel</button>
+      <button class="btn btn-danger" id="confirmBtn">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentRole = "admin";
+  let leads = [
+    { id: 1, name: "Ali Traders", email: "ali@traders.com", phone: "0300-1111111" },
+    { id: 2, name: "Sara Enterprises", email: "sara@ent.com", phone: "0301-2222222" },
+    { id: 3, name: "Khan & Sons", email: "info@khan.com", phone: "0302-3333333" }
+  ];
+  let selectedLead = null;
+
+  const list = document.getElementById("list");
+  const drawer = document.getElementById("drawer");
+  const info = document.getElementById("info");
+  const deleteBtn = document.getElementById("deleteBtn");
+  const overlay = document.getElementById("overlay");
+  const confirmName = document.getElementById("confirmName");
+
+  function renderList() {
+    list.innerHTML = "";
+    leads.forEach(function (lead) {
+      const row = document.createElement("div");
+      row.className = "lead-row";
+      row.style.marginBottom = "10px";
+      row.innerHTML = "<span>" + lead.name + "</span>";
+      const btn = document.createElement("button");
+      btn.className = "btn";
+      btn.textContent = "View";
+      btn.onclick = function () { openDrawer(lead); };
+      row.appendChild(btn);
+      list.appendChild(row);
+    });
+  }
+
+  function updateDeleteVisibility() {
+    deleteBtn.style.display = currentRole === "admin" ? "inline-block" : "none";
+  }
+
+  function openDrawer(lead) {
+    selectedLead = lead;
+    info.innerHTML =
+      "<p><strong>Name:</strong> " + lead.name + "</p>" +
+      "<p><strong>Email:</strong> " + lead.email + "</p>" +
+      "<p><strong>Phone:</strong> " + lead.phone + "</p>";
+    updateDeleteVisibility();
+    drawer.classList.add("open");
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove("open");
+    selectedLead = null;
+  }
+
+  document.getElementById("closeBtn").onclick = closeDrawer;
+
+  deleteBtn.onclick = function () {
+    if (currentRole !== "admin" || !selectedLead) return;
+    confirmName.textContent = selectedLead.name;
+    overlay.classList.add("show");
+  };
+
+  document.getElementById("cancelBtn").onclick = function () {
+    overlay.classList.remove("show");
+  };
+
+  document.getElementById("confirmBtn").onclick = function () {
+    if (currentRole !== "admin" || !selectedLead) return;
+    leads = leads.filter(function (l) { return l.id !== selectedLead.id; });
+    overlay.classList.remove("show");
+    closeDrawer();
+    renderList();
+  };
+
+  document.getElementById("roleSelect").onchange = function (e) {
+    currentRole = e.target.value;
+    updateDeleteVisibility();
+  };
+
+  renderList();
+</script>
+</body>
+</html>
