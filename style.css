@@ -1,0 +1,776 @@
+/* ==========================================================================
+   Agreement Page Shell - Consistent with LogixPulse Client Portal
+   ========================================================================== */
+
+:root {
+    --color-navy: #1E2432;
+    --color-gray-dark: #5F6B73;
+    --color-gray-muted: #8A93A3;
+    --color-white: #FFFFFF;
+    --color-accent: #4F46E5;
+    --color-accent-dark: #4338CA;
+    --color-accent-light: #EEF0FF;
+    --border-color: #E5E7EE;
+    --page-bg: #F6F7FB;
+    
+    --radius-md: 14px;
+    --radius-sm: 8px;
+    
+    --shadow-card: 0 1px 2px rgba(30, 36, 50, 0.05), 0 1px 8px rgba(30, 36, 50, 0.04);
+}
+
+body {
+    background-color: var(--page-bg);
+    color: var(--color-navy);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Base styles matching previous tasks (simplified for shell) */
+.portal-navbar {
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 24px;
+}
+.navbar-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; }
+.brand-mark { width: 32px; height: 32px; background: var(--color-accent); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.brand-subtext { color: var(--color-gray-muted); font-weight: 400; font-size: 13px; margin-left: 4px; }
+.navbar-links { display: flex; gap: 4px; }
+.nav-link { padding: 8px 16px; border-radius: 99px; font-size: 14px; font-weight: 500; color: var(--color-gray-dark); text-decoration: none; }
+.nav-link.active { background: var(--color-accent); color: white; }
+.navbar-actions { display: flex; align-items: center; gap: 10px; }
+.workspace-badge { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--color-accent-light); color: var(--color-accent-dark); border-radius: 99px; font-size: 12px; font-weight: 600; }
+.avatar { width: 32px; height: 32px; background: var(--color-accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+
+.dashboard-wrapper {
+    padding: 32px 24px;
+}
+.dashboard-content {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.page-header { margin-bottom: 24px; }
+.page-title { font-size: 24px; font-weight: 700; margin: 0 0 6px 0; }
+.page-subtitle { color: var(--color-gray-dark); margin: 0; font-size: 14px; }
+
+/* ==========================================================================
+   Agreement Specific Layout
+   ========================================================================== */
+
+.agreement-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Sidebar */
+.agreement-sidebar {
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    padding: 12px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--color-navy);
+    transition: background 0.2s;
+}
+
+.menu-item:hover {
+    background: var(--page-bg);
+}
+
+.menu-item.active {
+    background: var(--color-accent-light);
+    border: 1px solid #D0D4F7;
+}
+
+.menu-item-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-dark);
+}
+
+.menu-item.active .menu-item-icon {
+    color: var(--color-accent);
+    border-color: var(--color-accent-light);
+}
+
+.menu-item-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item-text .title {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.menu-item-text .subtitle {
+    font-size: 12px;
+    color: var(--color-gray-muted);
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.status-indicator.pending { background: #F59E0B; } /* Amber */
+.status-indicator.signed { background: #108981; } /* Emerald */
+
+/* Main Agreement Card */
+.agreement-card {
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+
+/* Header */
+.agreement-header {
+    padding: 32px;
+    border-bottom: 1px solid var(--border-color);
+    background: #FAFBFC;
+}
+
+.header-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.status-pending {
+    background: #FEF3DC;
+    color: #92600B;
+    border: 1px solid #FBE3AE;
+}
+
+.status-badge.status-signed {
+    background: #DEF7EC;
+    color: #03543F;
+    border: 1px solid #BCF0DA;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+    background: #F59E0B;
+}
+
+.status-dot.signed {
+    background: #0E9F6E;
+}
+
+.document-id {
+    font-size: 13px;
+    color: var(--color-gray-muted);
+    font-family: monospace;
+}
+
+.agreement-title {
+    font-size: 24px;
+    margin: 0 0 8px 0;
+}
+
+.agreement-meta {
+    margin: 0;
+    font-size: 14px;
+    color: var(--color-gray-dark);
+}
+
+/* Body / Content */
+.agreement-body {
+    padding: 40px 48px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #374151;
+}
+
+.document-section {
+    margin-bottom: 32px;
+}
+
+.document-section h3 {
+    font-size: 16px;
+    color: var(--color-navy);
+    margin: 0 0 12px 0;
+}
+
+.document-section p {
+    margin: 0 0 12px 0;
+}
+
+.info-box {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: var(--color-accent-light);
+    border: 1px solid #D0D4F7;
+    border-radius: var(--radius-sm);
+    color: var(--color-accent-dark);
+    font-size: 13px;
+    margin-top: 16px;
+}
+.info-box svg { flex-shrink: 0; }
+
+/* Signature Section */
+.agreement-signature-section {
+    padding: 32px 48px;
+    border-top: 1px solid var(--border-color);
+    background: #FAFBFC;
+}
+
+.signature-header h3 {
+    font-size: 16px;
+    margin: 0 0 4px 0;
+}
+.signature-header p {
+    margin: 0 0 24px 0;
+    font-size: 13px;
+    color: var(--color-gray-dark);
+}
+
+.signature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.signature-box {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 24px;
+    background: var(--color-white);
+}
+
+.signature-box.action-required {
+    border: 2px dashed var(--color-accent);
+    background: var(--color-accent-light);
+}
+
+.signature-box.signed-locked {
+    border: 1px solid #BCF0DA;
+    background: #F9FDFB;
+}
+
+.locked-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: #DEF7EC;
+    color: #03543F;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.locked-badge svg {
+    stroke: #03543F;
+}
+
+.signature-box label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-gray-dark);
+    margin-bottom: 16px;
+}
+
+.signature-line {
+    height: 60px;
+    border-bottom: 1px solid var(--color-navy);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 8px;
+    justify-content: center;
+}
+
+.signature-font {
+    font-family: 'Brush Script MT', cursive, serif;
+    font-size: 28px;
+    color: var(--color-navy);
+}
+
+.signature-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--color-gray-muted);
+}
+
+/* Footer / Actions */
+.agreement-footer {
+    padding: 24px 32px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background: var(--color-white);
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--color-accent);
+    color: white;
+}
+.btn-primary:hover:not(:disabled) { background: var(--color-accent-dark); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-secondary {
+    background: white;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+}
+.btn-secondary:hover { background: var(--color-accent-light); }
+
+.btn-outline {
+    background: white;
+    color: var(--color-gray-dark);
+    border: 1px solid var(--border-color);
+}
+.btn-outline:hover { background: var(--page-bg); border-color: var(--color-gray-muted); }
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+    .agreement-layout {
+        grid-template-columns: 1fr;
+    }
+    .signature-grid {
+        grid-template-columns: 1fr;
+    }
+    .agreement-body, .agreement-signature-section {
+        padding: 24px;
+    }
+}
+
+/* ==========================================================================
+   Dashboard & Auth Extensions (W7D1 - W7D5 Integration)
+   ========================================================================== */
+
+/* Auth Layout */
+.auth-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.auth-wrapper { width: 100%; max-width: 400px; padding: 24px; }
+.auth-card { background: var(--color-white); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 40px; border: 1px solid var(--border-color); }
+.auth-header { text-align: center; margin-bottom: 32px; }
+.auth-header h2 { margin: 0 0 8px; font-size: 24px; }
+.auth-header p { margin: 0; color: var(--color-gray-dark); font-size: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--color-navy); }
+.form-group input { padding: 10px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 14px; outline: none; }
+.form-group input:focus { border-color: var(--color-accent); }
+.otp-input { width: 40px; height: 48px; text-align: center; font-size: 20px; font-weight: 600; border: 1px solid var(--border-color); border-radius: var(--radius-sm); outline: none; }
+
+/* Dashboard Layout */
+.dashboard-grid { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; }
+.dashboard-card { background: var(--color-white); border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: var(--shadow-card); padding: 24px; }
+.card-title { font-size: 16px; margin: 0 0 24px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
+
+/* Timeline */
+.timeline { display: flex; flex-direction: column; gap: 24px; position: relative; }
+.timeline::before { content: ''; position: absolute; left: 5px; top: 8px; bottom: 0; width: 2px; background: var(--border-color); }
+.timeline-item { position: relative; padding-left: 24px; }
+.timeline-dot { position: absolute; left: 0; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--color-accent); border: 3px solid var(--color-accent-light); }
+.timeline-content h4 { margin: 0 0 4px 0; font-size: 14px; }
+.timeline-date { font-size: 12px; color: var(--color-gray-muted); }
+
+/* Invoices Table */
+.invoice-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.invoice-table th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border-color); color: var(--color-gray-dark); font-weight: 600; }
+.invoice-table td { padding: 16px 12px; border-bottom: 1px solid var(--border-color); color: var(--color-navy); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+
+/* Fix Navbar Active Link Highlight */
+.nav-link.active { 
+    background: var(--color-accent); 
+    color: white; 
+    border-radius: 99px; /* Ensure it is pill-shaped */
+    padding: 8px 16px;   /* Consistent padding to match text size exactly */
+}
+
+/* Ensure other nav-links maintain the same padding so layout doesn't jump */
+.nav-link { 
+    padding: 8px 16px; 
+    border-radius: 99px; 
+    font-size: 14px; 
+    font-weight: 500; 
+    color: var(--color-gray-dark); 
+    text-decoration: none; 
+    display: inline-flex; /* Ensures content dictates size without stretching */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive Fixes for Mobile */
+@media screen and (max-width: 768px) {
+    /* Navbar adjustments */
+    .navbar-inner {
+        flex-direction: column;
+        gap: 16px;
+    }
+    .navbar-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    /* Dashboard & Auth adjustments */
+    .dashboard-grid, .agreement-layout {
+        grid-template-columns: 1fr;
+    }
+    .auth-card {
+        padding: 24px;
+        width: 100%;
+        margin: 16px;
+    }
+    
+    /* Signature and Table adjustments */
+    .signature-grid {
+        grid-template-columns: 1fr;
+    }
+    .invoice-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    /* OTP box adjustments */
+    .otp-container {
+        gap: 4px !important;
+    }
+    .otp-input {
+        width: 35px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
+/* Better Mobile Navbar & Auth Fixes */
+@media screen and (max-width: 768px) {
+    /* Navbar Flex Layout */
+    .portal-navbar {
+        padding: 16px;
+    }
+    .navbar-inner {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+    .navbar-links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+    }
+    
+    /* Make active link smaller on mobile to avoid taking too much space */
+    .nav-link {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+
+    /* Auth Wrapper mobile fix */
+    .auth-wrapper {
+        padding: 16px;
+        box-sizing: border-box;
+    }
+    
+    .auth-card {
+        padding: 24px;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Ensure forms don't break boundaries */
+    .form-group input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Dashboard and Agreements padding */
+    .page-header {
+        margin-bottom: 24px;
+        text-align: center;
+    }
+}
+
+/* COMPREHENSIVE MOBILE RESPONSIVE FIXES */
+@media screen and (max-width: 768px) {
+    /* Prevent any horizontal scrolling */
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Fix Navbar on Mobile */
+    .portal-navbar {
+        padding: 12px 16px;
+        height: auto; /* Allow height to grow */
+    }
+    .navbar-inner {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+    .navbar-brand {
+        margin-bottom: 4px;
+    }
+    .navbar-links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap; /* Allows links to wrap to next line if needed */
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+    }
+    .nav-link {
+        font-size: 13px;
+        padding: 6px 12px;
+        margin: 2px;
+    }
+    
+    /* Fix Dashboard & Agreement Layout Grids */
+    .dashboard-content {
+        padding: 16px; /* Less padding on mobile */
+    }
+    .dashboard-grid, .agreement-layout {
+        display: flex !important;
+        flex-direction: column !important; /* Force single column */
+        gap: 20px;
+        width: 100%;
+    }
+    .dashboard-card {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Fix Auth Pages (Login, Magic Code, Reset) */
+    .auth-wrapper {
+        padding: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .auth-card {
+        padding: 32px 20px;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+    }
+    .form-group input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Fix OTP Boxes */
+    .otp-container {
+        gap: 6px !important;
+    }
+    .otp-input {
+        width: 36px;
+        height: 44px;
+        font-size: 18px;
+    }
+    
+    /* Responsive Table for Invoices */
+    .invoice-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+    }
+}
+
+/* Readability and Typography Improvements */
+body {
+    /* Improve text rendering on Windows/Mac */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Darken the text slightly for better contrast */
+    color: #111827; 
+}
+
+/* Ensure headings are crisp */
+h1, h2, h3, h4, h5, h6 {
+    color: #0f172a;
+    letter-spacing: -0.02em; /* Tighter letter spacing for headings looks more professional */
+}
+
+/* Auth Cards specific typography */
+.auth-header h2 {
+    font-size: 26px; /* Slightly larger heading */
+    font-weight: 700;
+}
+.auth-header p {
+    color: #475569; /* Darker, more legible gray for subtitles */
+    font-size: 15px; /* Slightly larger text */
+}
+
+.form-group label {
+    font-size: 14px; /* Larger label */
+    font-weight: 600;
+    color: #1e293b; /* Darker slate for labels */
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    font-size: 15px; /* More readable input text */
+    padding: 12px 14px; /* Taller input fields */
+    color: #0f172a;
+}
+
+/* Dashboard specific typography */
+.page-subtitle {
+    color: #475569;
+    font-size: 15px;
+}
+
+.card-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.timeline-content h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.invoice-table th {
+    font-size: 14px;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.invoice-table td {
+    font-size: 15px;
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1E2432;
+    color: #FFFFFF;
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    font-weight: 500;
+    animation: toastSlideIn 0.3s ease-out forwards;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    max-width: 420px;
+    line-height: 1.4;
+}
+
+.toast.success {
+    border-left: 4px solid #10B981;
+}
+
+.toast-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toast-message {
+    flex: 1;
+}
+
+.toast.toast-fadeout {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Locked submit button style */
+.btn-primary.btn-locked {
+    background: #10B981;
+    color: #FFFFFF;
+    cursor: default;
+    opacity: 0.9;
+}
+
