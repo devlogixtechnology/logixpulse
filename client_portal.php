@@ -1,0 +1,16 @@
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/../config/bootstrap.php';
+
+$user = require_client();
+
+json_success([
+    'message' => 'Client portal access granted.',
+    'user' => [
+        'id' => (int)$user['id'],
+        'email' => $user['email'],
+        'role' => $user['role'],
+        'user_type' => $user['user_type'],
+    ],
+]);
