@@ -1,142 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lead Details - Delete Lead</title>
-<style>
-  * { box-sizing: border-box; }
-  body { margin: 0; font-family: Arial, sans-serif; background: #f3f4f6; color: #111; }
-  .topbar { display: flex; gap: 12px; align-items: center; padding: 14px 18px; background: #111827; color: #fff; }
-  .topbar select { padding: 6px; border-radius: 6px; }
-  .page { padding: 18px; }
-  .lead-row { background: #fff; padding: 14px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-  .btn { padding: 8px 16px; border-radius: 6px; border: 1px solid #9ca3af; background: #fff; cursor: pointer; font-weight: 600; }
-  .btn-danger { background: #dc2626; color: #fff; border-color: #b91c1c; }
-  .btn-danger:hover { background: #b91c1c; }
-  .btn-danger:disabled { opacity: .6; cursor: not-allowed; }
-  .drawer { position: fixed; top: 0; right: -100%; width: min(100%, 380px); height: 100%; background: #fff; box-shadow: -4px 0 16px rgba(0,0,0,.25); transition: right .25s; padding: 20px; display: flex; flex-direction: column; z-index: 100; }
-  .drawer.open { right: 0; }
-  .drawer h2 { margin-top: 0; }
-  .drawer .info p { margin: 8px 0; }
-  .drawer-footer { margin-top: auto; display: flex; justify-content: space-between; gap: 10px; }
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 200; }
-  .overlay.show { display: flex; }
-  .confirm-box { background: #fff; padding: 20px; border-radius: 10px; width: min(92vw, 380px); }
-  .confirm-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+<!doctype html><html lang="en"><meta charset="utf-8"><title>FEA-W8D1-1 Add Lead Modal</title><!doctype html><html lang="en"><meta charset="utf-8"><title>REC-FEA-02 Kanban Drag &amp; Drop</title><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet"><style>
+:root{--bg:#F9FAFB;--ink:#111827;--mut:#6B7280;--line:#E5E7EB;--card:#fff;--ac:#4F46E5;--acd:#4338CA;--ok:#10B981;--warn:#F59E0B;--bad:#EF4444;--tint:#EEF2FF}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,"Segoe UI",system-ui,sans-serif}
+.top{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--line);font:700 16px Manrope,Inter,sans-serif}
+.top i{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:var(--ac)}
+.top em{margin-left:auto;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--tint);color:var(--ac);font:600 12px Inter,sans-serif;font-style:normal}
+h1{font:600 22px Manrope,Inter,sans-serif;margin:0;padding:20px 16px 12px}
+h1 label{font:400 12px Inter,sans-serif;color:var(--mut)}
+.board{display:flex;gap:16px;overflow-x:auto;padding:0 16px 32px;align-items:flex-start;scroll-snap-type:x proximity}
+.col{flex:0 0 min(85vw,300px);background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;min-height:220px;padding-bottom:8px;scroll-snap-align:start;transition:background .15s,outline-color .15s}
+.col.over{outline:2px dashed var(--ac);outline-offset:-2px;background:var(--tint)}
+.col h2{margin:0 0 12px;padding:12px 16px;background:var(--tint);border-bottom:1px solid var(--line);font:600 15px Manrope,Inter,sans-serif;display:flex;align-items:center;gap:8px}
+.col h2::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mut)}
+.col[data-stage="Contacted"] h2::before{background:var(--ac)}
+.col[data-stage="Meeting Booked"] h2::before{background:var(--warn)}
+.col[data-stage="Won"] h2::before{background:var(--ok)}
+.col[data-stage="Won"] .card{border-left:3px solid var(--ok)}
+.col h2 span{margin-left:auto;background:#E0E7FF;color:var(--ac);border-radius:99px;padding:0 10px;font:600 12px Inter,sans-serif}
+.col:not(:has(.card))::after{content:"No cards yet";display:block;margin:0 12px;padding:24px 8px;border:1.5px dashed #D1D5DB;border-radius:12px;text-align:center;color:var(--mut)}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;margin:0 12px 8px;box-shadow:0 1px 2px #1118270d;touch-action:none;cursor:grab;transition:opacity .25s,transform .2s,box-shadow .15s}
+.card:hover{box-shadow:0 4px 12px #11182714}
+.card b{display:block;font:600 14px Manrope,Inter,sans-serif}.card small{color:var(--mut);font-size:12px}
+.card.drag{opacity:.45;z-index:9;position:relative;cursor:grabbing;transition:none}
+.tag{display:inline-block;background:var(--tint);color:var(--ac);border-radius:99px;padding:0 8px;font:500 12px Inter,sans-serif;margin:6px 4px 0 0;border:0;cursor:pointer}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--acd)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn.sec:hover{background:var(--bg)}
+input,select,textarea{background:#fff;border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);outline:2px solid #4F46E540;outline-offset:0}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;transition:transform .25s;z-index:99}
+#toast.on{transform:translateX(-50%)}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-</head>
-<body>
-
-<div class="topbar">
-  <strong>Leads</strong>
-  <label>Role:
-    <select id="roleSelect">
-      <option value="admin">admin</option>
-      <option value="bd_rep">bd_rep</option>
-    </select>
-  </label>
-</div>
-
-<div class="page" id="list"></div>
-
-<div class="drawer" id="drawer">
-  <h2>Lead Details</h2>
-  <div class="info" id="info"></div>
-  <div class="drawer-footer">
-    <button class="btn" id="closeBtn">Close</button>
-    <button class="btn btn-danger" id="deleteBtn" style="display:none">Delete Lead</button>
-  </div>
-</div>
-
-<div class="overlay" id="overlay">
-  <div class="confirm-box">
-    <h3>Delete this lead?</h3>
-    <p><strong id="confirmName"></strong> permanently delete ho jayegi. Ye action undo nahi hoga.</p>
-    <div class="confirm-actions">
-      <button class="btn" id="cancelBtn">Cancel</button>
-      <button class="btn btn-danger" id="confirmBtn">Yes, Delete</button>
-    </div>
-  </div>
-</div>
-
+<style>
+.card{cursor:default;touch-action:auto}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:20px 16px 12px}.bar h1{padding:0}
+dialog{border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);width:min(420px,92vw);padding:20px}
+dialog::backdrop{background:#11182799}
+dialog h3{margin:0 0 4px;font:600 18px Manrope,Inter,sans-serif}
+dialog label{display:block;margin:12px 0 4px;font-size:12px;font-weight:500;color:var(--mut)}
+dialog [aria-invalid="true"]{border-color:var(--bad)}
+.row{display:flex;gap:8px;margin-top:20px;justify-content:flex-end}
+#err{color:var(--bad);margin:10px 0 0;min-height:20px}
+</style>
+<header class="top"><i><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,12 7,12 10,4 14,20 17,12 21,12"/></svg></i>LogixPulse<em>AL</em></header>
+<div class="bar"><h1>Lead Board</h1><button class="btn" id="addBtn" type="button">+ Add Lead</button></div>
+<div class="board" id="board"></div>
+<dialog id="dlg" aria-labelledby="ttl"><form id="f" novalidate><h3 id="ttl">Add Lead</h3>
+<label for="fName">Name</label><input id="fName" autocomplete="off" placeholder="Full name">
+<label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="off" placeholder="name@company.com">
+<label for="fPhone">Phone</label><input id="fPhone" type="tel" autocomplete="off" placeholder="+92 300 1234567">
+<label for="fSource">Source</label><select id="fSource"><option value="">Select a source</option><option>Website</option><option>Referral</option><option>Campaign</option><option>Direct</option></select>
+<p id="err" role="alert"></p>
+<div class="row"><button type="button" class="btn sec" id="cancel">Cancel</button><button class="btn" id="save">Save</button></div></form></dialog>
+<div id="toast" role="status"></div>
 <script>
-  let currentRole = "admin";
-  let leads = [
-    { id: 1, name: "Ali Traders", email: "ali@traders.com", phone: "0300-1111111" },
-    { id: 2, name: "Sara Enterprises", email: "sara@ent.com", phone: "0301-2222222" },
-    { id: 3, name: "Khan & Sons", email: "info@khan.com", phone: "0302-3333333" }
-  ];
-  let selectedLead = null;
-
-  const list = document.getElementById("list");
-  const drawer = document.getElementById("drawer");
-  const info = document.getElementById("info");
-  const deleteBtn = document.getElementById("deleteBtn");
-  const overlay = document.getElementById("overlay");
-  const confirmName = document.getElementById("confirmName");
-
-  function renderList() {
-    list.innerHTML = "";
-    leads.forEach(function (lead) {
-      const row = document.createElement("div");
-      row.className = "lead-row";
-      row.style.marginBottom = "10px";
-      row.innerHTML = "<span>" + lead.name + "</span>";
-      const btn = document.createElement("button");
-      btn.className = "btn";
-      btn.textContent = "View";
-      btn.onclick = function () { openDrawer(lead); };
-      row.appendChild(btn);
-      list.appendChild(row);
-    });
-  }
-
-  function updateDeleteVisibility() {
-    deleteBtn.style.display = currentRole === "admin" ? "inline-block" : "none";
-  }
-
-  function openDrawer(lead) {
-    selectedLead = lead;
-    info.innerHTML =
-      "<p><strong>Name:</strong> " + lead.name + "</p>" +
-      "<p><strong>Email:</strong> " + lead.email + "</p>" +
-      "<p><strong>Phone:</strong> " + lead.phone + "</p>";
-    updateDeleteVisibility();
-    drawer.classList.add("open");
-  }
-
-  function closeDrawer() {
-    drawer.classList.remove("open");
-    selectedLead = null;
-  }
-
-  document.getElementById("closeBtn").onclick = closeDrawer;
-
-  deleteBtn.onclick = function () {
-    if (currentRole !== "admin" || !selectedLead) return;
-    confirmName.textContent = selectedLead.name;
-    overlay.classList.add("show");
-  };
-
-  document.getElementById("cancelBtn").onclick = function () {
-    overlay.classList.remove("show");
-  };
-
-  document.getElementById("confirmBtn").onclick = function () {
-    if (currentRole !== "admin" || !selectedLead) return;
-    leads = leads.filter(function (l) { return l.id !== selectedLead.id; });
-    overlay.classList.remove("show");
-    closeDrawer();
-    renderList();
-  };
-
-  document.getElementById("roleSelect").onchange = function (e) {
-    currentRole = e.target.value;
-    updateDeleteVisibility();
-  };
-
-  renderList();
-</script>
-</body>
-</html>
+const API_URL="api/leads_create.php";
+const DEMO=true;
+const STAGES=["New Lead","Contacted","Meeting Booked","Won"];
+const LEADS=[
+{id:1,name:"Ayesha Khan",email:"ayesha@novatextiles.com",phone:"+92 300 1112233",source:"Website",stage:"New Lead"},
+{id:2,name:"Bilal Ahmed",email:"bilal@punjabtraders.pk",phone:"+92 301 2223344",source:"Referral",stage:"Contacted"},
+{id:3,name:"Hina Malik",email:"hina@sargodhafresh.pk",phone:"+92 302 3334455",source:"Campaign",stage:"Meeting Booked"}];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+function toast(m){toastEl.textContent=m;toastEl.classList.add("on");setTimeout(()=>toastEl.classList.remove("on"),2600)}
+const toastEl=document.getElementById("toast");
+board.innerHTML=STAGES.map(s=>'<section class="col" data-stage="'+s+'"><h2>'+s+' <span></span></h2></section>').join("");
+const count=()=>board.querySelectorAll(".col").forEach(c=>c.querySelector("span").textContent=c.querySelectorAll(".card").length);
+function addCard(l,top){const c=document.createElement("div");c.className="card";c.dataset.id=l.id;
+ c.innerHTML="<b>"+esc(l.name)+"</b><small>"+esc(l.email)+" · "+esc(l.phone)+'</small><div><span class="tag">'+esc(l.source)+"</span></div>";
+ const h=board.querySelector('[data-stage="'+l.stage+'"]');top?h.querySelector("h2").after(c):h.append(c);count();return c}
+LEADS.forEach(l=>addCard(l));
+const emailOk=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),phoneOk=v=>/^[+()\d\s-]{7,20}$/.test(v);
+function check(d){const r=[[fName,!d.name,"Name is required."],[fEmail,!emailOk(d.email),"Enter a valid email address."],[fPhone,!phoneOk(d.phone),"Enter a valid phone number."],[fSource,!d.source,"Select a source."]];
+ [fName,fEmail,fPhone,fSource].forEach(x=>x.removeAttribute("aria-invalid"));
+ const bad=r.find(x=>x[1]);if(bad)bad[0].setAttribute("aria-invalid","true");return bad}
+function reset(){f.reset();err.textContent="";[fName,fEmail,fPhone,fSource].forEach(x=>x.removeAttribute("aria-invalid"))}
+addBtn.onclick=()=>{reset();dlg.showModal();fName.focus()};
+cancel.onclick=()=>{dlg.close()};
+dlg.addEventListener("close",reset);
+f.onsubmit=async e=>{e.preventDefault();
+ const d={name:fName.value.trim(),email:fEmail.value.trim(),phone:fPhone.value.trim(),source:fSource.value};
+ const bad=check(d);if(bad){err.textContent=bad[2];bad[0].focus();return}
+ save.disabled=true;save.textContent="Saving...";err.textContent="";
+ try{let r;
+  if(DEMO){await new Promise(x=>setTimeout(x,500));r={ok:true,lead:{id:Date.now(),name:d.name,email:d.email,phone:d.phone,source:d.source,stage:"New Lead"}}}
+  else{const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)});r=await res.json();if(!res.ok||!r.ok)throw new Error(r.error||"Save failed")}
+  const c=addCard(r.lead,true);dlg.close();c.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});toast("Lead added")}
+ catch(x){err.textContent=x.message||"Could not save the lead. Try again."}
+ save.disabled=false;save.textContent="Save"};
+</script></html>
