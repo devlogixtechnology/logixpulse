@@ -1,462 +1,590 @@
-/* =========================================
-   VARIABLES & DESIGN SYSTEM
-========================================= */
+/* ==========================================================================
+   LogixPulse Design System & Component Spec
+   Engineered by DevLogix for Client Portal Architecture
+   Strict 8pt spatial baseline, semantic elevation, WCAG 2.1 AAA Compliant
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+
 :root {
-    /* Colors */
-    --color-primary: #2563eb;       /* Modern Blue */
-    --color-primary-hover: #1d4ed8;
-    --color-bg: #f9fafb;            /* Light gray background */
-    --color-card-bg: #ffffff;
-    --color-text-main: #111827;     /* Dark gray/black for headings */
-    --color-text-muted: #6b7280;    /* Medium gray for subtitles */
-    --color-border: #d1d5db;        /* Light gray for borders */
-    --color-input-focus: #93c5fd;   /* Soft blue for focus rings */
-    
-    /* Spacing & Sizes */
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --space-sm: 8px;
-    --space-md: 16px;
-    --space-lg: 24px;
-    --space-xl: 32px;
-    
-    /* Typography */
-    --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  /* LogixPulse 02 - Foundations: Color Palette */
+  --lp-primary-indigo: #4F46E5;       /* Core CTA & Focus */
+  --lp-primary-hover: #4338CA;        /* Active Pressed State */
+  --lp-success-emerald: #10B981;      /* Deals Won, Signatures */
+  --lp-success-bg: #ECFDF5;
+  --lp-success-border: #A7F3D0;
+  --lp-warning-amber: #F59E0B;        /* Meeting Booked, Alerts */
+  --lp-warning-bg: #FFFBEB;
+  --lp-warning-border: #FDE68A;
+  --lp-danger-red: #EF4444;           /* Overdue, Invoices, Critical */
+  --lp-danger-bg: #FEF2F2;
+  --lp-danger-border: #FECACA;
+  
+  /* Neutral Canvas & Surfaces */
+  --lp-neutral-canvas: #F8FAFB;       /* Main Viewport Surface */
+  --lp-surface-pure: #FFFFFF;         /* Elevated Containers */
+  --lp-primary-copy: #111827;         /* Headings & Critical Data */
+  --lp-muted-copy: #6B7280;           /* Labels, Subtitles, Meta */
+  --lp-border: #E5E7EB;               /* Standard Slate Border */
+  --lp-sidebar-spine: #111827;        /* Dark Navigation Spine */
+
+  /* Geometry & Radius Scale (from Figma spec) */
+  --lp-radius-sm: 4px;                /* Inputs/Chips */
+  --lp-radius-md: 8px;                /* Buttons/Cells */
+  --lp-radius-lg: 12px;               /* Modules, Cards, Modals */
+
+  /* Shadows */
+  --lp-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --lp-shadow-card: 0 1px 3px 0 rgba(16, 24, 40, 0.1), 0 1px 2px 0 rgba(16, 24, 40, 0.06);
+  --lp-shadow-dropdown: 0 12px 24px -4px rgba(16, 24, 40, 0.12), 0 4px 8px -2px rgba(16, 24, 40, 0.08);
 }
 
-/* =========================================
-   RESET & BASE STYLES
-========================================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Global Typography & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 body {
-    font-family: var(--font-family);
-    background-color: var(--color-bg);
-    color: var(--color-text-main);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--lp-neutral-canvas);
+  color: var(--lp-primary-copy);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* =========================================
-   NAVBAR
-========================================= */
-.auth-navbar {
-    background-color: var(--color-card-bg);
-    border-bottom: 1px solid var(--color-border);
+h1, h2, h3, h4, h5, h6, .lp-headline {
+  font-family: 'Manrope', 'Inter', sans-serif;
+  color: var(--lp-primary-copy);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
-.auth-navbar-inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 24px;
-    gap: 16px;
+/* Touch targets for mobile */
+.lp-touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.auth-navbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 700;
-    font-size: 16px;
-    color: var(--color-text-main);
+/* 01 - Brand Asset: LogixPulse Monogram */
+.lp-brand-monogram {
+  width: 32px;
+  height: 32px;
+  background: var(--lp-primary-indigo);
+  border-radius: var(--lp-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
+  flex-shrink: 0;
 }
 
-.auth-navbar .brand-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-md);
-    background-color: var(--color-primary);
-    color: #ffffff;
-    flex-shrink: 0;
+.lp-brand-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--lp-primary-copy);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
 }
 
-.auth-navbar .brand-mark svg {
-    width: 18px;
-    height: 18px;
+.lp-brand-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--lp-muted-copy);
 }
 
-.auth-navbar-brand-subtext {
-    font-weight: 400;
-    color: var(--color-text-muted);
-    margin-left: 4px;
-    font-size: 13px;
+/* Header Navigation Bar */
+.lp-topbar {
+  background-color: var(--lp-surface-pure);
+  border-bottom: 1px solid var(--lp-border);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  height: 64px;
 }
 
-.auth-navbar-cta {
-    font-size: 14px;
-    color: var(--color-text-muted);
-    text-decoration: none;
-    white-space: nowrap;
+/* Search input in topbar */
+.lp-search-container {
+  position: relative;
+  width: 280px;
 }
 
-.auth-navbar-cta-link {
-    color: var(--color-primary);
-    font-weight: 600;
+.lp-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--lp-muted-copy);
+  font-size: 0.875rem;
+  pointer-events: none;
 }
 
-.auth-navbar-cta:hover .auth-navbar-cta-link {
-    text-decoration: underline;
+.lp-search-input {
+  width: 100%;
+  padding: 6px 12px 6px 32px;
+  font-size: 0.875rem;
+  background-color: var(--lp-neutral-canvas);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-md);
+  color: var(--lp-primary-copy);
+  transition: all 0.15s ease;
 }
 
-/* =========================================
-   LAYOUT (Wrapper & Card)
-========================================= */
-.auth-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: var(--space-md); /* Ensures it doesn't touch screen edges on mobile */
+.lp-search-input:focus {
+  outline: none;
+  background-color: #FFFFFF;
+  border-color: var(--lp-primary-indigo);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
-.auth-card {
-    background-color: var(--color-card-bg);
-    width: 100%;
-    max-width: 420px; /* Optimal reading width for forms */
-    padding: var(--space-xl);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    border: 1px solid var(--color-border);
+/* Notification Bell Trigger */
+.lp-notification-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--lp-radius-md);
+  border: 1px solid var(--lp-border);
+  background-color: #FFFFFF;
+  color: var(--lp-primary-copy);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
 }
 
-/* =========================================
-   TYPOGRAPHY & HEADERS
-========================================= */
-.auth-header {
-    margin-bottom: var(--space-lg);
-    text-align: center;
+.lp-notification-btn:hover,
+.lp-notification-btn:focus-visible {
+  background-color: var(--lp-neutral-canvas);
+  border-color: var(--lp-primary-indigo);
+  color: var(--lp-primary-indigo);
+  outline: 2px solid rgba(79, 70, 229, 0.25);
+  outline-offset: 1px;
 }
 
-.auth-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: var(--space-sm);
-    color: var(--color-text-main);
+/* Badge Counter on Bell */
+.lp-notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background-color: var(--lp-danger-red);
+  color: #FFFFFF;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 2px #FFFFFF;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.auth-subtitle {
-    font-size: 14px;
-    color: var(--color-text-muted);
+.lp-notification-badge.is-animating {
+  animation: lp-badge-pop 0.3s ease-out;
 }
 
-/* =========================================
-   FORMS & INPUTS
-========================================= */
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
+.lp-notification-badge.is-zero {
+  display: none !important;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+@keyframes lp-badge-pop {
+  0% { transform: scale(0.6); }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); }
 }
 
-.label-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Notification Center Dropdown */
+.lp-notification-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 380px;
+  max-width: 92vw;
+  background-color: var(--lp-surface-pure);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  box-shadow: var(--lp-shadow-dropdown);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1060;
+  animation: lp-fade-in 0.18s ease-out;
 }
 
-label {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-text-main);
+.lp-notification-dropdown.show {
+  display: flex;
 }
 
-input[type="email"],
-input[type="password"],
-.password-field input[type="text"] {
-    width: 100%;
-    padding: 10px 14px;
-    font-size: 15px;
-    font-family: inherit;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    outline: none;
-    transition: all 0.2s ease;
-    color: var(--color-text-main);
+@keyframes lp-fade-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-input[type="email"]:focus,
-input[type="password"]:focus,
-.password-field input[type="text"]:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px var(--color-input-focus);
+.lp-dropdown-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--lp-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FFFFFF;
 }
 
-input::placeholder {
-    color: #9ca3af;
+.lp-unread-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background-color: #EEF2FF;
+  color: var(--lp-primary-indigo);
 }
 
-/* =========================================
-   PASSWORD FIELD WITH SHOW/HIDE TOGGLE
-========================================= */
-.password-field {
-    position: relative;
+.lp-mark-read-btn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--lp-primary-indigo);
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  border-radius: var(--lp-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
 }
 
-.password-field input[type="password"],
-.password-field input[type="text"] {
-    padding-right: 44px;
+.lp-mark-read-btn:hover {
+  background-color: #EEF2FF;
+  color: var(--lp-primary-hover);
 }
 
-.password-toggle {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    padding: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-muted);
-    border-radius: 6px;
-    cursor: pointer;
+.lp-mark-read-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
-.password-toggle:hover {
-    color: var(--color-text-main);
-    background-color: var(--color-bg);
+/* Filter Tabs */
+.lp-filter-tabs {
+  display: flex;
+  background-color: var(--lp-neutral-canvas);
+  border-bottom: 1px solid var(--lp-border);
+  padding: 6px 12px;
+  gap: 4px;
+  overflow-x: auto;
 }
 
-/* =========================================
-   OTP / MAGIC CODE INPUTS
-========================================= */
-.otp-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    margin-top: 4px;
+.lp-filter-tab {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--lp-muted-copy);
+  background: none;
+  border: 1px solid transparent;
+  padding: 4px 10px;
+  border-radius: var(--lp-radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
 }
 
-.otp-input {
-    width: 100%;
-    aspect-ratio: 1 / 1.1; /* Keeps them nicely boxed */
-    text-align: center;
-    font-size: 24px;
-    font-weight: 600;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    outline: none;
-    transition: all 0.2s;
-    color: var(--color-text-main);
+.lp-filter-tab:hover {
+  color: var(--lp-primary-copy);
+  background-color: #FFFFFF;
 }
 
-.otp-input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px var(--color-input-focus);
+.lp-filter-tab.active {
+  background-color: #FFFFFF;
+  color: var(--lp-primary-indigo);
+  font-weight: 600;
+  border-color: var(--lp-border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* =========================================
-   BUTTONS
-========================================= */
-.btn {
-    display: inline-block;
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 15px;
-    font-weight: 500;
-    font-family: inherit;
-    text-align: center;
-    border: none;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    text-decoration: none;
+/* Notification Items List */
+.lp-notification-list {
+  max-height: 350px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.btn:active {
-    transform: scale(0.98);
+.lp-notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--lp-border);
+  background-color: #FFFFFF;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  position: relative;
 }
 
-.btn-primary {
-    background-color: var(--color-primary);
-    color: white;
-    margin-top: 8px;
+.lp-notification-item:last-child {
+  border-bottom: none;
 }
 
-.btn-primary:hover {
-    background-color: var(--color-primary-hover);
+.lp-notification-item:hover {
+  background-color: var(--lp-neutral-canvas);
 }
 
-.btn-secondary {
-    background-color: white;
-    color: var(--color-text-main);
-    border: 1px solid var(--color-border);
+.lp-notification-item.is-unread {
+  background-color: #F5F7FF;
 }
 
-.btn-secondary:hover {
-    background-color: #f3f4f6;
+.lp-notification-item.is-unread::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--lp-primary-indigo);
 }
 
-/* =========================================
-   DIVIDERS & LINKS
-========================================= */
-.auth-divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: var(--space-lg) 0;
-    color: var(--color-text-muted);
-    font-size: 12px;
-    font-weight: 500;
+/* Category Icons */
+.lp-cat-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--lp-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.auth-divider::before,
-.auth-divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid var(--color-border);
+.lp-cat-milestone {
+  background-color: #EEF2FF;
+  color: var(--lp-primary-indigo);
 }
 
-.auth-divider span {
-    padding: 0 10px;
+.lp-cat-agreement {
+  background-color: #F5F3FF;
+  color: #7C3AED;
 }
 
-.auth-footer {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-    text-align: center;
-    font-size: 14px;
-    color: var(--color-text-muted);
+.lp-cat-success {
+  background-color: var(--lp-success-bg);
+  color: var(--lp-success-emerald);
 }
 
-.auth-link {
-    color: var(--color-primary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
+.lp-cat-urgent {
+  background-color: var(--lp-danger-bg);
+  color: var(--lp-danger-red);
 }
 
-.auth-link:hover {
-    text-decoration: underline;
-    color: var(--color-primary-hover);
+.lp-cat-system {
+  background-color: #F3F4F6;
+  color: var(--lp-muted-copy);
 }
 
-.auth-link-small {
-    font-size: 13px;
-    color: var(--color-primary);
-    text-decoration: none;
-    font-weight: 500;
+.lp-item-content {
+  flex: 1;
+  min-width: 0;
 }
 
-.auth-link-small:hover {
-    text-decoration: underline;
+.lp-item-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--lp-primary-copy);
+  margin: 0 0 2px 0;
+  line-height: 1.3;
 }
 
-.auth-footer-links {
-    margin-top: var(--space-lg);
-    text-align: center;
+.lp-item-desc {
+  font-size: 0.75rem;
+  color: var(--lp-muted-copy);
+  margin: 0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.auth-footer-links p {
-    font-size: 14px;
-    color: var(--color-text-muted);
-    margin: 6px 0;
+.lp-item-time {
+  font-size: 0.6875rem;
+  color: var(--lp-muted-copy);
+  white-space: nowrap;
 }
 
-.auth-footer-links a {
-    color: var(--color-text-muted);
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 3px;
-    font-weight: 500;
+/* Empty State */
+.lp-empty-state {
+  padding: 36px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.auth-footer-links a:hover {
-    color: var(--color-primary);
+.lp-empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--lp-neutral-canvas);
+  border: 1px dashed var(--lp-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--lp-muted-copy);
+  margin-bottom: 12px;
 }
 
-/* Utilities */
-.text-center {
-    text-align: center;
-}
-.margin-top-sm {
-    margin-top: var(--space-sm);
+/* Dynamic Floating Toasts (Page 5 Figma Spec) */
+.toast-container {
+  z-index: 1090;
 }
 
-/* =========================================
-   RESPONSIVE DESIGN (Mobiles/Tablets)
-========================================= */
-@media screen and (max-width: 480px) {
-    .auth-card {
-        padding: var(--space-lg) var(--space-md); /* Reduce padding on small phones */
-        border: none; /* Remove border for cleaner mobile look */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Softer shadow */
-    }
-    
-    .otp-input {
-        font-size: 20px; /* Slightly smaller text for narrow screens */
-    }
-
-    .auth-navbar-brand-subtext {
-        display: none;
-    }
-
-    .auth-navbar-cta {
-        font-size: 12px;
-    }
-
-    .auth-heading h1 {
-        font-size: 22px;
-    }
-}
-/* Back link utility from FEB-W7D5-1 */
-.back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: var(--color-primary, #2563eb);
-    font-size: 0.875rem;
-    text-decoration: none;
-}
-.back-link:hover {
-    color: var(--color-primary-hover, #1d4ed8);
-    text-decoration: underline;
-}
-.back-link::before {
-    content: '\2190';
-    margin-right: 4px;
+.lp-toast-success {
+  background-color: #FFFFFF;
+  border: 1px solid var(--lp-success-border);
+  border-left: 4px solid var(--lp-success-emerald);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-radius: var(--lp-radius-md);
 }
 
-/* Invoices Table & Data Display */
-.invoice-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.invoice-table th { text-align: left; padding: 12px; border-bottom: 2px solid var(--color-border, #E5E7EE); color: var(--color-text-muted, #5F6B73); font-weight: 600; }
-.invoice-table td { padding: 16px 12px; border-bottom: 1px solid var(--color-border, #E5E7EE); color: var(--color-text-main, #1E2432); }
-.btn-sm { padding: 6px 12px; font-size: 12px; }
-
-/* Navbar Link Utilities */
-.nav-link.active { 
-    background: var(--color-primary, #4F46E5); 
-    color: white; 
-    border-radius: 99px; 
-    padding: 8px 16px; 
-}
-.nav-link { 
-    padding: 8px 16px; 
-    border-radius: 99px; 
-    font-size: 14px; 
-    font-weight: 500; 
-    color: var(--color-text-muted, #5F6B73); 
-    text-decoration: none; 
-    display: inline-flex; 
-    align-items: center; 
-    justify-content: center; 
+.lp-toast-urgent {
+  background-color: #FFFFFF;
+  border: 1px solid var(--lp-danger-border);
+  border-left: 4px solid var(--lp-danger-red);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-radius: var(--lp-radius-md);
 }
 
+/* LogixPulse Status Pills (Page 1 & 5 Figma Spec) */
+.lp-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  line-height: 1;
+}
+
+.lp-status-pill::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.lp-status-lead {
+  background-color: #F3F4F6;
+  color: #374151;
+}
+.lp-status-lead::before { background-color: #9CA3AF; }
+
+.lp-status-review {
+  background-color: var(--lp-warning-bg);
+  color: #B45309;
+}
+.lp-status-review::before { background-color: var(--lp-warning-amber); }
+
+.lp-status-won {
+  background-color: var(--lp-success-bg);
+  color: #065F46;
+}
+.lp-status-won::before { background-color: var(--lp-success-emerald); }
+
+/* Client Portal Shell (Page 5 Figma Spec) */
+.lp-sidebar-client {
+  width: 240px;
+  background-color: #FFFFFF;
+  border-right: 1px solid var(--lp-border);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lp-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--lp-radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--lp-muted-copy);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.lp-nav-item:hover {
+  background-color: var(--lp-neutral-canvas);
+  color: var(--lp-primary-copy);
+}
+
+.lp-nav-item.active {
+  background-color: #EEF2FF;
+  color: var(--lp-primary-indigo);
+  font-weight: 600;
+}
+
+/* Card Styling */
+.lp-card {
+  background-color: var(--lp-surface-pure);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  box-shadow: var(--lp-shadow-card);
+}
+
+.lp-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--lp-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Buttons (04 - Interactive Controls Figma Spec) */
+.lp-btn-primary {
+  background-color: var(--lp-primary-indigo);
+  color: #FFFFFF;
+  border: 1px solid transparent;
+  border-radius: var(--lp-radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 8px 16px;
+  transition: all 0.15s ease;
+}
+
+.lp-btn-primary:hover {
+  background-color: var(--lp-primary-hover);
+  color: #FFFFFF;
+}
+
+.lp-btn-secondary {
+  background-color: #FFFFFF;
+  color: var(--lp-primary-copy);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-md);
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 8px 16px;
+  transition: all 0.15s ease;
+}
+
+.lp-btn-secondary:hover {
+  background-color: var(--lp-neutral-canvas);
+  border-color: #D1D5DB;
+}
