@@ -1,99 +1,427 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In | LogixPulse Client Portal</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>LogixPulse &bull; Client Portal</title>
+  <meta name="description" content="LogixPulse Client Portal - Project Milestones, Agreements & Real-time Event Notifications." />
+
+  <!-- Bootstrap 5 CSS via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  
+  <!-- Bootstrap Icons via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <!-- LogixPulse Design System Stylesheets -->
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-    <header class="auth-navbar">
-        <div class="auth-navbar-inner">
-            <div class="auth-navbar-brand">
-                <span class="brand-mark" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="2 12 8 12 10 6 14 18 16 12 22 12"></polyline>
-                    </svg>
+  <!-- ======================================================================
+       08 - SHELL ARCHITECTURE: TOP NAVIGATION BAR (FIGMA SPEC)
+       ====================================================================== -->
+  <header class="lp-topbar px-3 px-lg-4 d-flex align-items-center justify-content-between">
+    
+    <!-- Brand / Monogram & Mobile Toggle -->
+    <div class="d-flex align-items-center gap-3">
+      <!-- Mobile Drawer Hamburger Toggle (FEB-02) -->
+      <button 
+        class="btn btn-light d-lg-none lp-touch-target p-0 text-secondary" 
+        type="button" 
+        data-bs-toggle="offcanvas" 
+        data-bs-target="#mobileDrawer" 
+        aria-controls="mobileDrawer"
+        aria-label="Toggle navigation drawer"
+      >
+        <i class="bi bi-list fs-4"></i>
+      </button>
+
+      <!-- LogixPulse Vector Monogram & Wordmark (Figma Page 1 & 5) -->
+      <a href="#timeline" class="lp-brand-title text-decoration-none">
+        <div class="lp-brand-monogram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+        </div>
+        <span>LogixPulse</span>
+        <span class="lp-brand-sub d-none d-sm-inline ms-1 text-muted">Client Portal</span>
+      </a>
+
+      <!-- External RBAC Badge (Figma Page 5: "CLIENT PORTAL UI • External") -->
+      <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill d-none d-md-inline-block px-2 py-1" style="font-size: 0.6875rem; font-weight: 600;">
+        External
+      </span>
+    </div>
+
+    <!-- Search Bar (Operational Canvas Header - Figma Page 5) -->
+    <div class="lp-search-container d-none d-md-block">
+      <i class="bi bi-search lp-search-icon"></i>
+      <input type="search" class="lp-search-input" placeholder="Search agreements, milestones..." aria-label="Search agreements and milestones" />
+    </div>
+
+    <!-- Header Actions: Notification Bell (FEB-01) & User Profile -->
+    <div class="d-flex align-items-center gap-2 gap-sm-3">
+      
+      <!-- ==================================================================
+           TASK FEB-01: NOTIFICATION BELL DROPDOWN & UNREAD BADGE COUNTER
+           ================================================================== -->
+      <div class="position-relative">
+        <!-- Bell Trigger Button (Accessible aria labels, touch target >=44px) -->
+        <button 
+          type="button" 
+          class="lp-notification-btn lp-touch-target" 
+          id="notificationBellBtn" 
+          aria-label="Notifications, 3 unread items" 
+          aria-expanded="false" 
+          aria-haspopup="true"
+        >
+          <i class="bi bi-bell fs-5"></i>
+          <!-- Unread Badge Counter (Pulse animation on count changes) -->
+          <span class="lp-notification-badge" id="notificationBadge">3</span>
+        </button>
+
+        <!-- Notification Center Dropdown (Figma Design Spec) -->
+        <div class="lp-notification-dropdown" id="notificationDropdown" role="region" aria-labelledby="notificationBellBtn">
+          <!-- Dropdown Header -->
+          <div class="lp-dropdown-header">
+            <div class="d-flex align-items-center gap-2">
+              <h3 class="m-0 fs-6 fw-bold">Notifications</h3>
+              <span class="lp-unread-pill" id="dropdownUnreadCount">3 unread</span>
+            </div>
+            <!-- Mark All as Read Button (Triggers api/notifications_read.php) -->
+            <button type="button" class="lp-mark-read-btn" id="markAllReadBtn" title="Mark all notifications as read">
+              <i class="bi bi-check2-all"></i>
+              <span>Mark all as read</span>
+            </button>
+          </div>
+
+          <!-- Category Filter Tabs -->
+          <div class="lp-filter-tabs" role="tablist" aria-label="Filter notifications">
+            <button class="lp-filter-tab active" data-filter="all" role="tab" aria-selected="true">All</button>
+            <button class="lp-filter-tab" data-filter="unread" role="tab" aria-selected="false">Unread</button>
+            <button class="lp-filter-tab" data-filter="milestone" role="tab" aria-selected="false">Milestones</button>
+            <button class="lp-filter-tab" data-filter="system" role="tab" aria-selected="false">System</button>
+          </div>
+
+          <!-- Notification Items List (or Empty/Loading State) -->
+          <ul class="lp-notification-list" id="notificationList" role="list">
+            <!-- Dynamically populated by js/notifications.js -->
+          </ul>
+
+          <!-- Dropdown Footer -->
+          <div class="p-2 border-top bg-light d-flex align-items-center justify-content-between" style="font-size: 0.72rem;">
+            <span class="text-muted"><i class="bi bi-broadcast text-primary me-1"></i>Real-time CRM Alerts</span>
+            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" onclick="window.DevLogixNotificationCenter.loadNotifications()">
+              <i class="bi bi-arrow-repeat me-1"></i>Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vertical Divider -->
+      <div class="vr mx-1 opacity-25 text-secondary" style="height: 24px;"></div>
+
+      <!-- User Profile (Figma Page 5: Acme Cloud / client1@logixpulse.test) -->
+      <div class="d-flex align-items-center gap-2">
+        <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; font-size: 0.8125rem;">
+          AC
+        </div>
+        <div class="d-none d-lg-block text-start lh-1">
+          <div class="fw-bold" style="font-size: 0.8125rem; color: var(--lp-primary-copy);">Acme Cloud</div>
+          <small class="text-muted" style="font-size: 0.7rem;">client1@logixpulse.test</small>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       COLLAPSIBLE MOBILE NAVIGATION DRAWER (FEB-02)
+       ====================================================================== -->
+  <div class="offcanvas offcanvas-start dl-mobile-drawer" tabindex="-1" id="mobileDrawer" aria-labelledby="mobileDrawerLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="d-flex align-items-center gap-2">
+        <div class="lp-brand-monogram" style="width: 28px; height: 28px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        </div>
+        <h5 class="offcanvas-title fw-bold fs-6 m-0" id="mobileDrawerLabel">LogixPulse Portal</h5>
+      </div>
+      <button type="button" class="btn-close lp-touch-target" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-3">
+      <div class="p-2 mb-3 bg-light rounded-2 border">
+        <small class="text-muted d-block" style="font-size: 0.7rem;">ORGANIZATION</small>
+        <span class="fw-semibold text-dark" style="font-size: 0.85rem;">Acme Cloud Technologies</span>
+      </div>
+
+      <nav class="d-flex flex-column" aria-label="Client Navigation">
+        <a href="#timeline" class="lp-nav-item active" data-bs-dismiss="offcanvas">
+          <i class="bi bi-graph-up-arrow text-primary"></i> Project Timeline
+        </a>
+        <a href="#invoices" class="lp-nav-item" data-bs-dismiss="offcanvas">
+          <i class="bi bi-credit-card"></i> Invoices &amp; Billing
+        </a>
+        <a href="#agreements" class="lp-nav-item" data-bs-dismiss="offcanvas">
+          <i class="bi bi-file-earmark-check"></i> Master Agreements
+        </a>
+        <a href="#lead" class="lp-nav-item" data-bs-dismiss="offcanvas">
+          <i class="bi bi-person-check"></i> Dedicated Lead
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       DYNAMIC FLOATING TOASTS (FIGMA SPEC PAGE 5)
+       ====================================================================== -->
+  <div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer" aria-live="polite" aria-atomic="true">
+    <!-- Toasts injected dynamically by window.DevLogixNotificationCenter.showToast() -->
+  </div>
+
+  <!-- ======================================================================
+       APP BODY: SIDEBAR + MAIN CONTENT AREA
+       ====================================================================== -->
+  <div class="d-flex flex-grow-1">
+
+    <!-- DESKTOP SIDEBAR: CLIENT PORTAL UI (Figma Page 5 Spec) -->
+    <aside class="lp-sidebar-client d-none d-lg-flex p-3">
+      <div>
+        <div class="px-2 pb-3 mb-2 border-bottom">
+          <small class="text-uppercase text-muted fw-bold" style="font-size: 0.6875rem; letter-spacing: 0.05em;">CLIENT WORKSPACE</small>
+        </div>
+        <nav class="d-flex flex-column" aria-label="Desktop Client Navigation">
+          <a href="#timeline" class="lp-nav-item active">
+            <i class="bi bi-graph-up-arrow"></i> Project Timeline
+          </a>
+          <a href="#invoices" class="lp-nav-item">
+            <i class="bi bi-credit-card"></i> Invoices &amp; Billing
+          </a>
+          <a href="#agreements" class="lp-nav-item">
+            <i class="bi bi-file-earmark-check"></i> Master Agreements
+          </a>
+          <a href="#lead" class="lp-nav-item">
+            <i class="bi bi-person-check"></i> Dedicated Lead
+          </a>
+        </nav>
+      </div>
+
+      <div class="p-3 bg-light rounded-3 border">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="rounded-circle bg-success" style="width: 8px; height: 8px;"></div>
+          <span class="fw-bold" style="font-size: 0.8125rem;">Active Engagement</span>
+        </div>
+        <p class="text-muted mb-0" style="font-size: 0.72rem;">Acme Cloud Infrastructure &bull; $45,000 ARR</p>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT CONTENT -->
+    <main class="flex-grow-1 p-3 p-md-4" style="background-color: var(--lp-neutral-canvas);">
+      <div class="container-fluid p-0" style="max-width: 1200px;">
+
+        <!-- Quick Event Simulator Toolbar (Testing Controls without technical target line) -->
+        <div class="lp-card p-3 mb-4">
+          <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="lp-status-pill lp-status-won">Notification Center Active</span>
+              </div>
+              <h2 class="h6 fw-bold mb-0">Client Communication &amp; Event Notification Center</h2>
+              <p class="text-muted small mb-0">Test real-time CRM updates, unread badge increments, and mark-all-as-read.</p>
+            </div>
+            
+            <!-- Quick Test Actions -->
+            <div class="d-flex flex-wrap gap-2">
+              <button type="button" class="btn btn-sm lp-btn-secondary" id="btnTriggerMilestone">
+                <i class="bi bi-flag text-primary me-1"></i>New Milestone (+1)
+              </button>
+              <button type="button" class="btn btn-sm btn-danger rounded-2" id="btnTriggerHighPriority">
+                <i class="bi bi-exclamation-triangle me-1"></i>Urgent Event (+Toast)
+              </button>
+              <button type="button" class="btn btn-sm btn-success rounded-2" id="btnTriggerMarkAllRead">
+                <i class="bi bi-check2-all me-1"></i>Mark All Read
+              </button>
+              <button type="button" class="btn btn-sm lp-btn-secondary" id="btnToggleEmptyState">
+                <i class="bi bi-bell-slash me-1"></i>Empty State
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CRM Pipeline Overview & Milestone Velocity (Figma Page 4 & 5 Spec) -->
+        <div class="row g-3 mb-4" id="timeline">
+          <div class="col-12 col-lg-8">
+            <div class="lp-card p-4 h-100">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <div>
+                  <span class="lp-status-pill lp-status-review mb-2">Meeting Booked &bull; Contract Review</span>
+                  <h1 class="h5 fw-bold mb-1">Acme Cloud Infrastructure Pipeline</h1>
+                  <p class="text-muted small mb-0">Contract negotiation phase for cloud architecture consolidation.</p>
+                </div>
+                <div class="text-end d-none d-sm-block">
+                  <span class="text-muted small d-block">DEAL VALUE</span>
+                  <strong class="fs-5 text-dark">$45,000 ARR</strong>
+                </div>
+              </div>
+
+              <!-- Pipeline Velocity Bar (Figma Page 4) -->
+              <div class="p-3 bg-light rounded-2 border mb-3">
+                <div class="d-flex justify-content-between small text-muted mb-2">
+                  <span>Pipeline Velocity Progress</span>
+                  <span class="fw-bold text-primary">Stage 3 of 4 (75%)</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar bg-primary" role="progressbar" style="width: 75%; background-color: var(--lp-primary-indigo) !important;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+
+              <!-- Stage Progression Milestones -->
+              <div class="row g-2 text-center">
+                <div class="col-6 col-md-3">
+                  <div class="p-2 border rounded-2 bg-white">
+                    <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                    <div class="fw-semibold small mt-1">1. Discovery</div>
+                    <small class="text-muted" style="font-size: 0.7rem;">Completed</small>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="p-2 border rounded-2 bg-white">
+                    <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                    <div class="fw-semibold small mt-1">2. Proposal</div>
+                    <small class="text-muted" style="font-size: 0.7rem;">Completed</small>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="p-2 border border-primary rounded-2" style="background-color: #EEF2FF;">
+                    <i class="bi bi-arrow-repeat text-primary fs-5"></i>
+                    <div class="fw-bold small text-primary mt-1">3. Review</div>
+                    <small class="text-primary fw-semibold" style="font-size: 0.7rem;">Active Stage</small>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="p-2 border rounded-2 bg-white opacity-75">
+                    <i class="bi bi-lock-fill text-secondary fs-5"></i>
+                    <div class="fw-semibold small mt-1">4. Closed/Won</div>
+                    <small class="text-muted" style="font-size: 0.7rem;">Pending Sign</small>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Dedicated Lead Summary Card (Figma Page 5) -->
+          <div class="col-12 col-lg-4" id="lead">
+            <div class="lp-card p-4 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <h3 class="h6 fw-bold mb-3">Dedicated CRM Lead</h3>
+                <div class="d-flex align-items-center gap-3 mb-3 p-2 rounded-2 bg-light">
+                  <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                    AL
+                  </div>
+                  <div>
+                    <strong class="d-block text-dark small">Alex Lawson</strong>
+                    <span class="text-muted" style="font-size: 0.75rem;">Senior Lead Architect</span>
+                  </div>
+                </div>
+                <ul class="list-unstyled small text-muted mb-0">
+                  <li class="mb-2"><i class="bi bi-envelope me-2 text-primary"></i>alex.lawson@devlogix.io</li>
+                  <li class="mb-2"><i class="bi bi-telephone me-2 text-primary"></i>+1 (555) 392-1084</li>
+                  <li><i class="bi bi-shield-check me-2 text-success"></i>Verified Dedicated Rep</li>
+                </ul>
+              </div>
+              <div class="pt-3 border-top mt-3">
+                <span class="lp-status-pill lp-status-won w-100 justify-content-center">
+                  <i class="bi bi-check2"></i> CRM Auto-Sync Active
                 </span>
-                <span>LogixPulse <span class="auth-navbar-brand-subtext">Client Portal</span></span>
+              </div>
             </div>
-            <a href="#" class="auth-navbar-cta">Don't have an invite? <span class="auth-navbar-cta-link">Contact us</span></a>
+          </div>
         </div>
-    </header>
 
-    <main class="auth-wrapper">
-        <div class="auth-page-inner">
+        <!-- Agreements & Responsive Mobile Touch Signature (FEB-02) -->
+        <div class="row g-3" id="agreements">
+          
+          <!-- Master Agreement Preview -->
+          <div class="col-12 col-lg-7">
+            <div class="lp-card h-100">
+              <div class="lp-card-header">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-file-earmark-text-fill text-primary fs-5"></i>
+                  <h3 class="h6 fw-bold mb-0">Master Services Agreement (MSA-2026-904)</h3>
+                </div>
+                <span class="badge bg-light text-secondary border">v2.4</span>
+              </div>
+              <div class="p-3 p-md-4">
+                <div class="p-3 bg-light rounded-2 mb-3 text-muted small" style="line-height: 1.6;">
+                  "This Agreement consolidates the scope, SLA commitments, and cloud milestone delivery schedule for Acme Cloud Technologies under DevLogix CRM governance."
+                </div>
 
-            <div class="auth-heading">
-                <h1>Sign in to <span class="text-accent">your Client Portal</span></h1>
+                <!-- Form Controls (With font-size >= 16px to prevent iOS Safari auto-zoom) -->
+                <div class="row g-2 mb-3">
+                  <div class="col-12 col-sm-6">
+                    <label for="signerName" class="form-label small fw-semibold text-muted mb-1">Authorized Signer</label>
+                    <input type="text" id="signerName" class="form-control" value="Sarah Jenkins" style="font-size: 16px;" />
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <label for="signerEmail" class="form-label small fw-semibold text-muted mb-1">Corporate Email</label>
+                    <input type="email" id="signerEmail" class="form-control" value="s.jenkins@acmecloud.com" style="font-size: 16px;" />
+                  </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between text-muted small">
+                  <span><i class="bi bi-lock-fill me-1 text-success"></i>256-bit Encrypted</span>
+                  <span>Touch Targets: <strong class="text-success">&ge; 44px</strong></span>
+                </div>
+              </div>
             </div>
+          </div>
 
-            <div class="auth-card">
-                <form id="traditional-login-form" class="auth-form" action="client-portal-dashboard/index.php" method="GET">
-                    <div class="form-group">
-                        <label for="login-email">Email address</label>
-                        <input
-                            type="email"
-                            id="login-email"
-                            name="email"
-                            placeholder="Enter your email"
-                            required
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <div class="password-field">
-                            <input
-                                type="password"
-                                id="login-password"
-                                name="password"
-                                placeholder="••••••••"
-                                required
-                            />
-                            <button type="button" class="password-toggle" id="password-toggle" aria-label="Show password" aria-pressed="false">
-                                <svg class="icon-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                                <svg class="icon-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.62 21.62 0 0 1 5.06-6.06M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button type="submit" id="login-submit" class="btn btn-primary">Sign In</button>
-                </form>
+          <!-- Touch Signature Pad (FEB-02: Zero Horizontal Scroll) -->
+          <div class="col-12 col-lg-5">
+            <div class="lp-card h-100">
+              <div class="lp-card-header">
+                <h3 class="h6 fw-bold mb-0">Client Digital Signature</h3>
+                <button type="button" class="btn btn-sm lp-btn-secondary py-1 px-2" id="clearSignatureBtn">
+                  <i class="bi bi-eraser me-1"></i>Clear
+                </button>
+              </div>
+              <div class="p-3 p-md-4">
+                <p class="text-muted small mb-2">
+                  Sign with touch or mouse. Canvas adapts dynamically to device width with zero horizontal window scroll.
+                </p>
+                <div class="dl-signature-pad-container mb-2">
+                  <canvas id="signatureCanvas" class="dl-signature-canvas"></canvas>
+                </div>
+                <div class="d-flex align-items-center justify-content-between text-muted" style="font-size: 0.72rem;">
+                  <span><i class="bi bi-hand-index me-1"></i>Touch &amp; Stylus Ready</span>
+                  <span>100% Mobile Adaptive</span>
+                </div>
+              </div>
             </div>
-
-            <div class="auth-footer-links">
-                <p>Forgot your password? <a href="auth/reset-password.html" id="forgot-password-link">Get help signing in</a></p>
-                <p>Prefer not to use passwords? <a href="auth/magic-code.html">Sign in with magic link</a></p>
-            </div>
+          </div>
 
         </div>
+
+      </div>
     </main>
+  </div>
 
-    <script src="js/auth.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var toggle = document.getElementById('password-toggle');
-            var input = document.getElementById('login-password');
-            if (toggle && input) {
-                toggle.addEventListener('click', function () {
-                    var isHidden = input.type === 'password';
-                    input.type = isHidden ? 'text' : 'password';
-                    toggle.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
-                    toggle.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
-                    toggle.querySelector('.icon-eye').style.display = isHidden ? 'none' : 'block';
-                    toggle.querySelector('.icon-eye-off').style.display = isHidden ? 'block' : 'none';
-                });
-            }
-        });
-    </script>
+  <!-- Footer -->
+  <footer class="bg-white border-top py-3 text-center text-muted small mt-auto">
+    <div class="container-fluid px-4 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
+      <span>&copy; 2026 DevLogix &bull; LogixPulse Client Portal Engine</span>
+      <span>Enterprise CRM Pipeline &bull; Event Alerts</span>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- Vanilla JavaScript Modules (FEB-01 & FEB-02) -->
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script src="/js/app.js"></script>
+
 </body>
 </html>
