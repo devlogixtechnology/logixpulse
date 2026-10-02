@@ -1,0 +1,2 @@
+# Block direct access to all files below storage.
+Require all denied
