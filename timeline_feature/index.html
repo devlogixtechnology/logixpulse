@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Preview</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .preview-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .controls select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .custom-timeline-wrapper {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .timeline-heading {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .timeline-container {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline-step {
+            position: relative;
+            padding-bottom: 30px;
+            padding-left: 30px;
+        }
+
+        .timeline-step:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-step:last-child .timeline-line {
+            display: none;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 25px;
+            bottom: -5px;
+            width: 2px;
+            background-color: #e5e7eb;
+        }
+
+        .timeline-icon {
+            position: absolute;
+            left: -12px;
+            top: 0;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            border: 2px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #9ca3af;
+            z-index: 1;
+        }
+
+        .timeline-content {
+            margin-top: 2px;
+        }
+
+        .timeline-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #4b5563;
+            margin: 0;
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            color: #9ca3af;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* DYNAMIC STATES */
+        .timeline-step.completed .timeline-icon {
+            background-color: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        .timeline-step.completed .timeline-line {
+            background-color: #10b981;
+        }
+        .timeline-step.completed .timeline-title {
+            color: #111827;
+        }
+
+        .timeline-step.active .timeline-icon {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+        .timeline-step.active .timeline-title {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        .timeline-step.active .timeline-date {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="preview-container">
+    
+    <!-- User Switcher for Previewing -->
+    <div class="controls">
+        <h3 style="margin: 0; font-size: 16px; color: #4b5563;">Simulate Database User</h3>
+        <select id="clientSelector" onchange="updateTimeline()">
+            <option value="3">Client 1 (Logixpulse Portal) - Phase 3</option>
+            <option value="1">Client 2 (E-commerce App) - Phase 1</option>
+            <option value="5">Client 3 (Completed Project) - Phase 5</option>
+        </select>
+    </div>
+
+    <!-- Timeline UI -->
+    <div class="custom-timeline-wrapper">
+        <h3 class="timeline-heading">Project Progress</h3>
+        <div class="timeline-container" id="timelineContainer">
+            <!-- JavaScript will populate this based on the selected phase -->
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const steps = [
+        { id: 1, title: "Planning & Strategy", date: "Phase 1" },
+        { id: 2, title: "UI/UX Design", date: "Phase 2" },
+        { id: 3, title: "Development", date: "Phase 3" },
+        { id: 4, title: "Testing & QA", date: "Phase 4" },
+        { id: 5, title: "Final Launch", date: "Phase 5" }
+    ];
+
+    function updateTimeline() {
+        const currentPhase = parseInt(document.getElementById('clientSelector').value);
+        const container = document.getElementById('timelineContainer');
+        container.innerHTML = '';
+
+        steps.forEach(step => {
+            let statusClass = "pending";
+            let icon = "";
+            
+            if (step.id < currentPhase) {
+                statusClass = "completed";
+                icon = "✓";
+            } else if (step.id === currentPhase) {
+                statusClass = "active";
+                icon = "●";
+            }
+
+            const stepHtml = `
+                <div class="timeline-step ${statusClass}">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-icon">${icon}</div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">${step.date}</span>
+                        <h4 class="timeline-title">${step.title}</h4>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += stepHtml;
+        });
+    }
+
+    // Initialize on load
+    updateTimeline();
+</script>
+
+</body>
+</html>
