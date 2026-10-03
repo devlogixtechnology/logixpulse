@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FEA-01 Filter Toolbar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F9FAFB;--ink:#111827;--mut:#6B7280;--line:#E5E7EB;--card:#fff;--ac:#4F46E5;--acd:#4338CA;--ok:#10B981;--warn:#F59E0B;--bad:#EF4444;--tint:#EEF2FF}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,"Segoe UI",system-ui,sans-serif}
+.top{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--line);font:700 16px Manrope,Inter,sans-serif}
+.top i{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:var(--ac)}
+.top em{margin-left:auto;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--tint);color:var(--ac);font:600 12px Inter,sans-serif;font-style:normal}
+h1{font:600 22px Manrope,Inter,sans-serif;margin:0;padding:20px 16px 12px}
+
+/* ---------- Board ---------- */
+.board{display:flex;gap:16px;overflow-x:auto;padding:0 16px 32px;align-items:flex-start;scroll-snap-type:x proximity}
+.col{flex:0 0 min(85vw,300px);background:#fff;border:1px solid var(--line);border-radius:12px;min-height:220px;padding-bottom:8px;scroll-snap-align:start}
+.col h2{margin:0 0 12px;padding:12px 16px;background:var(--tint);border-bottom:1px solid var(--line);border-radius:12px 12px 0 0;font:600 15px Manrope,Inter,sans-serif;display:flex;align-items:center;gap:8px}
+.col h2::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mut)}
+.col[data-stage="Contacted"] h2::before{background:var(--ac)}
+.col[data-stage="Meeting Booked"] h2::before{background:var(--warn)}
+.col[data-stage="Won"] h2::before{background:var(--ok)}
+.col[data-stage="Won"] .card{border-left:3px solid var(--ok)}
+.col h2 span{margin-left:auto;background:#E0E7FF;color:var(--ac);border-radius:99px;padding:0 10px;font:600 12px Inter,sans-serif}
+/* empty states: column me cards hi nahi / filter se sab hide */
+.col:not(:has(.card))::after,.col.nomatch::after{display:block;margin:0 12px;padding:24px 8px;border:1.5px dashed #D1D5DB;border-radius:12px;text-align:center;color:var(--mut)}
+.col:not(:has(.card))::after{content:"No cards yet"}
+.col.nomatch::after{content:"No matching leads"}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;margin:0 12px 8px;box-shadow:0 1px 2px #1118270d;transition:opacity .25s ease,box-shadow .15s}
+.card:hover{box-shadow:0 4px 12px #11182714}
+.card b{display:block;font:600 14px Manrope,Inter,sans-serif}
+.card small{color:var(--mut);font-size:12px}
+.card.hide{opacity:0}          /* fade out */
+.card.gone{display:none}       /* fade ke baad layout se hatao */
+.tag{display:inline-block;background:var(--tint);color:var(--ac);border-radius:99px;padding:0 8px;font:500 12px Inter,sans-serif;margin:6px 4px 0 0;border:0;cursor:pointer}
+.tag:hover{background:#E0E7FF}
+
+/* ---------- Toolbar ---------- */
+button,input,select{font:inherit;color:inherit}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--acd)}
+input{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+input:focus{border-color:var(--ac);outline:2px solid #4F46E540;outline-offset:0}
+#bar{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 8px}
+#bar>*{flex:1 1 150px;width:auto}
+details{position:relative;flex:1 1 150px}
+summary{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"▾";color:var(--mut)}
+details[open] summary{border-color:var(--ac)}
+details div{position:absolute;z-index:5;top:calc(100% + 4px);left:0;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%;box-shadow:0 8px 20px #11182720}
+details label{display:flex;gap:8px;padding:4px 0;cursor:pointer}
+details input{width:auto}
+#chips{padding:0 16px 8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{background:var(--card);border:1px solid var(--ac);border-radius:99px;padding:2px 6px 2px 10px;font-size:13px;display:inline-flex;gap:4px;align-items:center}
+.chip button{border:0;background:none;cursor:pointer;font-size:16px;line-height:1;padding:0 4px;color:var(--mut)}
+.chip button:hover{color:var(--bad)}
+#result{padding:0 16px 12px;color:var(--mut);font-size:12px}
+
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;transition:transform .25s;z-index:99}
+#toast.on{transform:translateX(-50%)}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <i><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,12 7,12 10,4 14,20 17,12 21,12"/></svg></i>
+  LogixPulse<em>AL</em>
+</header>
+<h1>Pipeline</h1>
+
+<!-- Filter toolbar -->
+<div id="bar">
+  <input id="q" type="search" placeholder="Search title, company or tag" aria-label="Search leads">
+  <details id="src"><summary id="srcLabel">Lead source</summary><div></div></details>
+  <input id="min" type="number" min="0" placeholder="Min value" aria-label="Minimum deal value">
+  <input id="max" type="number" min="0" placeholder="Max value" aria-label="Maximum deal value">
+</div>
+<div id="chips"></div>
+<div id="result" aria-live="polite"></div>
+<div class="board" id="board"></div>
+<div id="toast" role="status"></div>
+
+<script>
+const STAGES=["New Lead","Contacted","Meeting Booked","Won"];
+const SOURCES=["Website","Referral","Campaign","Direct"];
+const LEADS=[
+{id:1,title:"Website redesign",company:"Nova Textiles",contact_name:"Ayesha Khan",source:"Website",deal_value:4200,stage:"New Lead",tags:["design","urgent"]},
+{id:2,title:"Inventory portal",company:"Punjab Traders",contact_name:"Bilal Ahmed",source:"Referral",deal_value:9800,stage:"Contacted",tags:["portal"]},
+{id:3,title:"Mobile app MVP",company:"Sargodha Fresh",contact_name:"Hina Malik",source:"Campaign",deal_value:15000,stage:"Meeting Booked",tags:["mobile","urgent"]},
+{id:4,title:"CRM setup",company:"Indus Logistics",contact_name:"Usman Raza",source:"Direct",deal_value:6100,stage:"Meeting Booked",tags:["crm"]},
+{id:5,title:"E-commerce store",company:"Kohsar Crafts",contact_name:"Sana Iqbal",source:"Website",deal_value:12500,stage:"Won",tags:["shop","design"]}];
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money=n=>"$"+Number(n).toLocaleString();
+let toastTimer;
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("on"),2600)}
+
+/* ---------- filter state ---------- */
+const F={q:"",src:new Set(),min:null,max:null,tag:new Set()};
+const board=$("board"),qIn=$("q"),srcBox=$("src"),minIn=$("min"),maxIn=$("max"),chips=$("chips");
+
+/* ---------- render board ---------- */
+board.innerHTML=STAGES.map(s=>'<section class="col" data-stage="'+s+'"><h2>'+s+' <span></span></h2></section>').join("");
+LEADS.forEach(l=>{
+  const c=document.createElement("div");c.className="card";c._l=l;
+  c.innerHTML="<b>"+esc(l.title)+"</b><small>"+esc(l.company)+" · "+esc(l.source)+" · "+money(l.deal_value)+"</small><div>"+
+    l.tags.map(t=>'<button class="tag" data-tag="'+esc(t)+'">#'+esc(t)+"</button>").join("")+"</div>";
+  board.querySelector('[data-stage="'+l.stage+'"]').append(c);
+});
+srcBox.querySelector("div").innerHTML=SOURCES.map(s=>'<label><input type="checkbox" value="'+s+'">'+s+"</label>").join("");
+
+/* ---------- matching (AND logic: sab filters ek saath) ---------- */
+const match=l=>{
+  const q=F.q.toLowerCase();
+  return (!q||[l.title,l.company,l.contact_name,...l.tags].join(" ").toLowerCase().includes(q))
+    &&(!F.src.size||F.src.has(l.source))
+    &&(F.min==null||l.deal_value>=F.min)
+    &&(F.max==null||l.deal_value<=F.max)
+    &&[...F.tag].every(t=>l.tags.includes(t));
+};
+
+/* ---------- apply filters with fade animation ---------- */
+function show(c){
+  if(c._timer){clearTimeout(c._timer);c._timer=null}
+  if(c.classList.contains("gone")){
+    c.classList.remove("gone");
+    void c.offsetWidth;            // reflow force: warna fade-in animate nahi hota
+  }
+  c.classList.remove("hide");
+}
+function hide(c){
+  if(c.classList.contains("gone")||c.classList.contains("hide"))return;
+  c.classList.add("hide");
+  c._timer=setTimeout(()=>{c.classList.add("gone");c._timer=null},250);
+}
+function apply(){
+  let total=0;
+  document.querySelectorAll(".card").forEach(c=>{
+    if(match(c._l)){show(c);total++}else hide(c);
+  });
+  document.querySelectorAll(".col").forEach(col=>{
+    const n=[...col.querySelectorAll(".card")].filter(c=>match(c._l)).length;
+    col.querySelector("span").textContent=n;
+    col.classList.toggle("nomatch",n===0&&col.querySelector(".card")!==null);
+  });
+
+  // chips
+  const ch=[];
+  if(F.q)ch.push(["q","Search: "+F.q]);
+  F.src.forEach(s=>ch.push(["src:"+s,s]));
+  if(F.min!=null)ch.push(["min","Min "+money(F.min)]);
+  if(F.max!=null)ch.push(["max","Max "+money(F.max)]);
+  F.tag.forEach(t=>ch.push(["tag:"+t,"#"+t]));
+  chips.innerHTML=ch.map(c=>'<span class="chip">'+esc(c[1])+'<button data-k="'+esc(c[0])+'" aria-label="Remove filter '+esc(c[1])+'">×</button></span>').join("")+
+    (ch.length?'<button class="btn" data-k="all" style="padding:2px 12px">Clear all</button>':"");
+
+  $("srcLabel").textContent=F.src.size?"Lead source ("+F.src.size+")":"Lead source";
+  $("result").textContent=ch.length?"Showing "+total+" of "+LEADS.length+" leads":"";
+  if(F.min!=null&&F.max!=null&&F.min>F.max)toast("Min value Max value se zyada hai");
+}
+
+/* ---------- events ---------- */
+let deb;                                   // debounce: 300ms ruk kar filter chalao
+qIn.oninput=()=>{clearTimeout(deb);deb=setTimeout(()=>{F.q=qIn.value.trim();apply()},300)};
+srcBox.onchange=e=>{e.target.checked?F.src.add(e.target.value):F.src.delete(e.target.value);apply()};
+minIn.oninput=()=>{F.min=minIn.value===""?null:+minIn.value;apply()};
+maxIn.oninput=()=>{F.max=maxIn.value===""?null:+maxIn.value;apply()};
+board.onclick=e=>{const b=e.target.closest("[data-tag]");if(b){F.tag.add(b.dataset.tag);apply()}};
+
+chips.onclick=e=>{
+  const k=e.target.dataset.k;if(!k)return;
+  if(k==="all"){
+    F.q="";F.src.clear();F.min=F.max=null;F.tag.clear();
+    qIn.value=minIn.value=maxIn.value="";
+    srcBox.querySelectorAll("input").forEach(i=>i.checked=false);
+  }
+  else if(k==="q"){F.q="";qIn.value=""}
+  else if(k==="min"){F.min=null;minIn.value=""}
+  else if(k==="max"){F.max=null;maxIn.value=""}
+  else if(k.startsWith("src:")){F.src.delete(k.slice(4));srcBox.querySelector('[value="'+k.slice(4)+'"]').checked=false}
+  else F.tag.delete(k.slice(4));
+  apply();
+};
+
+// dropdown bahar click ya Escape se band ho
+document.addEventListener("click",e=>{if(!srcBox.contains(e.target))srcBox.open=false});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")srcBox.open=false});
+
+apply();
+</script>
+</body>
+</html>
