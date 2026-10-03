@@ -1362,20 +1362,6 @@ button {
     max-width: 320px;
 }
 
-/* Empty-state illustration (shown only when the client has zero milestones) */
-.milestone-empty-art {
-    display: block;
-    width: 100%;
-    max-width: 160px;
-    margin: 0 auto 6px;
-}
-
-.milestone-empty-art svg {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
 .milestone-retry {
     display: inline-flex;
     align-items: center;
@@ -1402,9 +1388,5 @@ button {
 
     .milestone-content {
         padding: 10px;
-    }
-
-    .milestone-empty-art {
-        max-width: 130px;
     }
 }

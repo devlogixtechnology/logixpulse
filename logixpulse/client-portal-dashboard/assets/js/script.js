@@ -182,19 +182,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var ICON_CLOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline></svg>';
     var ICON_FILE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>';
     var ICON_CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
-    // Empty-state illustration: a vertical timeline with no events yet (fixed markup, no database text)
-    var ILLUSTRATION_EMPTY_TIMELINE = '<svg viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">'
-        + '<ellipse cx="80" cy="112" rx="46" ry="5" fill="#E5E7EE"></ellipse>'
-        + '<line x1="44" y1="18" x2="44" y2="98" stroke="#C7CBF5" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"></line>'
-        + '<circle cx="44" cy="22" r="9" fill="#EEF0FF" stroke="#4F46E5" stroke-width="2.5"></circle>'
-        + '<circle cx="44" cy="58" r="9" fill="#FFFFFF" stroke="#C7CBF5" stroke-width="2.5" stroke-dasharray="3 3"></circle>'
-        + '<circle cx="44" cy="94" r="9" fill="#FFFFFF" stroke="#C7CBF5" stroke-width="2.5" stroke-dasharray="3 3"></circle>'
-        + '<rect x="64" y="12" width="70" height="20" rx="6" fill="#FFFFFF" stroke="#C7CBF5" stroke-width="2"></rect>'
-        + '<rect x="72" y="19" width="36" height="5" rx="2.5" fill="#C7CBF5"></rect>'
-        + '<rect x="72" y="26" width="22" height="3" rx="1.5" fill="#E5E7EE"></rect>'
-        + '<rect x="64" y="48" width="70" height="20" rx="6" fill="#F6F7FB" stroke="#E5E7EE" stroke-width="2" stroke-dasharray="4 3"></rect>'
-        + '<rect x="64" y="84" width="70" height="20" rx="6" fill="#F6F7FB" stroke="#E5E7EE" stroke-width="2" stroke-dasharray="4 3"></rect>'
-        + '</svg>';
 
     if (milestoneFeed && milestoneBody && milestoneEndpoint) {
         milestoneBody.addEventListener("click", handleMilestoneClick);
@@ -440,12 +427,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function buildMilestoneEmpty() {
         var empty = createEl("div", "card-empty milestone-empty");
-
-        var art = createEl("span", "milestone-empty-art");
-        art.setAttribute("aria-hidden", "true");
-        art.innerHTML = ILLUSTRATION_EMPTY_TIMELINE; // fixed illustration markup, no database text
-        empty.appendChild(art);
-
         empty.appendChild(createEl("p", "", "No project updates yet"));
         empty.appendChild(createEl("span", "card-empty-hint", "Project activity and milestone updates will appear here as work progresses."));
         return empty;
